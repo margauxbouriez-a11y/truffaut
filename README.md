@@ -1,6 +1,6 @@
 # Le Grand Jardin — maquette imaginée pour Truffaut
 
-## 👉 [Ouvrir le site](https://margauxbouriez-a11y.github.io/grandjardintruffaut/)
+## 👉 [Ouvrir le site](https://margauxbouriez-a11y.github.io/truffaut/)
 
 > Maquette de démonstration, **non affiliée à Truffaut**. Les produits, prix et liens
 > viennent de truffaut.com (relevés le 17/10/2026) et peuvent avoir changé.
