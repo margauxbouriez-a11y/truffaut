@@ -269,6 +269,8 @@ svg [stroke-width="5"] { stroke-width: 3; }
 .tile-ghost { background: #FBFAF4; color: var(--ink); }
 @media (max-width: 640px) { .hub2-head p { text-align: left; } .tiles { grid-template-columns: 1fr 1fr; } .tile b { font-size: 18px; } .tile span { font-size: 13px; } }
 
+.hchalk { font-family: var(--hand); font-size: 8px; fill: #FBF5E8; }
+
 /* ---------- Silence ça truffe ---------- */
 .logo-title { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 0 .25em; }
 .logo-title span:first-child { color: var(--leaf-dark); }
@@ -1308,7 +1310,7 @@ const Deco = (() => {
    ============================================================ */
 const HubMap = (() => {
   const K = '#22303A'; // encre de la carte
-  const sw = (w = 1.5) => `stroke="${K}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
+  const sw = (w = 1.2) => `stroke="${K}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
   const shadow = (x, y, rx, ry) => `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="#1E3B2A" opacity=".22"/>`;
 
   /* ---- motifs ---- */
@@ -1369,7 +1371,13 @@ const HubMap = (() => {
         <g transform="translate(18 -50)"><path d="M0 0 c8 -8 18 -3 15 5 l-6 1 l-3 5z" fill="#1F2A30" ${sw(.6)}/><circle cx="9" cy="0" r="1.2" fill="#fff"/></g></g>
       <g transform="translate(205 395) rotate(-8)"><path d="M0 0 h26 l-4 14 h-18z" fill="#3E9FCF" ${sw(1)}/><path d="M26 4 l14 -10 l2 3 l-14 12" fill="#3E9FCF" ${sw(1)}/><path d="M4 0 q9 -14 18 0" fill="none" ${sw(1)}/></g>
       <g transform="translate(540 380)">${shadow(10, 8, 24, 5)}<path d="M-14 -6 h36 l-6 14 h-24z" fill="#9AA6AE" ${sw(1)}/><circle cx="-10" cy="10" r="5" fill="#2A2A2A"/><path d="M22 -6 l18 -8" stroke="#7A4A26" stroke-width="2.4"/>${[[-4, -10, '#F29A2E'], [6, -12, '#7DC27A'], [14, -9, '#E8432E']].map(([a, b, cc]) => `<circle cx="${a}" cy="${b}" r="5" fill="${cc}" ${sw(.6)}/>`).join('')}</g>
-      ${fence(210, 196, 530, 196, 26)}</g>`;
+      ${fence(210, 196, 530, 196, 26)}
+      <g transform="translate(150 280)">${shadow(28, 4, 40, 7)}<rect x="0" y="-56" width="56" height="56" fill="#6E8B6A" ${sw(1.2)}/>${Array.from({ length: 7 }, (_, k) => `<path d="M${k * 8} -56 v56" stroke="${K}" stroke-width=".6" opacity=".5"/>`).join('')}
+        <path d="M-6 -54 L28 -78 L62 -54Z" fill="#8A5428" ${sw(1.2)}/><path d="M-6 -54 L28 -78 L62 -54" fill="none" stroke="#B9773E" stroke-width="2"/><rect x="18" y="-36" width="20" height="36" fill="#4E6A4A" ${sw(.8)}/><circle cx="34" cy="-18" r="1.4" fill="#E8B23A"/>
+        <rect x="4" y="-46" width="12" height="10" fill="#BFE6EE" ${sw(.6)}/><path d="M58 -40 l14 30 M62 -40 l4 30" stroke="#7A4A26" stroke-width="1.6"/><path d="M68 -14 h8 l-2 6 h-6z M62 -12 l-3 6 h6z" fill="#9AA6AE" ${sw(.5)}/></g>
+      <g transform="translate(520 430)"><rect x="-22" y="-26" width="44" height="26" fill="#8A5428" ${sw(1)}/>${[0, 1, 2].map((k) => `<path d="M-22 ${-26 + k * 9} h44" stroke="#6B3A1E" stroke-width="1"/>`).join('')}<path d="${blob(0, -28, 18, 6, 8, .4, 4)}" fill="#6B4022" ${sw(.6)}/><circle cx="-6" cy="-30" r="2" fill="#F28C28"/><circle cx="6" cy="-29" r="2" fill="#7DC27A"/></g>
+      <g transform="translate(250 395)"><path d="M0 0 h70 v-10 l-70 -10z" fill="url(#hGlass)" ${sw(1)}/><path d="M23 -3 v-13 M46 -6 v-10" stroke="#fff" stroke-width="1.6"/>${[10, 30, 50].map((dx) => `<circle cx="${dx}" cy="-5" r="3" fill="#7DC27A" opacity=".8"/>`).join('')}</g>
+      ${[[236, 216], [336, 216], [436, 216], [236, 306], [336, 306], [436, 306]].map(([x, y], i) => `<g transform="translate(${x + 78} ${y - 4})"><path d="M0 0 v10" stroke="#7A4A26" stroke-width="1.4"/><rect x="-7" y="-8" width="14" height="9" rx="1" fill="#FBF5E8" ${sw(.5)}/><circle cx="0" cy="-3.5" r="2.4" fill="${['#7DC27A', '#F28C28', '#E8432E', '#F29A2E', '#C2475A', '#3E8A54'][i]}"/></g>`).join('')}</g>`;
   };
 
   const serre = () => {
@@ -1387,7 +1395,10 @@ const HubMap = (() => {
       <path d="M${x + 96} ${y - 88} Q${x + 96} ${y - 170} ${x + 156} ${y - 196} Q${x + 216} ${y - 170} ${x + 216} ${y - 88}Z" fill="url(#hGlass)" ${sw(1.6)}/>
       ${ribs}${dome}
       <path d="M${x + 20} ${y - 80} l30 30 M${x + 40} ${y - 80} l18 18 M${x + 230} ${y - 80} l30 30 M${x + 118} ${y - 150} l30 30" stroke="#fff" stroke-width="3" opacity=".7"/>
-      <path d="M${x - 6} ${y - 88} H${x + 318}" stroke="#2F6B5A" stroke-width="4"/><path d="M${x + 150} ${y - 196} v-14" ${sw(2)}/><circle cx="${x + 156}" cy="${y - 212}" r="5" fill="#E8B23A" ${sw(1)}/>
+      ${[0, 1].map((r) => `<path d="M${x + 14} ${y - 16 - r * 26} H${x + 128} M${x + 186} ${y - 16 - r * 26} H${x + 298}" stroke="#8A5428" stroke-width="3"/>` + Array.from({ length: 9 }, (_, k) => `<path d="M${x + 18 + k * 12 + (k > 8 ? 60 : 0)} ${y - 18 - r * 26} l2 -7 h6 l2 7z" fill="#C8693E" opacity=".85"/><circle cx="${x + 23 + k * 12}" cy="${y - 28 - r * 26}" r="3.4" fill="${['#E8432E', '#F6D04A', '#F2A0C0', '#7DC27A'][(k + r) % 4]}" opacity=".85"/>` + `<path d="M${x + 190 + k * 12} ${y - 18 - r * 26} l2 -7 h6 l2 7z" fill="#C8693E" opacity=".85"/><circle cx="${x + 195 + k * 12}" cy="${y - 28 - r * 26}" r="3.4" fill="${['#B279D6', '#FFFFFF', '#F28C28', '#7DC27A'][(k + r) % 4]}" opacity=".85"/>`).join('')).join('')}
+      <path d="M${x - 6} ${y - 88} H${x + 318}" stroke="#2F6B5A" stroke-width="4"/>${Array.from({ length: 24 }, (_, k) => `<circle cx="${x + k * 13}" cy="${y - 93}" r="3" fill="none" stroke="#2F6B5A" stroke-width="1.4"/>`).join('')}
+      ${[x - 6, x + 318].map((px) => `<path d="M${px} ${y - 90} v-10" stroke="#2F6B5A" stroke-width="2"/><circle cx="${px}" cy="${y - 102}" r="3.2" fill="#E8B23A" ${sw(.6)}/>`).join('')}
+      ${[x + 60, x + 252].map((px) => `<path d="M${px} ${y - 86} v14" stroke="${K}" stroke-width=".8"/><path d="M${px - 9} ${y - 72} q9 10 18 0z" fill="#8A5428" ${sw(.6)}/>${[-6, 0, 6].map((dx, k) => `<path d="M${px + dx} ${y - 70} q${dx * .6} 10 ${dx} 16" stroke="#3E8F48" stroke-width="1.4" fill="none"/><circle cx="${px + dx * 1.3}" cy="${y - 54}" r="2.6" fill="${['#F2A0C0', '#E8432E', '#B279D6'][k]}"/>`).join('')}`).join('')}<path d="M${x + 150} ${y - 196} v-14" ${sw(2)}/><circle cx="${x + 156}" cy="${y - 212}" r="5" fill="#E8B23A" ${sw(1)}/>
       <path d="M${x + 136} ${y} v-46 a20 20 0 0 1 40 0 v46" fill="#2F6B5A" ${sw(1.4)}/><path d="M${x + 156} ${y} v-66" stroke="#F4F7F7" stroke-width="1.6"/>
       ${[x - 18, x + 330].map((px, i) => `<g transform="translate(${px} ${y + 4})"><path d="M-10 0 h20 l-3 -16 h-14z" fill="#C8693E" ${sw(1)}/>${bush(0, -14, .9, '#3E8F48', i ? '#F2A0C0' : '#F6D04A')}</g>`).join('')}
       ${[0, 1, 2, 3, 4].map((k) => `<g transform="translate(${x + 30 + k * 64} ${y + 14})"><path d="M-8 0 h16 l-2 -10 h-12z" fill="#C8693E" ${sw(.8)}/><circle cx="-3" cy="-13" r="4" fill="${['#E8432E', '#F6D04A', '#B279D6', '#F2A0C0', '#FFFFFF'][k]}" ${sw(.6)}/><circle cx="4" cy="-14" r="3.6" fill="${['#F2A0C0', '#E8432E', '#FFFFFF', '#F6D04A', '#B279D6'][k]}" ${sw(.6)}/></g>`).join('')}</g>`;
@@ -1407,6 +1418,10 @@ const HubMap = (() => {
       ${[x + 22, x + 160].map((wx) => `<rect x="${wx}" y="${y - 108}" width="38" height="30" fill="#BFE6EE" ${sw(1.1)}/><path d="M${wx + 19} ${y - 108} v30 M${wx} ${y - 93} h38" stroke="${K}" stroke-width=".8"/><path d="M${wx + 4} ${y - 104} l10 10" stroke="#fff" stroke-width="2" opacity=".7"/>
         <rect x="${wx - 4}" y="${y - 78}" width="46" height="9" fill="#8A5428" ${sw(.8)}/>${[0, 1, 2, 3, 4].map((k) => `<circle cx="${wx + 2 + k * 9}" cy="${y - 80}" r="4" fill="${['#E8432E', '#F6D04A', '#F2A0C0', '#B279D6', '#FFFFFF'][k]}" ${sw(.5)}/>`).join('')}`).join('')}
       ${[[x + 4, y - 120], [x + 4, y - 100], [x + 10, y - 80], [x + 4, y - 60], [x + 214, y - 110], [x + 216, y - 86], [x + 212, y - 64]].map(([a, b], k) => Deco.leaf(a, b, 12, k * 70, '#3E8F48') + `<circle cx="${a}" cy="${b}" r="4" fill="${k % 2 ? '#E8432E' : '#F2A0C0'}" ${sw(.6)}/>`).join('')}
+      <g transform="translate(${x + 252} ${y - 2})">${shadow(0, 2, 26, 4)}<circle cx="-16" cy="-10" r="10" fill="none" ${sw(1.4)}/><circle cx="16" cy="-10" r="10" fill="none" ${sw(1.4)}/><path d="M-16 -10 L-4 -26 L10 -26 L16 -10 M-4 -26 L0 -10 L10 -26 M-8 -30 h8 M10 -26 l-2 -6 h6" fill="none" stroke="#3E6FB3" stroke-width="2"/>
+        <path d="M6 -40 h18 l-3 10 h-12z" fill="#C99A5A" ${sw(.8)}/>${[0, 1, 2, 3].map((k) => `<circle cx="${9 + k * 4}" cy="${-42 - (k % 2) * 3}" r="3.2" fill="${['#E8432E', '#F6D04A', '#F2A0C0', '#FFFFFF'][k]}" ${sw(.4)}/>`).join('')}</g>
+      <g transform="translate(${x - 34} ${y - 2})"><path d="M-12 0 l6 -40 h12 l6 40 M-6 -20 h12" stroke="#8A5428" stroke-width="2" fill="none"/><rect x="-14" y="-40" width="28" height="22" fill="#22303A" ${sw(1)}/><text x="0" y="-31" text-anchor="middle" class="hchalk">Bouquet</text><text x="0" y="-23" text-anchor="middle" class="hchalk">du jour</text></g>
+      ${[x + 30, x + 190].map((lx) => `<path d="M${lx} ${y - 70} v8" stroke="${K}" stroke-width=".8"/><rect x="${lx - 4}" y="${y - 62}" width="8" height="10" rx="2" fill="#FFE59A" ${sw(.6)}/>`).join('')}
       <rect x="${x + 70}" y="${y - 160}" width="80" height="18" rx="2" fill="#2F6B5A" ${sw(1)}/><text x="${x + 110}" y="${y - 147}" text-anchor="middle" class="hsmall">FLEURS</text>
       ${[0, 1, 2, 3, 4, 5].map((k) => { const bx = x - 70 + k * 24 + (k > 2 ? 290 : 0), by = y + 8; const cols = [['#E8432E', '#F6D04A'], ['#F2A0C0', '#FFFFFF'], ['#B279D6', '#F2A0C0'], ['#F6D04A', '#E8432E'], ['#FFFFFF', '#B279D6'], ['#F28C28', '#F6D04A']][k];
         return `<g>${shadow(bx, by, 11, 3)}<path d="M${bx - 9} ${by} l2 -18 h14 l2 18z" fill="#A7B4BA" ${sw(.9)}/>${[-5, 0, 5].map((dx, j) => `<path d="M${bx + dx} ${by - 18} v-12" stroke="#3E8F48" stroke-width="1.2"/><circle cx="${bx + dx}" cy="${by - 32 + (j % 2) * 3}" r="4.6" fill="${cols[j % 2]}" ${sw(.6)}/>`).join('')}</g>`; }).join('')}</g>`;
@@ -1426,6 +1441,11 @@ const HubMap = (() => {
       <g>${shadow(ox + 215, oy - 84, 24, 5)}<rect x="${ox + 200}" y="${oy - 190}" width="30" height="106" fill="#F3E3C8" ${sw(1.3)}/><path d="M${ox + 200} ${oy - 150} h30 M${ox + 215} ${oy - 190} v40" stroke="#4A2E1A" stroke-width="1.6"/><circle cx="${ox + 215}" cy="${oy - 168}" r="9" fill="#fff" ${sw(1)}/><path d="M${ox + 215} ${oy - 168} v-6 M${ox + 215} ${oy - 168} l4 2" stroke="${K}" stroke-width="1"/>
         <path d="M${ox + 194} ${oy - 190} L${ox + 215} ${oy - 236} L${ox + 236} ${oy - 190}Z" fill="#3E3E46" ${sw(1.3)}/><path d="M${ox + 192} ${oy - 189} q23 -10 46 0 l-4 -8 q-19 -6 -38 0z" fill="#fff" ${sw(.8)}/><rect x="${ox + 206}" y="${oy - 112}" width="18" height="28" rx="9" fill="#C8243C" ${sw(.8)}/></g>
       ${house(ox + 250, oy - 70, 60, 52, '#F6E7C1', '#7A3A3A')}${fir(ox + 335, oy - 60, .9)}${fir(ox + 175, oy - 40, .6)}
+      <ellipse cx="${ox + 70}" cy="${oy - 130}" rx="40" ry="14" fill="#BFE3F2" ${sw(1)}/><path d="M${ox + 44} ${oy - 132} q20 -4 40 0" stroke="#fff" stroke-width="1.6" fill="none"/>
+      <g><g transform="translate(0 0)"><path d="M-2 0 v-6 M2 0 v-6" stroke="#2A2A2A" stroke-width="1.4"/><path d="M-4 -6 q0 -8 4 -9 q4 1 4 9z" fill="#C8243C"/><circle cy="-17" r="2.6" fill="#F0C9A8"/></g><animateMotion dur="9s" repeatCount="indefinite" path="M${ox + 40} ${oy - 128} a30 8 0 1 0 60 0 a30 8 0 1 0 -60 0"/></g>
+      <g><g><path d="M-2 0 v-6 M2 0 v-6" stroke="#2A2A2A" stroke-width="1.4"/><path d="M-4 -6 q0 -8 4 -9 q4 1 4 9z" fill="#2E4A8A"/><circle cy="-17" r="2.6" fill="#F0C9A8"/></g><animateMotion dur="9s" begin="-4.5s" repeatCount="indefinite" path="M${ox + 40} ${oy - 128} a30 8 0 1 0 60 0 a30 8 0 1 0 -60 0"/></g>
+      <g transform="translate(${ox + 300} ${oy - 120})"><circle cy="-8" r="9" fill="#fff" ${sw(.8)}/><circle cy="-22" r="6" fill="#fff" ${sw(.8)}/><path d="M0 -22 l5 1 l-5 1z" fill="#F28C28"/><rect x="-4" y="-34" width="8" height="6" fill="#2A2A2A"/><path d="M-5 -16 q5 3 10 0" stroke="#C8243C" stroke-width="2.4"/></g>
+      ${[[ox + 48, oy - 40], [ox + 186, oy - 40], [ox + 330, oy - 100]].map(([a, b]) => lamppost(a, b)).join('')}
       <path d="M${ox + 40} ${oy - 30} q120 30 260 0" stroke="#8C5A31" stroke-width="5" fill="none"/><path d="M${ox + 40} ${oy - 30} q120 30 260 0" stroke="#CFC6B8" stroke-width="2" fill="none" stroke-dasharray="2 5"/>
       <g transform="translate(${ox + 120} ${oy - 18})"><rect x="-16" y="-12" width="22" height="12" rx="3" fill="#C8243C" ${sw(.8)}/><rect x="2" y="-18" width="10" height="18" fill="#2F6B3A" ${sw(.8)}/><circle cx="-10" cy="1" r="3" fill="${K}"/><circle cx="6" cy="1" r="3" fill="${K}"/><rect x="18" y="-10" width="18" height="10" fill="#3FB6C4" ${sw(.8)}/><rect x="40" y="-10" width="18" height="10" fill="#F6D04A" ${sw(.8)}/></g></g>`;
   };
@@ -1454,7 +1474,7 @@ const HubMap = (() => {
         <g transform="translate(-2 2)"><ellipse rx="5" ry="6" fill="#9ED36A" ${sw(.6)}/><path d="M-5 -2 l-4 -2 M5 -2 l4 -2 M-5 2 l-4 1 M5 2 l4 1" stroke="${K}" stroke-width=".6"/></g></g></g>`;
   };
 
-  const pond = () => `<g><path d="${blob(800, 470, 120, 62, 11, .14, 5)}" fill="url(#hPond)" ${sw(1.5)}/><path d="${blob(800, 470, 120, 62, 11, .14, 5)}" fill="url(#hWaves)"/>
+  const pond = () => `<g><path d="${blob(800, 470, 128, 68, 11, .14, 5)}" fill="#9AA3A8" ${sw(1.2)}/>${Array.from({ length: 22 }, (_, i) => { const a = i / 22 * Math.PI * 2; return `<ellipse cx="${(800 + Math.cos(a) * 124).toFixed(0)}" cy="${(470 + Math.sin(a) * 64).toFixed(0)}" rx="8" ry="5" fill="${i % 2 ? '#B9B2A6' : '#A39C90'}" ${sw(.5)}/>`; }).join('')}<path d="${blob(800, 470, 120, 62, 11, .14, 5)}" fill="url(#hPond)" ${sw(1.5)}/><path d="${blob(800, 470, 120, 62, 11, .14, 5)}" fill="url(#hWaves)"/>
     ${[[740, 450], [770, 492], [850, 452], [870, 488], [812, 500]].map(([a, b], i) => `<path d="M${a} ${b} m-11 0 a11 7 0 1 0 22 0 a11 7 0 1 0 -22 0 M${a} ${b} l11 -2" fill="#5DA548" ${sw(.8)}/>${i % 2 ? `<circle cx="${a + 3}" cy="${b - 3}" r="4" fill="#F7A8C4" ${sw(.6)}/><circle cx="${a + 3}" cy="${b - 3}" r="1.6" fill="#F6D04A"/>` : ''}`).join('')}
     <g transform="translate(830 430)"><path d="M0 0 c6 -6 14 -4 12 2 l-4 6 c-4 2 -10 0 -8 -8z" fill="#fff" ${sw(.8)}/><path d="M10 -2 l5 -6 l2 4" fill="#F28C28"/></g>
     <path d="M680 470 q24 -26 48 0" fill="none" stroke="#8A5428" stroke-width="12"/><path d="M680 470 q24 -26 48 0" fill="none" stroke="#C99A6A" stroke-width="8"/>${[0, 1, 2, 3, 4].map((k) => `<path d="M${684 + k * 10} ${466 - (k === 2 ? 12 : k % 4 ? 9 : 2)} v-8" stroke="#8A5428" stroke-width="2"/>`).join('')}</g>`;
@@ -1475,14 +1495,60 @@ const HubMap = (() => {
     <g class="wave" style="animation-delay:-2s"><g transform="translate(120 140)"><path d="M-18 0 h36 l-6 8 h-24z" fill="#F6D04A" ${sw(1)}/><path d="M0 0 v-26 l14 22z" fill="#fff" ${sw(1)}/></g></g>`;
   const birds = `<g class="cloud" style="animation-duration:70s"><path d="M200 90 q8 -8 16 0 q8 -8 16 0 M240 110 q6 -6 12 0 q6 -6 12 0" fill="none" stroke="${K}" stroke-width="1.6"/></g>`;
 
+
+  /* ---- détails supplémentaires ---- */
+  const person = (x, y, c = '#3E6FB3', hat = '#E8B23A', act = '') => `<g transform="translate(${x} ${y})">${shadow(1, 1, 6, 2)}
+    <path d="M-2.4 0 v-6 M2.4 0 v-6" stroke="#3A3A3A" stroke-width="2" stroke-linecap="round"/><path d="M-5 -6 Q-5.5 -17 0 -18 Q5.5 -17 5 -6Z" fill="${c}" ${sw(.7)}/>
+    <circle cy="-21.5" r="3.6" fill="#F0C9A8" ${sw(.6)}/><path d="M-5.5 -22.5 h11 M-3.4 -22.5 q3.4 -5 6.8 0" fill="${hat}" stroke="${hat}" stroke-width="1.6"/>${act}</g>`;
+  const windmill = (x, y) => `<g transform="translate(${x} ${y})">${shadow(0, 2, 30, 7)}
+    <path d="M-20 0 L-13 -70 L13 -70 L20 0Z" fill="#F3E9D2" ${sw(1.2)}/><path d="M5 -70 L13 -70 L20 0 L8 0Z" fill="url(#hatch)" opacity=".5"/>
+    ${[-56, -40, -24].map((yy) => `<rect x="-5" y="${yy}" width="10" height="9" rx="4" fill="#8FC7D6" ${sw(.6)}/>`).join('')}<path d="M-6 0 v-14 a6 6 0 0 1 12 0 v14z" fill="#8A5428" ${sw(.7)}/>
+    <path d="M-17 -70 L0 -92 L17 -70Z" fill="#B83A2A" ${sw(1.2)}/>
+    <g><animateTransform attributeName="transform" type="rotate" from="0 0 -78" to="360 0 -78" dur="14s" repeatCount="indefinite"/>
+      ${[0, 90, 180, 270].map((a) => `<g transform="rotate(${a} 0 -78)"><path d="M0 -78 V-136" stroke="#7A4A26" stroke-width="2.4"/><path d="M1 -84 h12 v-50 h-12" fill="#FBF5E8" ${sw(.7)}/>${[0, 1, 2, 3, 4].map((k) => `<path d="M1 ${-92 - k * 9} h12" stroke="${K}" stroke-width=".4"/>`).join('')}</g>`).join('')}
+      <circle cx="0" cy="-78" r="3.5" fill="#3A3A3A"/></g></g>`;
+  const beehive = (x, y) => `<g transform="translate(${x} ${y})">${shadow(0, 1, 10, 3)}<path d="M-8 0 v-6 M8 0 v-6" stroke="#7A4A26" stroke-width="1.6"/>${[0, 1, 2].map((k) => `<rect x="${-9 + k}" y="${-12 - k * 7}" width="${18 - k * 2}" height="7" fill="${k % 2 ? '#F6D04A' : '#E8B23A'}" ${sw(.6)}/>`).join('')}<path d="M-8 -26 L0 -32 L8 -26Z" fill="#B83A2A" ${sw(.6)}/>
+    ${[[12, -20], [16, -12], [-14, -16]].map(([a, b]) => `<g transform="translate(${a} ${b})"><ellipse rx="2.2" ry="1.6" fill="#F6D04A" ${sw(.4)}/><path d="M-1 -1.5 q-1 -2 0.5 -2.5 M1 -1.5 q1 -2 -0.5 -2.5" stroke="#fff" stroke-width=".8"/></g>`).join('')}</g>`;
+  const butterfly = (x, y, c, d) => `<g><g><path d="M0 0 c-6 -8 -12 -2 -6 3 c-6 3 -2 8 6 -1 c8 9 12 4 6 1 c6 -5 0 -11 -6 -3z" fill="${c}" ${sw(.5)}><animateTransform attributeName="transform" type="scale" values="1 1;.3 1;1 1" dur=".4s" repeatCount="indefinite"/></path></g>
+    <animateMotion dur="${d}s" repeatCount="indefinite" path="M${x} ${y} c40 -30 80 30 120 0 s60 -40 20 -60 s-100 10 -140 60z"/></g>`;
+  const reeds = (x, y) => Array.from({ length: 7 }, (_, i) => { const dx = (i - 3) * 5, h = 26 + (i % 3) * 8; return `<path d="M${x + dx} ${y} q${dx * .3} ${-h * .5} ${dx * .6} ${-h}" stroke="#4E8A3E" stroke-width="1.6" fill="none"/>${i % 2 ? `<rect x="${x + dx * 1.6 - 2}" y="${y - h - 2}" width="4" height="10" rx="2" fill="#7A4A26"/>` : ''}`; }).join('');
+  const koi = (x, y, c, d) => `<g><path d="M0 0 c6 -4 14 -3 18 0 c-4 3 -12 4 -18 0z M0 0 l-6 -4 v8z" fill="${c}" ${sw(.4)} opacity=".9"/><animateMotion dur="${d}s" repeatCount="indefinite" rotate="auto" path="M${x} ${y} a50 22 0 1 0 100 0 a50 22 0 1 0 -100 0"/></g>`;
+  const lamppost = (x, y) => `<g transform="translate(${x} ${y})"><path d="M0 0 v-30" stroke="#2A2A2A" stroke-width="2"/><path d="M-4 -30 h8 l-1.6 -7 h-4.8z" fill="#FFE59A" ${sw(.6)}/><circle cy="-34" r="9" fill="#FFE59A" opacity=".35"/></g>`;
+  const shore = () => {
+    const isle = blob(800, 520, 730, 450, 16, .08, 21);
+    let rocks = '';
+    [[140, 360], [110, 560], [300, 860], [1010, 965], [1440, 760], [1500, 420], [1200, 110], [520, 120]].forEach(([x, y], i) => {
+      rocks += `<g transform="translate(${x} ${y})">${[[-10, 0, 12], [6, 4, 9], [14, -4, 7]].map(([a, b, r]) => `<path d="${blob(a, b, r, r * .7, 7, .3, i + a)}" fill="#9AA3A8" ${sw(1)}/><path d="${blob(a + 2, b + 2, r * .6, r * .35, 6, .3, i)}" fill="#7C858A" opacity=".7"/>`).join('')}<path d="M-24 6 q10 -4 20 0 t20 0 t20 0" stroke="#fff" stroke-width="2" fill="none" opacity=".8"/></g>`;
+    });
+    return `<path d="${blob(800, 520, 752, 470, 16, .08, 21)}" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="14 8" opacity=".55"/>
+      <path d="${blob(800, 520, 741, 460, 16, .08, 21)}" fill="none" stroke="#BFEAF0" stroke-width="8" opacity=".55"/>${rocks}
+      ${Array.from({ length: 40 }, (_, i) => { const a = i / 40 * Math.PI * 2; const x = 800 + Math.cos(a) * 705, y = 515 + Math.sin(a) * 430; return `<path d="M${(x - 8).toFixed(0)} ${y.toFixed(0)} q8 -3 16 0" stroke="#D9BE84" stroke-width="1.2" fill="none"/>`; }).join('')}`;
+  };
+  const patches = Array.from({ length: 26 }, (_, i) => { const a = i * 2.4, r = 120 + (i * 37) % 500; const x = 800 + Math.cos(a) * r, y = 510 + Math.sin(a) * r * .55; return `<path d="${blob(x, y, 40 + (i % 4) * 14, 18 + (i % 3) * 6, 9, .3, i)}" fill="${i % 2 ? '#8FCB5E' : '#5EA845'}" opacity=".45"/>`; }).join('');
+  const extras = () => `
+    ${windmill(560, 770)}
+    ${[[840, 770], [868, 778], [896, 770]].map(([x, y]) => beehive(x, y)).join('')}
+    ${reeds(690, 500)}${reeds(905, 470)}${reeds(760, 525)}
+    ${koi(770, 470, '#F28C28', 11)}${koi(790, 462, '#FFFFFF', 15)}
+    ${[[718, 520], [705, 545], [694, 572]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="9" ry="5" fill="#B9B2A6" ${sw(.7)}/>`).join('')}
+    <g transform="translate(860 520)"><path d="M0 0 l10 -1 M3 -1 l3 -6 M5 -1 l5 -5 M3 1 l3 6 M5 1 l5 5" stroke="#3FB6C4" stroke-width="1.4"/><animateMotion dur="7s" repeatCount="indefinite" path="M0 0 c20 -20 40 10 60 -10 s-20 -30 -60 10z"/></g>
+    ${butterfly(420, 520, '#F6D04A', 18)}${butterfly(1150, 520, '#F2A0C0', 22)}${butterfly(620, 260, '#B279D6', 20)}${butterfly(980, 760, '#FFFFFF', 24)}
+    ${person(470, 470, '#3E6FB3', '#E8B23A', `<path d="M5 -10 l10 4 l-2 6 h-10z" fill="#9AA6AE" stroke="${K}" stroke-width=".5"/><circle cx="3" cy="-1" r="2.4" fill="#2A2A2A"/>`)}
+    ${person(1090, 455, '#D9487A', '#F6E7C1', `<path d="M5 -12 l8 -2 v6 l-6 2z" fill="#3E9FCF" stroke="${K}" stroke-width=".5"/>`)}
+    ${person(500, 690, '#2F8A6A', '#B83A2A', `<circle cx="-7" cy="-12" r="3" fill="#F2A0C0" stroke="${K}" stroke-width=".5"/><circle cx="-9" cy="-15" r="2.6" fill="#F6D04A" stroke="${K}" stroke-width=".5"/>`)}
+    ${person(1160, 690, '#2E4A8A', '#C8243C')}${person(1172, 694, '#F6D04A', '#fff')}
+    ${person(760, 600, '#E8A62E', '#3E6FB3')}${person(980, 690, '#1F8FA8', '#F6E7C1')}
+    <g transform="translate(560 440)"><rect x="-16" y="-8" width="32" height="4" fill="#8A5428" ${sw(.6)}/><rect x="-16" y="-15" width="32" height="3" fill="#8A5428" ${sw(.6)}/><path d="M-14 -4 v6 M14 -4 v6 M-14 -15 v-2 M14 -15 v-2" stroke="#2A2A2A" stroke-width="1.4"/></g>
+    ${[[600, 600], [690, 610], [930, 610], [1010, 470]].map(([x, y]) => lamppost(x, y)).join('')}`;
+
   const place = (path, label, inner, sign) => `<a class="place" href="#${path}" aria-label="${label}">${inner}${sign}</a>`;
   function svg() {
     return `<svg viewBox="0 0 1600 1000" role="img" aria-label="Carte de l’île du Grand Jardin">${defs}
       <rect width="1600" height="1000" fill="url(#hSea)"/><rect width="1600" height="1000" fill="url(#hWaves)"/>
       <path d="${blob(800, 520, 730, 450, 16, .08, 21)}" fill="#F1DDB0" ${sw(2)}/><path d="${blob(800, 520, 730, 450, 16, .08, 21)}" fill="url(#dots)" opacity=".5"/>
-      <path d="${blob(800, 510, 690, 412, 16, .08, 21)}" fill="url(#hIsle)" ${sw(1.6)}/><path d="${blob(800, 510, 690, 412, 16, .08, 21)}" fill="url(#hGrass)"/>
+      ${shore()}<path d="${blob(800, 510, 690, 412, 16, .08, 21)}" fill="url(#hIsle)" ${sw(1.6)}/>${patches}<path d="${blob(800, 510, 690, 412, 16, .08, 21)}" fill="url(#hGrass)"/>
       ${Array.from({ length: 220 }, (_, i) => { const a = i * 2.39996, r = 60 + Math.sqrt(i / 220) * 600; const x = 800 + Math.cos(a) * r * 1.02, y = 510 + Math.sin(a) * r * .58; return `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${i % 4 ? 2 : 2.8}" fill="${['#FFFFFF', '#F6D04A', '#F2A0C0', '#E8432E', '#B279D6'][i % 5]}" opacity=".9"/>`; }).join('')}
-      ${paths}${fields}${pond()}${greenery}${boats}
+      ${paths}${fields}${pond()}${greenery}${boats}${extras()}
       ${place('potager', 'Silence ça truffe, le potager', potager(), bannerSign(380, 140, 'Le potager', '#E8432E'))}
       ${place('jardin', 'La grande serre, le jardin-boutique', serre(), bannerSign(1216, 380, 'La grande serre', '#2F8A6A'))}
       ${place('bouquet', 'L’atelier bouquet', atelier(), bannerSign(340, 890, 'L’atelier bouquet', '#D9487A'))}
