@@ -2,33 +2,102 @@
    LE VILLAGE DE NOËL — chaque élément est un produit Truffaut
    ============================================================ */
 const Noel = (() => {
-  let el, night = true;
+  let el, night = true, zoom = window.innerWidth < 700 ? 1.8 : 1.4;
   const W = 1400, H = 820;
   const it = (id) => VILLAGE.find((v) => v.id === id);
 
   /* ---------- petits dessins ---------- */
-  const person = (x, y, coat = '#EE5D45', s = 1, hat = '#fff', extra = '') => `<g transform="translate(${x} ${y}) scale(${s})">
-    <path d="M-9 0 Q-11 -26 0 -28 Q11 -26 9 0 Z" fill="${coat}" stroke="${INK}" stroke-width="2.5"/>
-    <circle cx="0" cy="-36" r="9" fill="#F6D2B5" stroke="${INK}" stroke-width="2.5"/>
-    <path d="M-9 -38 Q0 -54 9 -38 Z" fill="${hat}" stroke="${INK}" stroke-width="2.5"/>${extra}</g>`;
-  const snowRoof = (x, y, w) => `<path d="M${x - 6} ${y} Q${x + w / 4} ${y - 8} ${x + w / 2} ${y - 4} T${x + w + 6} ${y} L${x + w + 2} ${y + 8} Q${x + w * .7} ${y + 4} ${x + w / 2} ${y + 10} T${x - 2} ${y + 8} Z" fill="#fff" stroke="${INK}" stroke-width="2.5"/>`;
-  const win = (x, y, w = 14, h = 14) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" class="lit" fill="#FFD35A" stroke="${INK}" stroke-width="2.5"/>`;
-  const fir = (x, y, s = 1) => `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-5" y="-6" width="10" height="12" fill="#8C5A31" stroke="${INK}" stroke-width="2.5"/>
-    <path d="M0 -90 L26 -40 L14 -40 L34 -6 L-34 -6 L-14 -40 L-26 -40 Z" fill="#2F7A44" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/>
-    <path d="M0 -90 L12 -66 Q0 -60 -12 -66 Z M-20 -40 Q0 -32 20 -40 L14 -48 Q0 -42 -14 -48 Z M-30 -8 Q0 2 30 -8 L26 -16 Q0 -8 -26 -16 Z" fill="#fff" stroke="${INK}" stroke-width="2"/></g>`;
+  // Petit personnage victorien : manteau long, écharpe, bottes, chapeau haut-de-forme ou bonnet à pompon
+  const person = (x, y, coat = '#EE5D45', s = 1, hat = '#fff', extra = '') => {
+    const dark = Deco.shade(coat, -0.3), scarf = coat === '#EE5D45' || coat === '#E04E2E' ? '#2F7A44' : '#E04E2E';
+    const top = s >= .85 && hat !== '#fff';
+    return `<g transform="translate(${x} ${y}) scale(${s})">
+    <path d="M-5 0 v-7 M5 0 v-7" stroke="${INK}" stroke-width="4" stroke-linecap="round"/><path d="M-8 0 h6 M2 0 h6" stroke="#2B2B2B" stroke-width="3.4" stroke-linecap="round"/>
+    <path d="M-10 -5 Q-12 -27 -6 -29 L6 -29 Q12 -27 10 -5 Q0 -2 -10 -5Z" fill="${coat}" stroke="${INK}" stroke-width="1.8"/>
+    <path d="M3 -29 Q11 -27 10 -5 Q6 -4 3 -4Z" fill="url(#hatch)"/><path d="M0 -28 V-5" stroke="${dark}" stroke-width="1.2"/>
+    <circle cx="-1.6" cy="-22" r=".9" fill="${INK}"/><circle cx="-1.6" cy="-16" r=".9" fill="${INK}"/><circle cx="-1.6" cy="-10" r=".9" fill="${INK}"/>
+    <path d="M-10 -24 q-5 6 -3 12 M10 -24 q5 6 3 12" fill="none" stroke="${INK}" stroke-width="3.6" stroke-linecap="round"/><path d="M-10 -24 q-5 6 -3 12 M10 -24 q5 6 3 12" fill="none" stroke="${coat}" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M-7 -29 Q0 -25 7 -29 L6 -32 Q0 -29 -6 -32Z M3 -29 l3 9 l-4 0z" fill="${scarf}" stroke="${INK}" stroke-width="1.1"/>
+    <circle cx="0" cy="-38" r="7.5" fill="#F3D2B8" stroke="${INK}" stroke-width="1.6"/><circle cx="-2.6" cy="-38.5" r=".9" fill="${INK}"/><circle cx="2.6" cy="-38.5" r=".9" fill="${INK}"/>
+    <circle cx="-4" cy="-35.5" r="1.6" fill="#EE9AAE" opacity=".8"/><circle cx="4" cy="-35.5" r="1.6" fill="#EE9AAE" opacity=".8"/><path d="M-1.5 -34.5 q1.5 1.2 3 0" stroke="${INK}" stroke-width=".8" fill="none"/>
+    ${top ? `<rect x="-6" y="-56" width="12" height="12" fill="#2B2B2B" stroke="${INK}" stroke-width="1.4"/><path d="M-10 -44 h20" stroke="#2B2B2B" stroke-width="3" stroke-linecap="round"/><path d="M-6 -47 h12" stroke="${hat}" stroke-width="2"/>`
+          : `<path d="M-8 -40 Q-8 -50 0 -50 Q8 -50 8 -40Z" fill="${hat}" stroke="${INK}" stroke-width="1.4"/><path d="M-8.5 -41 h17" stroke="${Deco.shade(hat === '#fff' ? '#DDDDDD' : hat, -0.15)}" stroke-width="2.6" stroke-linecap="round"/><circle cy="-51" r="2.6" fill="#fff" stroke="${INK}" stroke-width="1"/>`}
+    ${extra}</g>`;
+  };
+  // Toit couvert d'une épaisse couche de neige, avec coulures et stalactites
+  const snowRoof = (x, y, w) => {
+    let drips = '', ice = '';
+    for (let i = w; i >= 0; i -= 9) { const h = 4 + ((Math.round(i) * 7) % 9); drips += ` Q${(x + i - 2).toFixed(1)} ${y + 8 + h} ${(x + i - 4.5).toFixed(1)} ${y + 8 + (Math.round(i) % 2 ? 2 : 5)}`; }
+    for (let i = 4; i < w; i += 11) ice += `<path d="M${x + i} ${y + 9} l1.6 ${5 + (i % 4) * 2} l1.6 ${-(5 + (i % 4) * 2)}" fill="#E8F4FA" stroke="${INK}" stroke-width=".7"/>`;
+    return `<path d="M${x - 6} ${y + 2} Q${x - 4} ${y - 9} ${x + w * .2} ${y - 7} Q${x + w * .45} ${y - 13} ${x + w * .65} ${y - 8} Q${x + w * .9} ${y - 12} ${x + w + 6} ${y + 1} L${x + w + 4} ${y + 8}${drips} L${x - 4} ${y + 8} Z" fill="#fff" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M${x + w * .25} ${y - 5} q${w * .15} -4 ${w * .3} 0" stroke="#D6E6F0" stroke-width="2" fill="none"/>${ice}`;
+  };
+  // Fenêtre à petits carreaux, lumière chaude, rideaux et appui enneigé
+  const win = (x, y, w = 14, h = 14) => `<g><rect x="${x - 1.5}" y="${y - 1.5}" width="${w + 3}" height="${h + 3}" rx="1.5" fill="#5E3B22" stroke="${INK}" stroke-width="1.2"/>
+    <rect x="${x}" y="${y}" width="${w}" height="${h}" class="lit" fill="#FFD35A"/><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#winGlow)"/>
+    <path d="M${x} ${y} q${w * .2} ${h * .5} 0 ${h} M${x + w} ${y} q${-w * .2} ${h * .5} 0 ${h}" fill="#C8243C" opacity=".75"/>
+    <path d="M${x + w / 2} ${y} V${y + h} M${x} ${y + h / 2} H${x + w}" stroke="#5E3B22" stroke-width="1.3"/>
+    <path d="M${x - 3} ${y + h + 2} h${w + 6} q-2 -4 -${(w + 6) / 2} -3 q-${(w + 6) / 2 - 2} -1 -${(w + 6) / 2} 3z" fill="#fff" stroke="${INK}" stroke-width=".8"/></g>`;
+  // Sapin floqué : trois étages découpés, paquets de neige, tronc
+  const fir = (x, y, s = 1) => {
+    const tier = (yy, w, h) => { let d = `M0 ${yy - h}`; const n = 5; for (let i = 0; i <= n; i++) d += ` L${w * (i / n)} ${yy - h * (1 - i / n) + (i % 2 ? 4 : 0)}`; d += ` L${-w} ${yy}`; for (let i = n; i >= 0; i--) d += ` L${-w * (i / n)} ${yy - h * (1 - i / n) + (i % 2 ? 4 : 0)}`; return d + 'Z'; };
+    return `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-5" y="-8" width="10" height="12" fill="#6B4528" stroke="${INK}" stroke-width="1.6"/>
+    ${[[-4, 36, 40], [-30, 28, 36], [-54, 19, 34]].map(([yy, w, h], i) => `<path d="${tier(yy, w, h)}" fill="${i % 2 ? '#2B6A3C' : '#24603A'}" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/><path d="${tier(yy, w, h)}" fill="url(#hatch)" opacity=".7"/>
+      <path d="M${-w * .9} ${yy - 2} q${w * .3} -7 ${w * .55} -2 q${w * .35} -8 ${w * .7} -1 q${w * .3} -6 ${w * .62} 1 l0 3 q${-w * .9} 4 ${-w * 1.85} 0z" fill="#fff" stroke="${INK}" stroke-width="1"/>
+      <circle cx="${-w * .35}" cy="${yy - h * .45}" r="${3 + i}" fill="#fff"/><circle cx="${w * .3}" cy="${yy - h * .6}" r="${2.5 + i * .6}" fill="#fff"/>`).join('')}
+    <path d="M-7 -82 q7 -10 14 0 q-7 4 -14 0z" fill="#fff" stroke="${INK}" stroke-width="1"/></g>`;
+  };
+  // Maison à colombages
+  const tudor = (x, y, w, h, wall = '#F3E9D2', roof = '#7A4E2D', opts = {}) => {
+    let beams = `<rect x="${x}" y="${y - h}" width="${w}" height="${h}" fill="${wall}" stroke="${INK}" stroke-width="1.8"/>`;
+    beams += `<rect x="${x}" y="${y - h * .42}" width="${w}" height="${h * .42}" fill="#B9A58A" stroke="${INK}" stroke-width="1.4"/>`;
+    for (let r = 0; r < 4; r++) for (let c = 0; c < Math.ceil(w / 12); c++) beams += `<rect x="${x + c * 12 + (r % 2) * 6}" y="${y - h * .42 + r * (h * .105)}" width="12" height="${h * .105}" fill="none" stroke="${INK}" stroke-width=".5" opacity=".45"/>`;
+    beams += `<path d="M${x} ${y - h * .42} H${x + w} M${x} ${y - h + 3} H${x + w}" stroke="#4A2E1A" stroke-width="3.2"/>`;
+    for (let i = 0; i <= w; i += w / 4) beams += `<path d="M${x + i} ${y - h} V${y - h * .42}" stroke="#4A2E1A" stroke-width="2.6"/>`;
+    for (let i = 0; i < w - 1; i += w / 4) beams += `<path d="M${x + i} ${y - h * .42} L${x + i + w / 8} ${y - h * .71} L${x + i + w / 4} ${y - h * .42}" stroke="#4A2E1A" stroke-width="1.6" fill="none"/>`;
+    beams += `<rect x="${x + w * .62}" y="${y - h}" width="${w * .38}" height="${h}" fill="url(#hatch)" opacity=".6"/>`;
+    const rx = x - 8, rw = w + 16, peak = y - h - h * .62;
+    let shingles = '';
+    for (let k = 1; k < 5; k++) { const yy = y - h - (h * .62) * (k / 5); const half = (rw / 2) * (1 - k / 5); shingles += `<path d="M${x + w / 2 - half} ${yy} ${Array.from({ length: Math.max(1, Math.round(half / 6)) }, (_, j) => `q3 4 6 0`).join(' ')} ${Array.from({ length: Math.max(1, Math.round(half / 6)) }, () => `q3 4 6 0`).join(' ')}" fill="none" stroke="${INK}" stroke-width=".6" opacity=".55"/>`; }
+    const roofD = `M${rx} ${y - h + 2} L${x + w / 2} ${peak} L${rx + rw} ${y - h + 2} Z`;
+    let out = beams + `<rect x="${x + w * .7}" y="${peak + 6}" width="${w * .13}" height="${h * .55}" fill="#8A5A3A" stroke="${INK}" stroke-width="1.4"/>`
+      + (opts.smoke !== false ? `<path class="smoke" d="M${x + w * .765} ${peak + 2} q-8 -10 0 -18 q8 -8 0 -16" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".7"/>` : '')
+      + `<path d="${roofD}" fill="${roof}" stroke="${INK}" stroke-width="1.8" stroke-linejoin="round"/>${shingles}<path d="M${x + w / 2} ${peak} L${rx + rw} ${y - h + 2} L${x + w / 2 + 6} ${y - h + 2}Z" fill="url(#hatch)"/>`
+      + `<path d="M${rx - 4} ${y - h + 4} L${x + w / 2} ${peak - 7} L${rx + rw + 4} ${y - h + 4} L${rx + rw - 2} ${y - h + 11} Q${x + w * .75} ${y - h + 5} ${x + w / 2} ${peak + 7} Q${x + w * .25} ${y - h + 5} ${rx + 2} ${y - h + 11}Z" fill="#fff" stroke="${INK}" stroke-width="1.4"/>`
+      + win(x + w * .12, y - h * .9, w * .22, h * .3) + win(x + w * .62, y - h * .9, w * .22, h * .3)
+      + `<path d="M${x + w * .4} ${y} v${-h * .32} a${w * .1} ${w * .1} 0 0 1 ${w * .2} 0 v${h * .32}z" fill="#5E3B22" stroke="${INK}" stroke-width="1.4"/><circle cx="${x + w * .5}" cy="${y - h * .26}" r="${w * .05}" fill="none" stroke="#2F7A44" stroke-width="2.4"/><circle cx="${x + w * .5}" cy="${y - h * .26 + w * .05}" r="1.4" fill="#C8243C"/>`
+      + Array.from({ length: 6 }, (_, i) => `<circle cx="${x + 4 + i * (w - 8) / 5}" cy="${y - h + 6 + (i % 2) * 3}" r="2.2" class="bulb b${i % 3}" stroke="${INK}" stroke-width=".6"/>`).join('');
+    if (opts.sign) out += `<rect x="${x + w * .1}" y="${y - h * .52}" width="${w * .8}" height="${h * .1 + 6}" rx="2" fill="#2F5A3A" stroke="${INK}" stroke-width="1.2"/><text x="${x + w / 2}" y="${y - h * .52 + h * .07 + 3}" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-style="italic" font-size="${Math.max(7, w * .1)}" fill="#F6D36A">${opts.sign}</text>`;
+    return `<g>${out}</g>`;
+  };
+  const lamp = (x, y) => `<g transform="translate(${x} ${y})"><circle cy="-58" r="26" class="glow" fill="url(#lampG)"/><path d="M0 0 V-50" stroke="#2B2B2B" stroke-width="3.4"/><path d="M-6 0 h12" stroke="#2B2B2B" stroke-width="4"/>
+    <path d="M-7 -50 h14 l-3 -12 h-8z" class="lit" fill="#FFE59A" stroke="#2B2B2B" stroke-width="1.6"/><path d="M-9 -62 h18 l-9 -7z" fill="#2B2B2B"/><path d="M-9 -63 q9 -6 18 0" stroke="#fff" stroke-width="2.4" fill="none"/>
+    <path d="M0 -30 q-10 2 -12 10" stroke="#2F7A44" stroke-width="2.4" fill="none"/><circle cx="-12" cy="-19" r="2.2" fill="#C8243C"/></g>`;
+  const bench = (x, y) => `<g transform="translate(${x} ${y})"><path d="M-20 0 v-10 M20 0 v-10 M-18 -10 v-12 M18 -10 v-12" stroke="#2B2B2B" stroke-width="2.4"/><rect x="-22" y="-13" width="44" height="4" fill="#8A5A3A" stroke="${INK}" stroke-width="1"/>
+    <rect x="-20" y="-24" width="40" height="3.4" fill="#8A5A3A" stroke="${INK}" stroke-width="1"/><rect x="-20" y="-19" width="40" height="3.4" fill="#8A5A3A" stroke="${INK}" stroke-width="1"/><path d="M-22 -14 q22 -6 44 0 l0 -2 q-22 -6 -44 0z M-20 -25 q20 -5 40 0" fill="#fff" stroke="#fff" stroke-width="1.6"/></g>`;
   const stand = (x, y, roof, sign, goods) => `<g transform="translate(${x} ${y})">
-    <rect x="-44" y="-50" width="88" height="50" fill="#C48A55" stroke="${INK}" stroke-width="2.5"/>
-    <rect x="-40" y="-30" width="80" height="12" fill="#E9D2A8" stroke="${INK}" stroke-width="2"/>${goods}
-    <path d="M-52 -50 L-40 -76 H40 L52 -50 Z" fill="${roof}" stroke="${INK}" stroke-width="2.5"/>
-    ${[-40, -20, 0, 20].map((k) => `<path d="M${k} -50 v8 a10 10 0 0 0 20 0 v-8" fill="#fff" stroke="${INK}" stroke-width="2"/>`).join('')}
+    <rect x="-44" y="-50" width="88" height="50" fill="#B98556" stroke="${INK}" stroke-width="1.8"/>
+    ${[-30, -15, 0, 15, 30].map((k) => `<path d="M${k} -50 V0" stroke="${INK}" stroke-width=".6" opacity=".4"/>`).join('')}<rect x="14" y="-50" width="30" height="50" fill="url(#hatch)" opacity=".6"/>
+    <rect x="-40" y="-44" width="80" height="16" fill="#3A2A1E" stroke="${INK}" stroke-width="1.2"/><rect x="-40" y="-44" width="80" height="16" fill="url(#winGlow)" class="lit" opacity=".75"/>
+    ${[-32, -20, -8, 4, 16, 28].map((k, i) => `<rect x="${k}" y="-40" width="8" height="${8 + (i % 2) * 3}" rx="1" fill="${['#C8243C', '#F0A830', '#5B8FD6', '#7CC46A', '#EE9AAE', '#FFFFFF'][i]}" stroke="${INK}" stroke-width=".6"/>`).join('')}
+    <rect x="-46" y="-30" width="92" height="10" fill="#E9D2A8" stroke="${INK}" stroke-width="1.4"/><path d="M-46 -30 q46 -5 92 0 v-3 q-46 -5 -92 0z" fill="#fff" stroke="${INK}" stroke-width=".8"/>${goods}
+    <rect x="-40" y="-14" width="22" height="14" fill="#C9A06A" stroke="${INK}" stroke-width="1.2"/><path d="M-40 -7 h22 M-29 -14 v14" stroke="${INK}" stroke-width=".7"/><rect x="22" y="-12" width="18" height="12" fill="#C9A06A" stroke="${INK}" stroke-width="1.2"/><path d="M22 -12 l18 12 M40 -12 l-18 12" stroke="${INK}" stroke-width=".6"/>
+    <path d="M-52 -50 L-40 -76 H40 L52 -50 Z" fill="${roof}" stroke="${INK}" stroke-width="1.8"/>${[-30, -10, 10, 30].map((k) => `<path d="M${k} -76 L${k * 1.3} -50" stroke="#fff" stroke-width="5" opacity=".75"/>`).join('')}
+    ${[-52, -32, -12, 8, 28].map((k) => `<path d="M${k} -50 v6 a10 10 0 0 0 20 0 v-6" fill="#fff" stroke="${INK}" stroke-width="1.4"/>`).join('')}
     ${snowRoof(-46, -80, 92)}
-    <rect x="-30" y="-100" width="60" height="18" rx="4" fill="#F6E7C1" stroke="${INK}" stroke-width="2"/><text x="0" y="-87" text-anchor="middle" class="vsign">${sign}</text>
-    ${[-36, -18, 0, 18, 36].map((k, i) => `<circle cx="${k}" cy="-48" r="3.5" class="bulb b${i % 3}" stroke="${INK}" stroke-width="1.5"/>`).join('')}</g>`;
+    <path d="M-50 -48 v10 M50 -48 v10" stroke="${INK}" stroke-width="1"/><g class="lantern"><rect x="-54" y="-38" width="8" height="10" rx="2" class="lit" fill="#FFD35A" stroke="${INK}" stroke-width="1"/></g><g class="lantern"><rect x="46" y="-38" width="8" height="10" rx="2" class="lit" fill="#FFD35A" stroke="${INK}" stroke-width="1"/></g>
+    <rect x="-32" y="-102" width="64" height="20" rx="3" fill="#F3E9D2" stroke="${INK}" stroke-width="1.4"/><text x="0" y="-88" text-anchor="middle" class="vsign">${sign}</text><circle cx="-32" cy="-92" r="6" fill="none" stroke="#2F7A44" stroke-width="3"/><circle cx="-32" cy="-86" r="1.6" fill="#C8243C"/>
+    ${[-36, -18, 0, 18, 36].map((k, i) => `<circle cx="${k}" cy="-47" r="2.6" class="bulb b${i % 3}" stroke="${INK}" stroke-width=".8"/>`).join('')}</g>`;
   const item = (id, inner, label) => `<g class="vitem" data-id="${id}" tabindex="0" role="button" aria-label="${esc(label || it(id).name)}">${inner}</g>`;
 
   function scene() {
     const sky = `<defs>
       <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="sky1"/><stop offset="1" class="sky2"/></linearGradient>
+      <radialGradient id="winGlow" cx=".5" cy=".6" r=".7"><stop offset="0" stop-color="#FFF6D0" stop-opacity=".9"/><stop offset="1" stop-color="#F0A830" stop-opacity=".2"/></radialGradient>
+      <radialGradient id="lampG"><stop offset="0" stop-color="#FFE59A" stop-opacity=".6"/><stop offset="1" stop-color="#FFE59A" stop-opacity="0"/></radialGradient>
+      <path id="cablePath" d="M352 318 L688 168"/>
+      <clipPath id="ringBack"><rect x="-200" y="-400" width="400" height="400"/></clipPath><clipPath id="ringFront"><rect x="-200" y="0" width="400" height="300"/></clipPath>
+      <path id="ringPath" d="M-74 0 a74 15 0 1 0 148 0 a74 15 0 1 0 -148 0"/>
       <path id="sleighPath" d="M-260 170 C200 90 500 230 800 140 S1300 110 1700 160"/>
       <path id="trackPath" d="M470 690 C470 640 560 630 740 630 C920 630 1060 640 1060 690 C1060 745 920 760 740 760 C560 760 470 745 470 690 Z"/>
       <path id="pondPath" d="M105 668 a80 22 0 1 0 160 0 a80 22 0 1 0 -160 0"/>
@@ -40,6 +109,74 @@ const Noel = (() => {
     const hills = `<path d="M0 340 Q160 260 360 340 T760 330 T1150 320 T${W} 330 V${H} H0 Z" fill="#EEF4FA" stroke="${INK}" stroke-width="3"/>
       <path d="M0 470 Q300 430 700 470 T${W} 460 V${H} H0Z" fill="#FFFFFF" stroke="${INK}" stroke-width="3"/>
       <path d="M90 372 Q190 408 330 474" stroke="#D5E3F0" stroke-width="22" fill="none" stroke-linecap="round"/>`;
+
+
+    /* Montagne rocheuse enneigée, chalets perchés et téléphérique */
+    const rock = `<path d="M240 345 L330 250 L380 270 L450 170 L510 210 L590 110 L660 180 L720 140 L800 230 L860 200 L960 300 L1010 345Z" fill="#9AA3A8" stroke="${INK}" stroke-width="2"/>
+      <path d="M590 110 L620 345 M450 170 L470 345 M720 140 L700 345 M330 250 L360 345 M860 200 L840 345 M510 210 L540 300 M660 180 L640 290" stroke="${INK}" stroke-width=".9" opacity=".45" fill="none"/>
+      <path d="M590 110 L660 180 L640 345 L620 345Z M450 170 L510 210 L480 345 L470 345Z M720 140 L800 230 L760 345 L700 345Z M860 200 L960 300 L900 345 L840 345Z" fill="url(#hatch)"/>
+      <path d="M560 146 L590 110 L620 140 L606 150 L592 138 L578 154Z M430 196 L450 170 L474 186 L462 196 L450 188 L440 202Z M700 160 L720 140 L748 172 L732 176 L720 162 L708 174Z M842 214 L860 200 L888 228 L872 230 L860 218 L850 230Z M318 262 L330 250 L352 258 L340 266Z" fill="#fff" stroke="${INK}" stroke-width="1.2"/>
+      <path d="M330 300 q60 -14 120 0 q50 10 100 -4 M520 250 q60 -10 110 6 M690 260 q70 -12 140 4 M380 330 q90 -10 180 2 q120 10 240 -4 q90 -8 160 4" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round"/>`;
+    const perched = [[400, 300, 46, 34, '#E86F5A'], [560, 252, 40, 30, '#5B8FD6'], [700, 262, 44, 32, '#F3E9D2'], [860, 296, 42, 30, '#F6D36A']]
+      .map(([x, y, w, h, c], i) => tudor(x, y, w, h, c, ['#7A4E2D', '#3E5A4A', '#7A3A3A', '#5E3B22'][i])).join('')
+      + [[470, 300, .4], [630, 254, .38], [800, 268, .42], [930, 312, .4], [520, 246, .3], [760, 230, .3], [360, 318, .36]].map(([x, y, sc]) => fir(x, y, sc)).join('');
+    const cable = `<path d="M352 318 L688 168" stroke="${INK}" stroke-width="1.6"/><path d="M352 324 L688 174" stroke="${INK}" stroke-width=".9" opacity=".6"/>
+      <g transform="translate(340 336)"><rect x="-16" y="-24" width="32" height="24" fill="#B9A58A" stroke="${INK}" stroke-width="1.6"/><path d="M-20 -24 L0 -36 L20 -24Z" fill="#7A3A3A" stroke="${INK}" stroke-width="1.6"/>${snowRoof(-20, -32, 40)}<circle cx="8" cy="-16" r="5" fill="#888" stroke="${INK}" stroke-width="1.2"/></g>
+      <g transform="translate(700 186)"><rect x="-16" y="-24" width="32" height="24" fill="#B9A58A" stroke="${INK}" stroke-width="1.6"/><path d="M-20 -24 L0 -36 L20 -24Z" fill="#7A3A3A" stroke="${INK}" stroke-width="1.6"/>${snowRoof(-20, -32, 40)}<circle cx="-8" cy="-16" r="5" fill="#888" stroke="${INK}" stroke-width="1.2"/></g>
+      <g><g transform="translate(0 0)"><path d="M0 -2 V10" stroke="${INK}" stroke-width="1.6"/><rect x="-11" y="10" width="22" height="18" rx="4" fill="#C8243C" stroke="${INK}" stroke-width="1.6"/><rect x="-8" y="13" width="7" height="7" class="lit" fill="#FFD35A" stroke="${INK}" stroke-width=".8"/><rect x="1" y="13" width="7" height="7" class="lit" fill="#FFD35A" stroke="${INK}" stroke-width=".8"/><path d="M-12 10 q12 -5 24 0" stroke="#fff" stroke-width="2" fill="none"/></g>
+        <animateMotion dur="22s" repeatCount="indefinite" keyPoints="0;1;1;0;0" keyTimes="0;.45;.5;.95;1" calcMode="linear"><mpath href="#cablePath"/></animateMotion></g>`;
+    const mountain = `<g class="decor" aria-hidden="true">${rock}${perched}${cable}</g>`;
+
+    /* Grande tour-horloge à colombages, manège de rennes et heure réelle */
+    const now = new Date(); const mAng = now.getMinutes() * 6 + now.getSeconds() * .1, hAng = (now.getHours() % 12) * 30 + now.getMinutes() * .5;
+    const reindeerRing = (clip) => `<g clip-path="url(#${clip})">${[0, 1, 2, 3, 4].map((i) => `<g><g transform="scale(.85)"><path d="M-14 0 c0 -10 6 -14 16 -12 l6 -10 l5 3 l-4 9 c4 2 4 8 0 10 l-2 6 h-3 l0 -6 h-12 l-2 6 h-3z" fill="#C9874F" stroke="${INK}" stroke-width="1.2"/>
+        <path d="M10 -22 l-3 -8 M10 -22 l4 -7 M7 -28 l-4 -2 M14 -27 l4 -2" stroke="#6B4528" stroke-width="1.4" fill="none"/><circle cx="15" cy="-14" r="1.6" fill="#C8243C"/><path d="M-4 -12 q4 -4 10 0" fill="#C8243C" stroke="${INK}" stroke-width=".6"/><path d="M0 -12 V-34" stroke="#D9B98A" stroke-width="1.6"/></g>
+        <animateMotion dur="9s" begin="${-i * 1.8}s" repeatCount="indefinite"><mpath href="#ringPath"/></animateMotion></g>`).join('')}</g>`;
+    const tower = `<g class="decor" aria-hidden="true" transform="translate(1170 560)">
+      <rect x="-46" y="-90" width="92" height="90" fill="#D9C6A8" stroke="${INK}" stroke-width="1.8"/>
+      ${Array.from({ length: 7 }, (_, r) => Array.from({ length: 8 }, (_, c) => `<rect x="${-46 + c * 12 + (r % 2) * 6}" y="${-90 + r * 13}" width="12" height="13" fill="none" stroke="${INK}" stroke-width=".5" opacity=".4"/>`).join('')).join('')}
+      <path d="M-30 0 v-34 a14 14 0 0 1 28 0 v34z M4 0 v-34 a14 14 0 0 1 28 0 v34z" fill="#C8243C" stroke="${INK}" stroke-width="1.4"/><path d="M-22 -4 v-26 a6 6 0 0 1 12 0 v26z M12 -4 v-26 a6 6 0 0 1 12 0 v26z" fill="#2F7A44" stroke="${INK}" stroke-width="1"/>
+      <rect x="10" y="-90" width="36" height="90" fill="url(#hatch)" opacity=".6"/>
+      <path d="M-56 -90 h112 l-8 -12 h-96z" fill="#3E3E3E" stroke="${INK}" stroke-width="1.6"/>${snowRoof(-56, -104, 112)}
+      ${reindeerRing('ringBack').replace('<g clip-path', '<g transform="translate(0 -122)"><g clip-path') + '</g>'}
+      <rect x="-34" y="-230" width="68" height="128" fill="#F3E9D2" stroke="${INK}" stroke-width="1.8"/>
+      <path d="M-34 -230 V-102 M34 -230 V-102 M-17 -230 V-102 M17 -230 V-102 M-34 -166 H34 M-34 -226 H34" stroke="#4A2E1A" stroke-width="2.6"/>
+      <path d="M-34 -166 L-17 -140 L0 -166 L17 -140 L34 -166 M-34 -102 L-17 -128 L0 -102 L17 -128 L34 -102" stroke="#4A2E1A" stroke-width="1.6" fill="none"/>
+      <rect x="-12" y="-150" width="24" height="34" rx="12" fill="#5E3B22" stroke="${INK}" stroke-width="1.2"/><rect x="-9" y="-146" width="18" height="28" rx="9" class="lit" fill="#9FD3A0" stroke="${INK}" stroke-width="1"/><path d="M0 -146 V-118 M-9 -132 H9" stroke="#5E3B22" stroke-width="1.2"/>
+      <rect x="6" y="-230" width="28" height="128" fill="url(#hatch)" opacity=".55"/>
+      <circle cx="0" cy="-196" r="22" fill="#5E3B22" stroke="${INK}" stroke-width="1.6"/><circle cx="0" cy="-196" r="18" fill="#FBF6E6" stroke="${INK}" stroke-width="1.2"/>
+      ${Array.from({ length: 12 }, (_, i) => `<path d="M0 -213 v${i % 3 ? 2 : 4}" stroke="${INK}" stroke-width="${i % 3 ? .8 : 1.6}" transform="rotate(${i * 30} 0 -196)"/>`).join('')}
+      <path d="M0 -196 V-207" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" from="${hAng} 0 -196" to="${hAng + 360} 0 -196" dur="43200s" repeatCount="indefinite"/></path>
+      <path d="M0 -196 V-211" stroke="${INK}" stroke-width="1.4" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" from="${mAng} 0 -196" to="${mAng + 360} 0 -196" dur="3600s" repeatCount="indefinite"/></path><circle cx="0" cy="-196" r="1.8" fill="${INK}"/>
+      <path d="M-46 -230 h92 l-10 -12 h-72z" fill="#3E3E3E" stroke="${INK}" stroke-width="1.6"/>${snowRoof(-46, -244, 92)}
+      <path d="M-40 -246 L0 -330 L40 -246Z" fill="#3E3E3E" stroke="${INK}" stroke-width="1.8"/>
+      ${Array.from({ length: 6 }, (_, k) => `<path d="M${-40 + k * 7} ${-246 - k * 14} h${80 - k * 14}" stroke="#777" stroke-width=".8"/>`).join('')}
+      <path d="M-40 -246 L0 -330 L-6 -246Z" fill="url(#hatchL)"/><path d="M-44 -246 q-2 -10 6 -12 q16 6 22 -6 q10 10 20 2 q12 10 24 -2 q8 6 18 16z" fill="#fff" stroke="${INK}" stroke-width="1.2"/>
+      <circle cx="0" cy="-268" r="9" fill="none" stroke="#2F7A44" stroke-width="5"/><path d="M-4 -260 l4 6 l4 -6" fill="#C8243C"/><path d="M0 -330 V-352" stroke="${INK}" stroke-width="2"/><path d="M0 -352 l12 4 l-12 4" fill="#C8243C" stroke="${INK}" stroke-width="1"/>
+      ${Array.from({ length: 9 }, (_, i) => `<circle cx="${-40 + i * 10}" cy="${-232 + (i % 2) * 3}" r="2.2" class="bulb b${i % 3}" stroke="${INK}" stroke-width=".6"/>`).join('')}
+      <g transform="translate(0 -122)">${reindeerRing('ringFront')}</g>
+      <path d="M-78 -122 a78 17 0 0 0 156 0" fill="none" stroke="#C48A55" stroke-width="2"/>
+    </g>`;
+
+    /* Boutiques à colombages en arrière-plan, lampadaires, bancs, grand sapin floqué, traces de pas */
+    const shops = `<g class="decor" aria-hidden="true">${tudor(150, 476, 62, 54, '#F3E9D2', '#7A3A3A', { sign: 'Boutique de Noël' })}${tudor(700, 470, 56, 50, '#F6E7C1', '#3E5A4A', { sign: 'Pâtisserie' })}${tudor(1018, 478, 54, 48, '#E9D2D2', '#5E3B22', { sign: 'Jouets' })}</g>`;
+    const lamps = `<g class="decor" aria-hidden="true">${lamp(205, 640)}${lamp(560, 625)}${lamp(870, 610)}${lamp(1120, 690)}${lamp(1390, 760)}${bench(240, 760)}${bench(1160, 640)}</g>`;
+    const bigTree = `<g class="decor" aria-hidden="true">${fir(1355, 620, 1.35)}${Array.from({ length: 10 }, (_, i) => `<circle cx="${1355 + Math.sin(i * 2.1) * (8 + i * 3)}" cy="${620 - 20 - i * 9}" r="2.4" class="bulb b${i % 3}" stroke="${INK}" stroke-width=".6"/>`).join('')}</g>`;
+    const prints = `<g class="decor" aria-hidden="true" opacity=".35">${Array.from({ length: 26 }, (_, i) => `<ellipse cx="${300 + i * 24}" cy="${612 + Math.sin(i * .7) * 6 + (i % 2) * 6}" rx="3" ry="1.8" fill="#8FA6C0"/>`).join('')}${Array.from({ length: 16 }, (_, i) => `<ellipse cx="${1080 + i * 18}" cy="${720 - i * 4 + (i % 2) * 6}" rx="3" ry="1.8" fill="#8FA6C0"/>`).join('')}</g>`;
+    const sparkle = `<g class="decor sparkle" aria-hidden="true">${Array.from({ length: 70 }, (_, i) => `<circle cx="${(i * 197) % W}" cy="${480 + (i * 61) % 330}" r="${i % 5 ? .9 : 1.6}" fill="#BFD6EA"/>`).join('')}</g>`;
+    const bank = `<g class="decor" aria-hidden="true"><path d="M0 ${H} V${H - 26} Q80 ${H - 52} 170 ${H - 30} T360 ${H - 24} T560 ${H - 36} T780 ${H - 22} T1000 ${H - 34} T1220 ${H - 20} T${W} ${H - 30} V${H}Z" fill="#fff" stroke="${INK}" stroke-width="1.6"/>
+      ${[[40, H - 34], [520, H - 38], [960, H - 36]].map(([x, y]) => fir(x, y, .45)).join('')}${[[300, H - 26], [700, H - 26], [1300, H - 28]].map(([x, y]) => `<path d="${blob(x, y, 22, 10, 8, .3, x)}" fill="#E8F1F8" stroke="${INK}" stroke-width="1"/>`).join('')}</g>`;
+
+
+    const garlandLights = `<g class="decor" aria-hidden="true">${[[205, 582, 560, 567], [560, 567, 870, 552]].map(([x1, y1, x2, y2]) => { const mx = (x1 + x2) / 2, my = Math.max(y1, y2) + 28; return `<path d="M${x1} ${y1} Q${mx} ${my} ${x2} ${y2}" fill="none" stroke="#2F5A3A" stroke-width="1.4"/>` + Array.from({ length: 14 }, (_, i) => { const t = (i + 1) / 15, x = (1 - t) * (1 - t) * x1 + 2 * (1 - t) * t * mx + t * t * x2, y = (1 - t) * (1 - t) * y1 + 2 * (1 - t) * t * my + t * t * y2; return `<path d="M${x.toFixed(1)} ${y.toFixed(1)} v3" stroke="#2F5A3A"/><circle cx="${x.toFixed(1)}" cy="${(y + 5).toFixed(1)}" r="2.6" class="bulb b${i % 3}" stroke="${INK}" stroke-width=".6"/>`; }).join(''); }).join('')}</g>`;
+    const book = '<rect x="-7" y="-24" width="9" height="6" fill="#C8243C" stroke="#1F3A2E" stroke-width=".8"/>';
+    const carolers = `<g class="decor" aria-hidden="true">${person(1240, 590, '#2E4A8A', .9, '#C8243C', book)}${person(1262, 594, '#7A3A3A', .85, '#fff', book)}${person(1284, 590, '#2F7A44', .9, '#2B2B2B', book)}${person(1252, 606, '#F0A830', .6, '#fff')}
+      <text x="1236" y="530" class="note" font-size="16">♪</text><text x="1290" y="522" class="note n2" font-size="16">♫</text></g>`;
+    const snowman = `<g class="decor" aria-hidden="true" transform="translate(110 770)"><circle cy="-14" r="16" fill="#fff" stroke="${INK}" stroke-width="1.6"/><circle cy="-40" r="11" fill="#fff" stroke="${INK}" stroke-width="1.6"/><circle cy="-58" r="8" fill="#fff" stroke="${INK}" stroke-width="1.6"/>
+      <path d="M-1 -58 l9 2 l-9 2z" fill="#F0A830"/><circle cx="-3" cy="-61" r="1.1" fill="${INK}"/><circle cx="2" cy="-61" r="1.1" fill="${INK}"/><rect x="-6" y="-76" width="12" height="11" fill="#2B2B2B"/><path d="M-10 -65 h20" stroke="#2B2B2B" stroke-width="2.4"/>
+      <path d="M-9 -48 q9 5 18 0 l2 10 h-5 l-2 -6" fill="#C8243C" stroke="${INK}" stroke-width=".8"/><path d="M-10 -40 l-16 -10 M10 -40 l14 -12" stroke="#6B4528" stroke-width="2"/><circle cy="-40" r="1.2" fill="${INK}"/><circle cy="-34" r="1.2" fill="${INK}"/>
+      ${person(-30, 4, '#5B8FD6', .6, '#F0A830')}${person(34, 4, '#EE9AAE', .6, '#fff')}<g transform="translate(50 8)"><path d="M-14 0 h26 q6 0 6 -6" fill="none" stroke="#C8243C" stroke-width="2.4"/><rect x="-12" y="-6" width="22" height="4" fill="#B98556" stroke="${INK}" stroke-width=".8"/></g></g>`;
+    const birds = `<g class="decor" aria-hidden="true">${[[488, 268], [512, 266], [1062, 413], [732, 420]].map(([x, y]) => `<g transform="translate(${x} ${y})"><ellipse rx="5" ry="4" fill="#C8243C" stroke="${INK}" stroke-width=".9"/><circle cx="4" cy="-3" r="2.6" fill="#C8243C" stroke="${INK}" stroke-width=".8"/><path d="M6 -3 l3 1 l-3 1" fill="#F0A830"/><path d="M-4 0 l-5 2" stroke="${INK}" stroke-width="1"/></g>`).join('')}</g>`;
 
     // Père Noël dans les airs : le traîneau traverse le ciel, une famille le regarde
     const sleigh = item('traineau', `<g><g class="sleigh">
@@ -57,19 +194,12 @@ const Noel = (() => {
         <path d="M-14 2 h26 M8 4 h22" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>
         <animateMotion dur="7s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="linear"><mpath href="#slopePath"/></animateMotion></g></g>`);
 
-    const rennes = item('rennes', `<g transform="translate(470 420)">
-        <path d="M-60 0 Q-70 -40 -40 -50 L-40 -90 L40 -90 L40 -50 Q70 -40 60 0 Z" fill="#fff" stroke="${INK}" stroke-width="3"/>
-        <rect x="-40" y="-90" width="80" height="62" fill="#E86F5A" stroke="${INK}" stroke-width="2.5"/>
-        <path d="M-50 -88 L0 -130 L50 -88 Z" fill="#7A4E2D" stroke="${INK}" stroke-width="2.5"/>${snowRoof(-52, -96, 104)}
-        <rect x="20" y="-140" width="12" height="22" fill="#8C5A31" stroke="${INK}" stroke-width="2"/><rect x="18" y="-150" width="16" height="10" fill="#5BB7E6" stroke="${INK}" stroke-width="2"/>
-        ${win(-30, -76)}${win(14, -76)}<rect x="-8" y="-58" width="16" height="30" fill="#8C5A31" stroke="${INK}" stroke-width="2.5"/>
-        ${fir(-74, -2, .55)}<path d="M-96 -40 q12 10 24 -2 q10 12 22 0" fill="none" stroke="${INK}" stroke-width="1.5"/>
-        ${[-92, -84, -76, -66, -58].map((x, i) => `<circle cx="${x}" cy="${-36 + (i % 2) * 6}" r="3" class="bulb b${i % 3}" stroke="${INK}" stroke-width="1"/>`).join('')}
-        <g transform="translate(-60 -8)"><path d="M-10 0 v-14 q0 -8 10 -8 h10 l4 -8 l6 4 l-4 8 v18" fill="#A9774C" stroke="${INK}" stroke-width="2.5"/><path d="M14 -30 l-4 -10 M18 -28 l6 -8" stroke="${INK}" stroke-width="2"/><circle cx="20" cy="-22" r="2.5" fill="#EE5D45"/></g></g>`);
-
-    const scout = item('scout', `<g transform="translate(630 418)"><rect x="-26" y="-36" width="52" height="36" fill="#8C5A31" stroke="${INK}" stroke-width="2.5"/>
-        <path d="M-34 -34 L0 -62 L34 -34 Z" fill="#2F7A44" stroke="${INK}" stroke-width="2.5"/>${snowRoof(-36, -40, 72)}${win(-18, -26, 12, 12)}<rect x="4" y="-24" width="12" height="24" fill="#5E3B22" stroke="${INK}" stroke-width="2"/>
-        <path d="M30 0 v-30 l18 6 l-18 6" fill="#EE5D45" stroke="${INK}" stroke-width="2"/></g>`);
+    const rennes = item('rennes', `<g><path d="${blob(470, 418, 90, 26, 9, .2, 4)}" fill="#fff" stroke="${INK}" stroke-width="1.6"/>${tudor(426, 420, 88, 74, '#E86F5A', '#5E3B22')}
+        ${fir(392, 424, .62)}${Array.from({ length: 7 }, (_, i) => `<circle cx="${392 + Math.sin(i * 1.9) * (6 + i * 3)}" cy="${424 - 14 - i * 8}" r="2.4" class="bulb b${i % 3}" stroke="${INK}" stroke-width=".6"/>`).join('')}
+        <path d="M372 396 q20 14 40 -6" fill="none" stroke="#2F5A3A" stroke-width="1.2"/>
+        <g transform="translate(404 420)"><path d="M-14 0 c0 -10 6 -14 16 -12 l6 -10 l5 3 l-4 9 c4 2 4 8 0 10 l-2 6 h-3 l0 -6 h-12 l-2 6 h-3z" fill="#C9874F" stroke="${INK}" stroke-width="1.2"/><path d="M10 -22 l-3 -8 M10 -22 l4 -7" stroke="#6B4528" stroke-width="1.4"/><circle cx="15" cy="-14" r="1.8" fill="#C8243C"/><path d="M4 -24 q6 8 -14 6" fill="none" stroke="#2F5A3A" stroke-width="1"/><circle cx="0" cy="-19" r="2" class="bulb b0"/><circle cx="-6" cy="-18" r="2" class="bulb b1"/></g>
+        <rect x="490" y="302" width="12" height="12" fill="#C8243C" stroke="${INK}" stroke-width="1"/><path d="M490 308 h12 M496 302 v12" stroke="#F0A830" stroke-width="1.6"/></g>`);
+    const scout = item('scout', `<g>${tudor(604, 420, 52, 44, '#8C6A48', '#2F5A3A', { smoke: false })}<path d="M664 420 v-30 l18 6 l-18 6" fill="#C8243C" stroke="${INK}" stroke-width="1.4"/>${person(674, 422, '#7A8A4A', .6, '#C9A06A')}</g>`);
 
     // Les cloches de Noël sonnent : trois jeunes sonneurs tirent les cordes
     const cloches = item('cloches', `<g transform="translate(800 440)">
@@ -109,10 +239,15 @@ const Noel = (() => {
         <g>${person(-8, 0, '#EE5D45', .7, '#fff')}${person(10, 0, '#5B6FA8', .75, '#EE5D45')}<animateMotion dur="9s" repeatCount="indefinite"><mpath href="#pondPath"/></animateMotion></g></g>`);
 
     // Train express du Père Noël sur son ovale de rails
-    const wagon = (c, gifts) => `<g><rect x="-22" y="-26" width="44" height="22" rx="3" fill="${c}" stroke="${INK}" stroke-width="2.5"/>${gifts}<circle cx="-12" cy="-2" r="6" fill="${INK}"/><circle cx="12" cy="-2" r="6" fill="${INK}"/></g>`;
-    const loco = `<g><rect x="-26" y="-30" width="34" height="26" fill="#EE5D45" stroke="${INK}" stroke-width="2.5"/><rect x="8" y="-42" width="20" height="38" fill="#2F7A44" stroke="${INK}" stroke-width="2.5"/><rect x="-22" y="-44" width="10" height="14" fill="${INK}"/>
-        <circle cx="-14" cy="-2" r="7" fill="${INK}"/><circle cx="16" cy="-2" r="7" fill="${INK}"/><circle cx="-30" cy="-16" r="4" class="lit" fill="#FFD35A" stroke="${INK}" stroke-width="2"/>${win(12, -38, 12, 10)}
-        <path class="smoke" d="M-17 -48 q-8 -10 0 -18" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/></g>`;
+    const wheel = (x, r) => `<g transform="translate(${x} -3)"><circle r="${r}" fill="#2B2B2B" stroke="${INK}" stroke-width="1"/><circle r="${r * .7}" fill="#C8243C"/>${[0, 45, 90, 135].map((a) => `<path d="M${-r * .7} 0 H${r * .7}" stroke="#2B2B2B" stroke-width="1" transform="rotate(${a})"/>`).join('')}<circle r="${r * .2}" fill="#F0A830"/></g>`;
+    const wagon = (c, gifts) => `<g><rect x="-22" y="-24" width="44" height="18" rx="2" fill="${c}" stroke="${INK}" stroke-width="1.6"/><path d="M-22 -18 h44 M-22 -11 h44" stroke="${INK}" stroke-width=".6" opacity=".5"/><rect x="-24" y="-8" width="48" height="4" fill="#2B2B2B"/>${gifts}${wheel(-12, 5.5)}${wheel(12, 5.5)}</g>`;
+    const loco = `<g><rect x="-30" y="-26" width="40" height="20" rx="9" fill="#C8243C" stroke="${INK}" stroke-width="1.6"/>${[-20, -8, 4].map((k) => `<path d="M${k} -26 v20" stroke="#F0A830" stroke-width="2"/>`).join('')}
+        <rect x="8" y="-44" width="22" height="38" rx="2" fill="#2F7A44" stroke="${INK}" stroke-width="1.6"/><path d="M5 -46 h28 l-3 -5 h-22z" fill="#2B2B2B" stroke="${INK}" stroke-width="1"/>${snowRoof(6, -52, 26)}
+        <path d="M-26 -26 v-14 h-6 l2 -6 h12 l2 6 h-6 v14" fill="#2B2B2B" stroke="${INK}" stroke-width="1.2"/><path d="M-6 -26 a5 5 0 0 1 10 0" fill="#F0A830" stroke="${INK}" stroke-width="1"/>
+        <rect x="-34" y="-8" width="66" height="4" fill="#2B2B2B"/><path d="M-36 -4 l-6 4 h8z" fill="#C8243C" stroke="${INK}" stroke-width="1"/>
+        ${wheel(-22, 5.5)}${wheel(-8, 5.5)}${wheel(18, 8)}<path d="M-22 -3 H18" stroke="#AAB" stroke-width="2"/>
+        <circle cx="-34" cy="-18" r="4" class="lit" fill="#FFE59A" stroke="${INK}" stroke-width="1.2"/>${win(12, -40, 14, 11)}<circle cx="-30" cy="-30" r="5" fill="none" stroke="#2F7A44" stroke-width="2.4"/>
+        <path class="smoke" d="M-26 -48 q-8 -10 0 -18 q8 -8 0 -16" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round"/></g>`;
     const car = (inner, delay) => `<g>${inner}<animateMotion dur="14s" begin="${delay}s" repeatCount="indefinite" calcMode="linear"><mpath href="#trackPath"/></animateMotion></g>`;
     const train = item('train', `<g><use href="#trackPath" fill="none" stroke="#8C5A31" stroke-width="16"/><use href="#trackPath" fill="none" stroke="#CFC6B8" stroke-width="8" stroke-dasharray="3 9"/><use href="#trackPath" fill="none" stroke="${INK}" stroke-width="2"/>
         ${car(loco, '0')}
@@ -135,13 +270,13 @@ const Noel = (() => {
     const horloge = item('horloge', `<g transform="translate(880 650)"><rect x="-3" y="-60" width="6" height="60" fill="#2E3A2A"/><circle cy="-66" r="13" fill="#fff" stroke="${INK}" stroke-width="3"/><path d="M0 -66 v-8 M0 -66 l6 3" stroke="${INK}" stroke-width="2" stroke-linecap="round"/></g>`);
     const puits = item('puits', `<g transform="translate(330 760)"><rect x="-22" y="-20" width="44" height="22" fill="#B9C6CC" stroke="${INK}" stroke-width="2.5"/><path d="M-18 -20 v-30 M18 -20 v-30 M-24 -50 L0 -64 L24 -50 Z" stroke="${INK}" stroke-width="2.5" fill="#7A4E2D"/>${snowRoof(-26, -54, 52)}<rect x="-6" y="-36" width="12" height="10" fill="#C48A55" stroke="${INK}" stroke-width="2"/></g>`);
     const niche = item('niche', `<g transform="translate(1340 690)"><rect x="-22" y="-26" width="44" height="26" fill="#EE5D45" stroke="${INK}" stroke-width="2.5"/><path d="M-28 -24 L0 -44 L28 -24 Z" fill="#7A4E2D" stroke="${INK}" stroke-width="2.5"/>${snowRoof(-28, -28, 56)}<path d="M-8 0 v-12 a8 8 0 0 1 16 0 v12" fill="#2E3A2A"/><circle cx="-2" cy="-6" r="4" fill="#C48A55"/></g>`);
-    const sapins = [[210, 470, .8], [600, 500, .7], [1120, 470, .85], [370, 470, .6], [1330, 470, .7], [60, 470, .75]].map(([x, y, s]) => item('sapin', fir(x, y, s), 'Sapin de Noël enneigé')).join('');
+    const sapins = [[210, 470, .8], [600, 500, .7], [370, 470, .6], [1330, 470, .7], [60, 470, .75]].map(([x, y, s]) => item('sapin', fir(x, y, s), 'Sapin de Noël enneigé')).join('');
 
     const snow = `<g class="snow" aria-hidden="true">${Array.from({ length: 70 }, (_, i) => `<circle cx="${(i * 211) % W}" cy="-10" r="${2 + (i % 3)}" fill="#fff" style="animation-duration:${6 + (i % 5) * 1.6}s;animation-delay:${-(i % 13)}s"/>`).join('')}</g>`;
     const glow = `<defs><radialGradient id="glowG"><stop offset="0" stop-color="#FFB347" stop-opacity=".55"/><stop offset="1" stop-color="#FFB347" stop-opacity="0"/></radialGradient></defs>`;
 
-    return `<svg class="village-svg ${night ? 'night' : 'day'}" viewBox="0 0 ${W} ${H}" role="group" aria-label="Le village de Noël">${glow}${sky}${hills}
-      ${sleigh}${sapins}${ski}${rennes}${scout}${cloches}${ledTree}${ecureuils}${stands}${tasses}${shoppers}${pond}${horloge}${train}${chef}${feu}${puits}${niche}${caravane}${snow}</svg>`;
+    return `<svg class="village-svg ${night ? 'night' : 'day'}" viewBox="0 0 ${W} ${H}" role="group" aria-label="Le village de Noël">${glow}${sky}${mountain}${hills}${sparkle}${shops}
+      ${sleigh}${sapins}${ski}${rennes}${scout}${cloches}${ledTree}${tower}${ecureuils}${prints}${garlandLights}${stands}${tasses}${shoppers}${lamps}${carolers}${snowman}${birds}${pond}${horloge}${train}${chef}${feu}${puits}${bigTree}${niche}${caravane}${bank}${snow}</svg>`;
   }
 
   function info(id) {
@@ -157,8 +292,10 @@ const Noel = (() => {
     el.innerHTML = `<div class="page noel">
       ${Deco.head('Le village de Noël', 'Un village où il neige tous les jours et où même le chef de gare est de bonne humeur. Tout ce qui bouge et brille ici existe en miniature chez Truffaut : clique pour voir le produit.',
         ['Même en miniature, je reste le plus lent du village.', 'Le traîneau me double tous les soirs. Vexant.', 'Les churros, c’est pour qui ? Pour moi ? Non ? D’accord.'], 1)}
-      <div class="walk-bar"><div class="v-ctrl"><button class="btn ${night ? 'white' : 'sun'}" id="daynight" type="button" aria-pressed="${!night}">${night ? '☀️ Passer en journée' : '🌙 Passer à la nuit'}</button></div></div>
-      <div class="village-wrap panel">${scene()}</div>
+      <div class="walk-bar"><div class="v-ctrl"><span class="zoom" role="group" aria-label="Zoom"><button class="btn white small" id="z-out" type="button" aria-label="Dézoomer">−</button><span id="z-val">${Math.round(zoom * 100)} %</span><button class="btn white small" id="z-in" type="button" aria-label="Zoomer">+</button></span>
+        <button class="btn ${night ? 'white' : 'sun'}" id="daynight" type="button" aria-pressed="${!night}">${night ? '☀️ Passer en journée' : '🌙 Passer à la nuit'}</button></div></div>
+      <div class="village-wrap panel" id="vwrap"><div class="vzoom" style="width:${zoom * 100}%">${scene()}</div></div>
+      <p class="hand hint">Zoome et fais glisser le village pour voir les détails : la tour-horloge donne l’heure réelle.</p>
       <section class="v-list panel"><h2>Dans le village</h2>
         <ul>${VILLAGE.map((v) => `<li><button type="button" data-id="${v.id}"><span>${esc(v.name)}</span><b>${euro(v.price)}</b></button></li>`).join('')}</ul>
         <p class="small">Dessins réalisés d’après les fiches produit. Mouvements décrits par Truffaut : les sonneurs tirent les cordes, les tasses tourbillonnent, le traîneau passe dans le ciel, les musiciens animent la scène autour du feu.</p>
@@ -173,6 +310,17 @@ const Noel = (() => {
       b.addEventListener('mouseleave', () => $$('.vitem', el).forEach((g) => g.classList.remove('hl')));
     });
     $('#daynight', el).addEventListener('click', () => { night = !night; draw(); });
+    const wrap = $('#vwrap', el), zbox = $('.vzoom', el);
+    const setZoom = (z, cx = .5) => { const old = zoom; zoom = clamp(Math.round(z * 10) / 10, 1, 3); const ratio = zoom / old;
+      const center = wrap.scrollLeft + wrap.clientWidth * cx; zbox.style.width = zoom * 100 + '%'; wrap.scrollLeft = center * ratio - wrap.clientWidth * cx;
+      wrap.scrollTop = wrap.scrollTop * ratio; $('#z-val', el).textContent = Math.round(zoom * 100) + ' %'; };
+    $('#z-in', el).addEventListener('click', () => setZoom(zoom + .4));
+    $('#z-out', el).addEventListener('click', () => setZoom(zoom - .4));
+    let drag = null;
+    wrap.addEventListener('pointerdown', (e) => { if (zoom <= 1 || e.target.closest('.vitem')) return; drag = { x: e.clientX, y: e.clientY, l: wrap.scrollLeft, t: wrap.scrollTop }; wrap.setPointerCapture(e.pointerId); wrap.classList.add('grabbing'); });
+    wrap.addEventListener('pointermove', (e) => { if (!drag) return; wrap.scrollLeft = drag.l - (e.clientX - drag.x); wrap.scrollTop = drag.t - (e.clientY - drag.y); });
+    wrap.addEventListener('pointerup', () => { drag = null; wrap.classList.remove('grabbing'); });
+    if (zoom > 1) { wrap.scrollLeft = (wrap.scrollWidth - wrap.clientWidth) * .55; wrap.scrollTop = (wrap.scrollHeight - wrap.clientHeight) * .5; }
   }
 
   return { title: 'Le village de Noël', mount(view) { el = view; draw(); } };

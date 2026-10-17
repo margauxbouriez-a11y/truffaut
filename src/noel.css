@@ -1,5 +1,11 @@
 /* ---------- Village de Noël ---------- */
-.village-wrap { overflow: hidden; border-radius: 30px; padding: 0; }
+.village-wrap { overflow: auto; max-height: 78vh; border-radius: 16px; padding: 0; cursor: grab; scrollbar-color: var(--leaf) transparent; }
+.village-wrap.grabbing { cursor: grabbing; }
+.vzoom { min-width: 100%; }
+.zoom { display: inline-flex; align-items: center; gap: 8px; margin-right: 8px; white-space: nowrap; font-weight: 600; font-variant-numeric: tabular-nums; }
+.zoom .btn { width: 38px; padding: 4px 0; font-size: 20px; }
+.lantern { animation: swing 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 0; }
+@keyframes swing { 50% { transform: rotate(8deg); } }
 .village-svg { display: block; width: 100%; height: auto; }
 .village-svg.night .sky1 { stop-color: #1E2A5A; }
 .village-svg.night .sky2 { stop-color: #5A6DB0; }
@@ -47,7 +53,10 @@
 .v-list button:hover { color: var(--leaf-dark); }
 .v-list button b { white-space: nowrap; }
 .v-price { font-size: 26px; font-weight: 700; margin: 8px 0 0; }
-@media (max-width: 700px) {
-  .village-wrap { overflow-x: auto; }
-  .village-svg { width: 1000px; max-width: none; }
-}
+
+.decor { pointer-events: none; }
+.day .glow, .day [fill="url(#lampG)"] { display: none; }
+.sparkle circle { animation: twinkle 2.6s ease-in-out infinite; }
+.sparkle circle:nth-child(3n) { animation-delay: .9s; }
+.sparkle circle:nth-child(3n+1) { animation-delay: 1.7s; }
+.v-ctrl { flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
