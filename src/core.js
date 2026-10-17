@@ -73,7 +73,7 @@ function blob(cx, cy, rx, ry, n = 9, jitter = 0.18, seed = 1) {
 const ROUTES = {};
 let current = null;
 function route(path, mod) { ROUTES[path] = mod; }
-function go(path) { location.hash = '#/' + path; }
+function go(path) { location.hash = "#" + path; }
 function render() {
   const path = (location.hash.replace(/^#\/?/, '') || '').split('?')[0];
   const mod = ROUTES[path] || ROUTES[''];
@@ -83,7 +83,7 @@ function render() {
   view.innerHTML = '';
   view.className = 'view view-' + (path || 'hub');
   current = mod;
-  document.title = (mod.title ? mod.title + ' — ' : '') + 'Le Grand Jardin Truffaut (maquette)';
+  document.title = (mod.title ? mod.title + ' — ' : '') + 'Le Grand Jardin';
   $('#home-btn').hidden = !path;
   mod.mount(view);
   window.scrollTo(0, 0);
@@ -182,7 +182,7 @@ function hubMap() {
   const clouds = `<g class="cloud"><path d="${blob(120, 70, 70, 26, 9, .2, 11)}" fill="#fff" stroke="${INK}" stroke-width="3" opacity=".95"/></g>
     <g class="cloud c2"><path d="${blob(80, 150, 55, 20, 9, .2, 21)}" fill="#fff" stroke="${INK}" stroke-width="3" opacity=".95"/></g>`;
 
-  const place = (path, label, inner) => `<a class="place" href="#/${path}" aria-label="${label}">${inner}</a>`;
+  const place = (path, label, inner) => `<a class="place" href="#${path}" aria-label="${label}">${inner}</a>`;
   return `<svg viewBox="0 0 1200 760" role="img" aria-label="Carte de l’île du Grand Jardin">
     ${sea}${island}${shore}${river}${paths}${meadow}${trees}${arch}
     ${place('potager', 'Silence ça truffe, ton potager virtuel', potager)}
@@ -206,8 +206,8 @@ route('', {
       </div>
       <div class="map-wrap">${hubMap()}</div>
       <nav class="hub-list" aria-label="Tous les espaces">
-        ${PLACES.map((p) => `<a class="hub-card panel" href="#/${p.path}"><span class="em" aria-hidden="true">${p.em}</span><span><b>${p.name}</b><span>${p.sub}</span></span></a>`).join('')}
-        <a class="hub-card panel" href="#/coulisses"><span class="em" aria-hidden="true">⚙️</span><span><b>Dans les coulisses</b><span>Les automatisations qui font tourner l’île</span></span></a>
+        ${PLACES.map((p) => `<a class="hub-card panel" href="#${p.path}"><span class="em" aria-hidden="true">${p.em}</span><span><b>${p.name}</b><span>${p.sub}</span></span></a>`).join('')}
+        <a class="hub-card panel" href="#coulisses"><span class="em" aria-hidden="true">⚙️</span><span><b>Dans les coulisses</b><span>Les automatisations qui font tourner l’île</span></span></a>
       </nav>
     </div>`;
   },

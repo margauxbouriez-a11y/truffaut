@@ -193,7 +193,7 @@ const Jardin = (() => {
         <p class="basket-total">Total : <b>${euro(total)}</b>${unknown ? '<br><span class="small">+ articles dont le prix s’affiche sur la fiche produit</span>' : ''}</p>
         <div class="actions"><button class="btn sun" id="order" type="button">Commander</button><button class="btn white" id="empty" type="button">Vider le panier</button></div>`
       : `<p class="hand" style="font-size:20px">Ton panier est vide. Va te balader dans le jardin-boutique et clique sur les plantes pour les cueillir.</p>
-         <div class="actions"><a class="btn" href="#/jardin" id="to-garden">Aller au jardin</a></div>`}`);
+         <div class="actions"><a class="btn" href="#jardin" id="to-garden">Aller au jardin</a></div>`}`);
     $$('.qty button', box).forEach((btn) => btn.addEventListener('click', () => {
       const bb = basket(); const it = bb[+btn.dataset.i]; it.qty += +btn.dataset.d; if (it.qty <= 0) bb.splice(+btn.dataset.i, 1); setBasket(bb); openBasket();
     }));

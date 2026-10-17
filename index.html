@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Le Grand Jardin Truffaut (maquette)</title>
+<title>Le Grand Jardin</title>
 <meta name="description" content="Maquette de démonstration : un site ludique et interactif imaginé pour Truffaut — potager virtuel, jardin-boutique, atelier bouquet, village de Noël, galerie et clinique des plantes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,7 +61,7 @@ svg [stroke-width="5"] { stroke-width: 3; }
 
 /* ---------- top bar ---------- */
 .topbar {
-  position: sticky; top: 0; z-index: 40;
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40;
   display: flex; align-items: center; gap: 14px;
   padding: 10px 18px;
   background: var(--paper);
@@ -614,13 +614,13 @@ svg [stroke-width="5"] { stroke-width: 3; }
 <body>
 <div id="deco-defs"></div>
 <header class="topbar">
-  <a class="brand" href="#/" aria-label="Le Grand Jardin, retour à la carte">
+  <a class="brand" href="#" aria-label="Le Grand Jardin, retour à la carte">
     <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="#7CC46A" stroke="#2E3A2A" stroke-width="3"/><path d="M15 33 C15 20 24 13 34 13 C34 25 27 33 15 33 Z" fill="#FFFCF2" stroke="#2E3A2A" stroke-width="3" stroke-linejoin="round"/><path d="M15 33 L27 21" stroke="#2E3A2A" stroke-width="3" stroke-linecap="round"/></svg>
     <span><b>Le Grand Jardin</b><small>une idée pour Truffaut</small></span>
   </a>
   <span class="spacer"></span>
-  <a class="chip-btn" id="home-btn" href="#/" hidden><span aria-hidden="true">🗺️</span><span class="lbl">La carte</span></a>
-  <a class="chip-btn" id="bell-btn" href="#/potager" aria-label="Alertes du potager"><span aria-hidden="true">🔔</span><span class="lbl">Potager</span><span class="count" id="bell-count"></span></a>
+  <a class="chip-btn" id="home-btn" href="#" hidden><span aria-hidden="true">🗺️</span><span class="lbl">La carte</span></a>
+  <a class="chip-btn" id="bell-btn" href="#potager" aria-label="Alertes du potager"><span aria-hidden="true">🔔</span><span class="lbl">Potager</span><span class="count" id="bell-count"></span></a>
   <button class="chip-btn" id="basket-btn" type="button" aria-label="Mon panier"><span aria-hidden="true">🧺</span><span class="lbl">Panier</span><span class="count" id="basket-count"></span></button>
 </header>
 <div class="ribbon">Maquette de démonstration, non affiliée à Truffaut. Les produits, prix et liens viennent de truffaut.com (relevés le 17/10/2026).</div>
@@ -961,7 +961,7 @@ function blob(cx, cy, rx, ry, n = 9, jitter = 0.18, seed = 1) {
 const ROUTES = {};
 let current = null;
 function route(path, mod) { ROUTES[path] = mod; }
-function go(path) { location.hash = '#/' + path; }
+function go(path) { location.hash = "#" + path; }
 function render() {
   const path = (location.hash.replace(/^#\/?/, '') || '').split('?')[0];
   const mod = ROUTES[path] || ROUTES[''];
@@ -971,7 +971,7 @@ function render() {
   view.innerHTML = '';
   view.className = 'view view-' + (path || 'hub');
   current = mod;
-  document.title = (mod.title ? mod.title + ' — ' : '') + 'Le Grand Jardin Truffaut (maquette)';
+  document.title = (mod.title ? mod.title + ' — ' : '') + 'Le Grand Jardin';
   $('#home-btn').hidden = !path;
   mod.mount(view);
   window.scrollTo(0, 0);
@@ -1070,7 +1070,7 @@ function hubMap() {
   const clouds = `<g class="cloud"><path d="${blob(120, 70, 70, 26, 9, .2, 11)}" fill="#fff" stroke="${INK}" stroke-width="3" opacity=".95"/></g>
     <g class="cloud c2"><path d="${blob(80, 150, 55, 20, 9, .2, 21)}" fill="#fff" stroke="${INK}" stroke-width="3" opacity=".95"/></g>`;
 
-  const place = (path, label, inner) => `<a class="place" href="#/${path}" aria-label="${label}">${inner}</a>`;
+  const place = (path, label, inner) => `<a class="place" href="#${path}" aria-label="${label}">${inner}</a>`;
   return `<svg viewBox="0 0 1200 760" role="img" aria-label="Carte de l’île du Grand Jardin">
     ${sea}${island}${shore}${river}${paths}${meadow}${trees}${arch}
     ${place('potager', 'Silence ça truffe, ton potager virtuel', potager)}
@@ -1094,8 +1094,8 @@ route('', {
       </div>
       <div class="map-wrap">${hubMap()}</div>
       <nav class="hub-list" aria-label="Tous les espaces">
-        ${PLACES.map((p) => `<a class="hub-card panel" href="#/${p.path}"><span class="em" aria-hidden="true">${p.em}</span><span><b>${p.name}</b><span>${p.sub}</span></span></a>`).join('')}
-        <a class="hub-card panel" href="#/coulisses"><span class="em" aria-hidden="true">⚙️</span><span><b>Dans les coulisses</b><span>Les automatisations qui font tourner l’île</span></span></a>
+        ${PLACES.map((p) => `<a class="hub-card panel" href="#${p.path}"><span class="em" aria-hidden="true">${p.em}</span><span><b>${p.name}</b><span>${p.sub}</span></span></a>`).join('')}
+        <a class="hub-card panel" href="#coulisses"><span class="em" aria-hidden="true">⚙️</span><span><b>Dans les coulisses</b><span>Les automatisations qui font tourner l’île</span></span></a>
       </nav>
     </div>`;
   },
@@ -1928,7 +1928,7 @@ const Jardin = (() => {
         <p class="basket-total">Total : <b>${euro(total)}</b>${unknown ? '<br><span class="small">+ articles dont le prix s’affiche sur la fiche produit</span>' : ''}</p>
         <div class="actions"><button class="btn sun" id="order" type="button">Commander</button><button class="btn white" id="empty" type="button">Vider le panier</button></div>`
       : `<p class="hand" style="font-size:20px">Ton panier est vide. Va te balader dans le jardin-boutique et clique sur les plantes pour les cueillir.</p>
-         <div class="actions"><a class="btn" href="#/jardin" id="to-garden">Aller au jardin</a></div>`}`);
+         <div class="actions"><a class="btn" href="#jardin" id="to-garden">Aller au jardin</a></div>`}`);
     $$('.qty button', box).forEach((btn) => btn.addEventListener('click', () => {
       const bb = basket(); const it = bb[+btn.dataset.i]; it.qty += +btn.dataset.d; if (it.qty <= 0) bb.splice(+btn.dataset.i, 1); setBasket(bb); openBasket();
     }));
@@ -2465,7 +2465,7 @@ const Galerie = (() => {
         <div class="c-ticket"><b>-10 %</b><span>sur ton prochain achat de plantes</span><code>${code}</code></div>
         <p class="small">Exemple pour la maquette : le montant, la durée et les conditions du bon seraient fixés par Truffaut, et le code généré automatiquement par la caisse.</p>
         <div class="actions"><button class="btn" type="button" id="c-copy">Copier le code</button></div></div>`, {
-        onMount: (b) => $('#c-copy', b).addEventListener('click', () => { navigator.clipboard && navigator.clipboard.writeText(code); toast('📋', 'Code copié', code); }),
+        onMount: (b) => $('#c-copy', b).addEventListener('click', () => { const ok = () => toast('📋', 'Code copié', code); if (navigator.clipboard) navigator.clipboard.writeText(code).then(ok, () => toast('📋', 'Sélectionne le code pour le copier', code)); else toast('📋', 'Sélectionne le code pour le copier', code); }),
       });
     });
     $$('.gal-filter button', el).forEach((b) => b.addEventListener('click', () => { filter = b.dataset.f; draw(); }));

@@ -74,7 +74,7 @@ const Galerie = (() => {
         <div class="c-ticket"><b>-10 %</b><span>sur ton prochain achat de plantes</span><code>${code}</code></div>
         <p class="small">Exemple pour la maquette : le montant, la durée et les conditions du bon seraient fixés par Truffaut, et le code généré automatiquement par la caisse.</p>
         <div class="actions"><button class="btn" type="button" id="c-copy">Copier le code</button></div></div>`, {
-        onMount: (b) => $('#c-copy', b).addEventListener('click', () => { navigator.clipboard && navigator.clipboard.writeText(code); toast('📋', 'Code copié', code); }),
+        onMount: (b) => $('#c-copy', b).addEventListener('click', () => { const ok = () => toast('📋', 'Code copié', code); if (navigator.clipboard) navigator.clipboard.writeText(code).then(ok, () => toast('📋', 'Sélectionne le code pour le copier', code)); else toast('📋', 'Sélectionne le code pour le copier', code); }),
       });
     });
     $$('.gal-filter button', el).forEach((b) => b.addEventListener('click', () => { filter = b.dataset.f; draw(); }));
