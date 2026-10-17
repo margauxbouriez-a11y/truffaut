@@ -1,0 +1,44 @@
+/* ---------- Jardin-boutique ---------- */
+.walk-ctrl { display: flex; gap: 8px; align-items: center; }
+.walk-ctrl .btn { padding: 8px 16px; }
+.walk-ctrl select { padding: 9px 12px; border: 2px solid var(--line); border-radius: 999px; background: #fff; font-weight: 700; }
+.garden-scroll { overflow-x: auto; overflow-y: hidden; border-radius: 30px; padding: 0; scrollbar-color: var(--leaf) transparent; }
+.garden-svg { display: block; }
+.zone-sign { font-family: var(--hand); font-size: 23px; fill: var(--ink); }
+.plant-tag { font-family: var(--hand); font-size: 15px; fill: var(--ink); }
+.shop-plant { cursor: pointer; }
+.shop-plant:focus { outline: none; }
+.shop-plant:hover .sway, .shop-plant:focus .sway { animation: shake .5s ease-in-out; }
+.shop-plant:focus > g:nth-child(2) rect { stroke-width: 5; }
+.sway { transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes shake { 25% { transform: rotate(-4deg); } 75% { transform: rotate(4deg); } }
+.walking .hopper { animation: hop .35s ease-in-out infinite; }
+.walking .l1 { animation: legA .35s ease-in-out infinite; }
+.walking .l2 { animation: legA .35s ease-in-out infinite reverse; }
+@keyframes hop { 50% { transform: translateY(-5px); } }
+@keyframes legA { 50% { transform: translateY(-4px); } }
+.fly { animation: flyleaf .9s cubic-bezier(.4, -0.3, .6, 1) forwards; }
+@keyframes flyleaf { to { transform: translate(var(--dx), var(--dy)) scale(.4) rotate(220deg); opacity: .6; } }
+.hint { color: var(--ink-soft); font-size: 18px; margin: 10px 4px 0; }
+.form-opt { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 12px; margin: 8px 0; border: 2px solid var(--line); border-radius: 18px; background: #fff; }
+.form-opt.off { opacity: .55; border-style: dashed; grid-template-columns: auto 1fr; }
+.fo-em { font-size: 32px; }
+.form-opt b { display: block; font-size: 18px; }
+.form-opt span { display: block; font-size: 14px; color: var(--ink-soft); line-height: 1.3; }
+.form-opt .fo-price { color: var(--ink); font-weight: 700; font-size: 16px; }
+.basket-list { list-style: none; padding: 0; margin: 12px 0; display: grid; gap: 8px; }
+.basket-list li { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 10px 12px; border: 2px solid var(--line); border-radius: 14px; background: #fff; }
+.basket-list li span { display: block; font-size: 13px; color: var(--ink-soft); }
+.qty { display: flex; align-items: center; gap: 8px; }
+.qty button { width: 30px; height: 30px; border: 2px solid var(--line); border-radius: 50%; background: var(--sun); font-weight: 700; cursor: pointer; }
+.basket-total { font-size: 20px; text-align: right; margin: 6px 0 0; }
+.link-list { padding-left: 20px; }
+.link-list li { margin: 6px 0; }
+.jiggle { animation: jig .5s; }
+@keyframes jig { 25% { transform: rotate(-10deg) scale(1.1); } 75% { transform: rotate(8deg) scale(1.1); } }
+@media (max-width: 640px) {
+  .walk-ctrl { width: 100%; }
+  .walk-ctrl select { flex: 1; min-width: 0; }
+  .form-opt { grid-template-columns: auto 1fr; }
+  .form-opt .btn { grid-column: 1 / -1; }
+}

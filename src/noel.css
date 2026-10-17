@@ -1,0 +1,53 @@
+/* ---------- Village de Noël ---------- */
+.village-wrap { overflow: hidden; border-radius: 30px; padding: 0; }
+.village-svg { display: block; width: 100%; height: auto; }
+.village-svg.night .sky1 { stop-color: #1E2A5A; }
+.village-svg.night .sky2 { stop-color: #5A6DB0; }
+.village-svg.day .sky1 { stop-color: #8FD3F2; }
+.village-svg.day .sky2 { stop-color: #DDF2FB; }
+.village-svg.day .stars, .village-svg.day .glow { display: none; }
+.village-svg.night .moon-cut { fill: #2A3770; }
+.village-svg.day .moon { opacity: 0; }
+.village-svg.day .moon-cut { fill: transparent; }
+.village-svg.day .lit { fill: #F6E7C1; }
+.stars circle { animation: twinkle 3s ease-in-out infinite; }
+@keyframes twinkle { 50% { opacity: .3; } }
+.bulb.b0 { fill: #EE5D45; } .bulb.b1 { fill: #FFD35A; } .bulb.b2 { fill: #5BB7E6; }
+.night .bulb { animation: blink 1.4s steps(2) infinite; }
+.night .bulb.b1 { animation-delay: .45s; } .night .bulb.b2 { animation-delay: .9s; }
+@keyframes blink { 50% { opacity: .35; } }
+.vsign { font-family: var(--hand); font-size: 13px; fill: var(--ink); }
+.vitem { cursor: pointer; }
+.vitem:focus { outline: none; }
+.vitem:hover, .vitem:focus, .vitem.hl { filter: drop-shadow(0 0 6px #FFE58A) drop-shadow(0 0 2px #fff); }
+.bell { animation: ring 1.2s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 0; }
+@keyframes ring { 25% { transform: rotate(18deg); } 75% { transform: rotate(-18deg); } }
+.ringer { animation: pull 1.2s ease-in-out infinite; }
+@keyframes pull { 25%, 75% { transform: translateY(0); } 0%, 50%, 100% { transform: translateY(4px); } }
+.cup { animation: cupspin 1.6s linear infinite; transform-box: fill-box; transform-origin: 50% 50%; }
+@keyframes cupspin { to { transform: rotate(360deg); } }
+.flame { animation: flick .5s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes flick { to { transform: scale(1.12, .9) skewX(4deg); } }
+.musician { animation: bob 0.9s ease-in-out infinite; }
+.note { fill: #fff; animation: notes 2.4s ease-out infinite; }
+.day .note { fill: var(--ink); }
+.note.n2 { animation-delay: 1.2s; }
+@keyframes notes { from { transform: translateY(10px); opacity: 0; } 40% { opacity: 1; } to { transform: translateY(-30px); opacity: 0; } }
+.smoke { animation: smoke 2s ease-out infinite; }
+@keyframes smoke { from { opacity: .9; transform: translateY(0); } to { opacity: 0; transform: translateY(-16px); } }
+.tail { animation: wag .4s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 100% 100%; }
+@keyframes wag { to { transform: rotate(25deg); } }
+.snow circle { animation: snowfall linear infinite; }
+@keyframes snowfall { to { transform: translate(30px, 840px); } }
+.v-ctrl { display: flex; gap: 8px; }
+.v-list { margin-top: 18px; padding: 18px 22px; }
+.v-list h2 { margin: 0 0 10px; font-size: 22px; }
+.v-list ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 6px 18px; }
+.v-list button { width: 100%; display: flex; justify-content: space-between; gap: 10px; padding: 6px 4px; border: 0; border-bottom: 2px dotted rgba(46,58,42,.3); background: none; cursor: pointer; text-align: left; font-size: 15px; }
+.v-list button:hover { color: var(--leaf-dark); }
+.v-list button b { white-space: nowrap; }
+.v-price { font-size: 26px; font-weight: 700; margin: 8px 0 0; }
+@media (max-width: 700px) {
+  .village-wrap { overflow-x: auto; }
+  .village-svg { width: 1000px; max-width: none; }
+}

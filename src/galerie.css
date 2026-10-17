@@ -1,0 +1,39 @@
+/* ---------- Galerie ---------- */
+.gal-grid { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 24px; align-items: start; }
+.share { padding: 20px; display: grid; gap: 12px; position: sticky; top: 90px; }
+.share h2 { margin: 0; font-size: 22px; }
+.dropzone { position: relative; display: grid; place-items: center; min-height: 130px; border: 2px dashed var(--line); border-radius: 18px; background: #fff; cursor: pointer; text-align: center; font-weight: 700; overflow: hidden; }
+.dropzone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.dropzone img { max-height: 180px; margin-top: 6px; border-radius: 10px; }
+.seg { display: flex; gap: 14px; border: 0; padding: 0; margin: 0; font-weight: 700; font-size: 15px; }
+.seg legend { padding: 0; margin-bottom: 4px; }
+.seg label { display: flex; gap: 6px; align-items: center; font-weight: 500; }
+.consent { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; line-height: 1.3; }
+.gal-filter, .cl-filter { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 16px; }
+.chip-btn.on { background: var(--sun); }
+.wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 26px 20px; }
+.polaroid { margin: 0; padding: 10px 10px 12px; background: #fff; border: 2px solid var(--line); border-radius: 6px; box-shadow: 0 6px 0 rgba(46,58,42,.18); transform: rotate(var(--r)); transition: transform .2s; }
+.polaroid:hover { transform: rotate(0) scale(1.02); }
+.polaroid svg, .polaroid img { display: block; width: 100%; aspect-ratio: 300 / 220; object-fit: cover; border: 2px solid var(--line); border-radius: 3px; }
+.polaroid figcaption { display: grid; grid-template-columns: 1fr auto; gap: 0 8px; margin-top: 8px; font-family: var(--hand); font-size: 18px; line-height: 1.2; }
+.polaroid figcaption span { grid-column: 1; font-size: 15px; color: var(--ink-soft); }
+.polaroid figcaption b { font-weight: 400; }
+.like { grid-row: 1 / span 2; grid-column: 2; align-self: center; padding: 4px 10px; border: 2px solid var(--line); border-radius: 999px; background: #fff; cursor: pointer; font-family: var(--ui); font-weight: 700; font-size: 14px; }
+.like.on { background: #FBD0DC; color: #B0233F; }
+.coupon { text-align: center; }
+.c-em { font-size: 54px; }
+.c-ticket { display: grid; gap: 2px; margin: 14px auto; padding: 16px; max-width: 320px; border: 2px dashed var(--line); border-radius: 18px; background: var(--sun); }
+.c-ticket b { font-size: 44px; line-height: 1; }
+.c-ticket code { font-size: 22px; font-weight: 700; letter-spacing: .08em; margin-top: 6px; }
+.coupon .actions { justify-content: center; }
+@media (max-width: 860px) { .gal-grid { grid-template-columns: 1fr; } .share { position: static; } }
+
+/* ---------- Coulisses ---------- */
+.cs-head { display: grid; grid-template-columns: 60px 1fr 1.3fr; gap: 20px; padding: 0 22px 8px; font-family: var(--hand); font-size: 20px; }
+.cs-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.cs-list li { display: grid; grid-template-columns: 60px 1fr 1.3fr; gap: 20px; align-items: center; padding: 18px 22px; }
+.cs-em { font-size: 40px; }
+.cs-list h2 { margin: 0 0 2px; font-size: 21px; line-height: 1.2; }
+.cs-list p { margin: 0; }
+.cs-back { padding: 12px 16px; border: 2px dashed var(--line); border-radius: 16px; background: #EAF6EE; font-size: 15px; color: var(--ink-soft); }
+@media (max-width: 760px) { .cs-head { display: none; } .cs-list li { grid-template-columns: 48px 1fr; } .cs-back { grid-column: 1 / -1; } }
