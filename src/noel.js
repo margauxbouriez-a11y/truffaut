@@ -2,7 +2,7 @@
    LE VILLAGE DE NOËL — chaque élément est un produit Truffaut
    ============================================================ */
 const Noel = (() => {
-  let el, night = true, zoom = window.innerWidth < 700 ? 1.8 : 1.4;
+  let el, night = true, mode = 'photo', fails = 0, zoom = window.innerWidth < 700 ? 1.8 : 1.4;
   const W = 1400, H = 820;
   const it = (id) => VILLAGE.find((v) => v.id === id);
 
@@ -279,6 +279,47 @@ const Noel = (() => {
       ${sleigh}${sapins}${ski}${rennes}${scout}${cloches}${ledTree}${tower}${ecureuils}${prints}${garlandLights}${stands}${tasses}${shoppers}${lamps}${carolers}${snowman}${birds}${pond}${horloge}${train}${chef}${feu}${puits}${bigTree}${niche}${caravane}${bank}${snow}</svg>`;
   }
 
+
+  /* ---------- Village en photos : les vrais produits Truffaut posés sur un décor de neige ---------- */
+  // [id, x centre, bas, largeur] dans un repère 1400 × 820
+  const SPOTS = [
+    ['traineau', 760, 300, 210, 'fly'],
+    ['sapin', 70, 470, 120], ['bonbons', 270, 478, 250, 'glow'], ['place', 560, 480, 320, 'glow'], ['tour', 1000, 486, 330, 'glow'], ['rennes', 1250, 476, 220, 'glow'], ['sapin', 1370, 470, 110],
+    ['ecureuils', 70, 640, 110], ['churros', 190, 626, 150], ['crepes', 320, 630, 150], ['choco', 450, 626, 150], ['bretzels', 580, 630, 150], ['marrons', 700, 636, 120],
+    ['cloches', 830, 630, 180, 'glow'], ['horloge', 925, 640, 80], ['tasses', 1035, 634, 200, 'glow'], ['feu', 1200, 636, 180, 'glow'], ['arbre-led', 1335, 630, 120, 'glow'],
+    ['glace', 120, 800, 140], ['ski', 245, 790, 120], ['train', 500, 805, 310], ['chef', 690, 790, 90], ['acheteurs', 800, 798, 140], ['photo', 925, 796, 130],
+    ['caravane', 1090, 806, 200], ['scout', 1230, 790, 120], ['niche', 1310, 796, 100], ['puits', 1375, 792, 90],
+  ];
+  function backdrop() {
+    const bokeh = Array.from({ length: 46 }, (_, i) => { const x = (i * 157) % 1400, y = 18 + (i * 83) % 140, r = 6 + (i % 5) * 4; return `<circle cx="${x}" cy="${y}" r="${r}" fill="${i % 4 ? '#FFB347' : '#FFD98A'}" opacity="${.35 + (i % 3) * .15}" class="bok" style="animation-delay:${(i % 9) * .5}s"/>`; }).join('');
+    const tier = (y, h, seed, tone) => `<path d="M0 ${y} ${Array.from({ length: 15 }, (_, i) => `Q${i * 100 + 50} ${y - 10 - ((i * seed) % 4) * 6} ${(i + 1) * 100} ${y + ((i * 3 + seed) % 3) * 3}`).join(' ')} V${y + h} H0Z" fill="${tone}"/>`;
+    const rocks = (y, seed) => Array.from({ length: 16 }, (_, i) => { const x = i * 92 + (seed * 13) % 40; return `<path d="M${x} ${y} l${20 + (i % 3) * 8} ${-18 - (i % 4) * 6} l${30 + (i % 2) * 10} ${10 + (i % 3) * 4} l${18 + (i % 4) * 6} ${14} Z" fill="#8E969B"/><path d="M${x + 20 + (i % 3) * 8} ${y - 18 - (i % 4) * 6} l${30 + (i % 2) * 10} ${10 + (i % 3) * 4} l${18 + (i % 4) * 6} 14 l-${40} 0z" fill="#6F777C"/>`; }).join('');
+    const flockTree = (x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})" opacity=".85">${[[0, 70], [-26, 56], [-50, 42], [-72, 28]].map(([yy, w]) => `<path d="M${-w} ${yy} Q0 ${yy - 50} ${w} ${yy} Q${w * .5} ${yy - 8} 0 ${yy - 4} Q${-w * .5} ${yy - 8} ${-w} ${yy}Z" fill="#7F9A86"/><path d="M${-w * .9} ${yy - 2} Q0 ${yy - 40} ${w * .9} ${yy - 2}" fill="none" stroke="#F4F8FA" stroke-width="6" stroke-linecap="round"/>`).join('')}</g>`;
+    return `<svg class="dio-bg" viewBox="0 0 1400 820" preserveAspectRatio="none" aria-hidden="true">
+      <defs><linearGradient id="dioSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B9C6D6"/><stop offset=".6" stop-color="#EADFD6"/><stop offset="1" stop-color="#F7EFE6"/></linearGradient>
+        <filter id="blur8"><feGaussianBlur stdDeviation="7"/></filter><filter id="blur2"><feGaussianBlur stdDeviation="1.6"/></filter>
+        <linearGradient id="snowT" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E4ECF2"/></linearGradient></defs>
+      <rect width="1400" height="820" fill="url(#dioSky)"/>
+      <g filter="url(#blur8)">${bokeh}</g>
+      <g filter="url(#blur2)">${[120, 330, 900, 1180, 1300].map((x, i) => flockTree(x, 360 + (i % 2) * 20, .9 + (i % 3) * .2)).join('')}
+        <path d="M0 330 L180 230 L300 290 L460 190 L620 280 L780 210 L950 300 L1120 220 L1280 290 L1400 240 V420 H0Z" fill="#C9D2DA"/><path d="M180 230 L210 250 L240 244 L300 290 M460 190 L500 220 L540 214 M780 210 L820 236 L860 228 M1120 220 L1160 246 L1200 240" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/></g>
+      ${tier(470, 360, 2, 'url(#snowT)')}<path d="M0 474 Q700 492 1400 474" stroke="#D7E2EA" stroke-width="10" fill="none" opacity=".8"/>
+      ${tier(632, 200, 5, 'url(#snowT)')}<path d="M0 636 Q700 652 1400 636" stroke="#D7E2EA" stroke-width="10" fill="none" opacity=".8"/>
+      ${tier(796, 40, 7, '#FFFFFF')}<g transform="translate(0 50)">${rocks(770, 4)}</g><path d="M0 812 Q350 800 700 812 T1400 810 V820 H0Z" fill="#fff"/>
+      <g fill="#fff" opacity=".9">${Array.from({ length: 90 }, (_, i) => `<circle cx="${(i * 211) % 1400}" cy="${470 + (i * 37) % 350}" r="${i % 6 ? .9 : 1.8}"/>`).join('')}</g>
+    </svg>`;
+  }
+  function photoScene() {
+    const cards = SPOTS.map(([id, x, yb, w, fx], i) => {
+      const v = it(id); if (!v || !v.img) return '';
+      const left = ((x - w / 2) / 1400) * 100, top = ((yb - w * .92) / 820) * 100, width = (w / 1400) * 100;
+      return `<button class="ph ${fx || ''}" type="button" data-id="${id}" style="left:${left.toFixed(2)}%;top:${top.toFixed(2)}%;width:${width.toFixed(2)}%;z-index:${Math.round(yb)}" aria-label="${esc(v.name)}">
+        <img src="${v.img}?width=700&height=700&store=fr&image-type=image" alt="" loading="lazy" decoding="async"><span class="ph-tag">${esc(v.name.replace(/\s*[-–:].*$/, '').slice(0, 34))}</span></button>`;
+    }).join('');
+    const snow = `<svg class="dio-snow" viewBox="0 0 1400 820" preserveAspectRatio="none" aria-hidden="true">${Array.from({ length: 80 }, (_, i) => `<circle cx="${(i * 173) % 1400}" cy="-10" r="${1.5 + (i % 3)}" fill="#fff" opacity=".85" style="animation-duration:${7 + (i % 5) * 1.7}s;animation-delay:${-(i % 13)}s"/>`).join('')}</svg>`;
+    return `<div class="diorama">${backdrop()}${cards}${snow}</div>`;
+  }
+
   function info(id) {
     const v = it(id);
     modal(`<h2>${esc(v.name)}</h2>
@@ -293,9 +334,10 @@ const Noel = (() => {
       ${Deco.head('Le village de Noël', 'Un village où il neige tous les jours et où même le chef de gare est de bonne humeur. Tout ce qui bouge et brille ici existe en miniature chez Truffaut : clique pour voir le produit.',
         ['Même en miniature, je reste le plus lent du village.', 'Le traîneau me double tous les soirs. Vexant.', 'Les churros, c’est pour qui ? Pour moi ? Non ? D’accord.'], 1)}
       <div class="walk-bar"><div class="v-ctrl"><span class="zoom" role="group" aria-label="Zoom"><button class="btn white small" id="z-out" type="button" aria-label="Dézoomer">−</button><span id="z-val">${Math.round(zoom * 100)} %</span><button class="btn white small" id="z-in" type="button" aria-label="Zoomer">+</button></span>
-        <button class="btn ${night ? 'white' : 'sun'}" id="daynight" type="button" aria-pressed="${!night}">${night ? '☀️ Passer en journée' : '🌙 Passer à la nuit'}</button></div></div>
-      <div class="village-wrap panel" id="vwrap"><div class="vzoom" style="width:${zoom * 100}%">${scene()}</div></div>
-      <p class="hand hint">Zoome et fais glisser le village pour voir les détails : la tour-horloge donne l’heure réelle.</p>
+        <span class="seg-mode" role="group" aria-label="Affichage"><button class="btn small ${mode === 'photo' ? '' : 'white'}" data-mode="photo" type="button" aria-pressed="${mode === 'photo'}">Photos des produits</button><button class="btn small ${mode === 'dessin' ? '' : 'white'}" data-mode="dessin" type="button" aria-pressed="${mode === 'dessin'}">Version dessinée</button></span>
+        ${mode === 'dessin' ? `<button class="btn white small" id="daynight" type="button" aria-pressed="${!night}">${night ? '☀️ Journée' : '🌙 Nuit'}</button>` : ''}</div></div>
+      <div class="village-wrap panel" id="vwrap"><div class="vzoom" style="width:${zoom * 100}%">${mode === 'photo' ? photoScene() : scene()}</div></div>
+      <p class="hand hint">${mode === 'photo' ? 'Chaque pièce est la vraie photo du produit vendu chez Truffaut. Zoome, fais glisser, clique pour ouvrir la fiche.' : 'Zoome et fais glisser le village pour voir les détails : la tour-horloge donne l’heure réelle.'}</p>
       <section class="v-list panel"><h2>Dans le village</h2>
         <ul>${VILLAGE.map((v) => `<li><button type="button" data-id="${v.id}"><span>${esc(v.name)}</span><b>${euro(v.price)}</b></button></li>`).join('')}</ul>
         <p class="small">Dessins réalisés d’après les fiches produit. Mouvements décrits par Truffaut : les sonneurs tirent les cordes, les tasses tourbillonnent, le traîneau passe dans le ciel, les musiciens animent la scène autour du feu.</p>
@@ -309,7 +351,13 @@ const Noel = (() => {
       b.addEventListener('mouseenter', () => $$('.vitem', el).forEach((g) => g.classList.toggle('hl', g.dataset.id === b.dataset.id)));
       b.addEventListener('mouseleave', () => $$('.vitem', el).forEach((g) => g.classList.remove('hl')));
     });
-    $('#daynight', el).addEventListener('click', () => { night = !night; draw(); });
+    const dn = $('#daynight', el); if (dn) dn.addEventListener('click', () => { night = !night; draw(); });
+    $$('.seg-mode button', el).forEach((b) => b.addEventListener('click', () => { mode = b.dataset.mode; draw(); }));
+    $$('.ph', el).forEach((b) => b.addEventListener('click', () => info(b.dataset.id)));
+    $$('.ph img', el).forEach((im) => im.addEventListener('error', () => {
+      im.closest('.ph').classList.add('noimg'); fails++;
+      if (fails === 4 && mode === 'photo') { mode = 'dessin'; draw(); toast('🖼️', 'Les photos des produits ne s’affichent pas ici', 'Voici la version dessinée. Ouvre le site en ligne (GitHub Pages) pour voir les vraies photos.', 7000); }
+    }));
     const wrap = $('#vwrap', el), zbox = $('.vzoom', el);
     const setZoom = (z, cx = .5) => { const old = zoom; zoom = clamp(Math.round(z * 10) / 10, 1, 3); const ratio = zoom / old;
       const center = wrap.scrollLeft + wrap.clientWidth * cx; zbox.style.width = zoom * 100 + '%'; wrap.scrollLeft = center * ratio - wrap.clientWidth * cx;
