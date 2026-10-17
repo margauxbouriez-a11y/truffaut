@@ -624,6 +624,18 @@ svg [stroke-width="5"] { stroke-width: 3; }
 .arch-txt { font-family: var(--display); font-style: italic; font-size: 26px; font-weight: 600; fill: #F6D36A; }
 .walking .nhop { animation: hop .32s ease-in-out infinite; }
 
+.walk-svg .layer-photo image { mix-blend-mode: multiply; }
+.walk-svg.photo-wait .layer-photo, .walk-svg.photo-ko .layer-photo { display: none; }
+.walk-svg.photo-ok .layer-drawn { display: none; }
+.walk-svg.photo-wait .layer-drawn { opacity: .0; }
+.walk-svg .ph-s { transition: transform .25s; transform-box: fill-box; transform-origin: 50% 100%; }
+.walk-svg .ph-s:hover, .walk-svg .ph-s:focus { transform: translateY(-6px) scale(1.04); filter: none; }
+.walk-svg .ph-s.fly { animation: fly 6s ease-in-out infinite; }
+
+.walk-svg .sky-pale { display: none; }
+.walk-svg.photo-ok .sky-pale { display: inline; }
+.walk-svg.photo-ok .stars, .walk-svg.photo-ok .moon { display: none; }
+
 /* ---------- Galerie ---------- */
 .gal-grid { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 24px; align-items: start; }
 .share { padding: 20px; display: grid; gap: 12px; position: sticky; top: 90px; }
@@ -2614,7 +2626,7 @@ route('bouquet', Bouquet);
    LE VILLAGE DE NOËL — chaque élément est un produit Truffaut
    ============================================================ */
 const Noel = (() => {
-  let PARTS = null, walk = null;
+  let PARTS = null, walk = null, photoState = 'photo-wait';
   let el, night = true, mode = 'walk', fails = 0, zoom = window.innerWidth < 700 ? 1.8 : 1.4;
   const W = 1400, H = 820;
   const it = (id) => VILLAGE.find((v) => v.id === id);
@@ -2945,70 +2957,49 @@ const Noel = (() => {
     { id: 'camp', name: 'Le camp du feu', x: 4080 },
   ];
   // position (centre x) de chaque produit dans la rue, pour la bulle « vous êtes devant… »
-  const ANCHORS = { ecureuils: 420, puits: 330, rennes: 4170, scout: 1800, churros: 970, crepes: 1085, acheteurs: 1205, choco: 1200, bretzels: 1315, marrons: 1420,
-    cloches: 2100, horloge: 2180, 'arbre-led': 2240, tasses: 2360, tour: 2570, train: 3165, chef: 3200, glace: 3635, ski: 3720, caravane: 4330, feu: 4390, traineau: 4400, niche: 4490, sapin: 4520 };
+  // Les produits Truffaut posés le long de la rue : [id, x centre, bas, taille]
+  const STREET = [
+    ['sapin', 80, 600, 160], ['bonbons', 300, 612, 300], ['ecureuils', 520, 722, 120], ['puits', 650, 728, 110], ['sapin', 780, 600, 140],
+    ['place', 1200, 566, 380], ['churros', 960, 704, 190], ['crepes', 1120, 706, 190], ['choco', 1280, 704, 190], ['bretzels', 1440, 706, 190], ['marrons', 1600, 712, 150], ['acheteurs', 1740, 736, 140],
+    ['cloches', 2010, 702, 220], ['arbre-led', 2190, 690, 160], ['tour', 2420, 650, 430], ['tasses', 2640, 716, 230], ['horloge', 2800, 722, 100], ['photo', 2880, 738, 130],
+    ['train', 3160, 732, 380], ['chef', 3390, 734, 110], ['glace', 3570, 732, 170], ['ski', 3760, 724, 150], ['scout', 3950, 700, 150],
+    ['rennes', 4250, 646, 300], ['traineau', 4600, 330, 240, 'fly'], ['feu', 4520, 716, 220], ['caravane', 4770, 728, 240], ['niche', 4970, 732, 120], ['sapin', 5110, 610, 170], ['sapin', 5300, 600, 150],
+  ];
+  const ANCHORS = {}; STREET.forEach(([id, x]) => { if (!(id in ANCHORS)) ANCHORS[id] = x; });
   const shift = (dx, str, dy = 0) => `<g transform="translate(${dx} ${dy})">${str}</g>`;
-  const SIGNS = ['Boulangerie', 'Pâtisserie', 'Jouets', 'Chocolats', 'Fromagerie', 'Café', 'Librairie', 'Bougies', 'Épices', 'Horlogerie'];
 
   function walkScene() {
-    scene(); // prépare les éléments dessinés
+    scene(); // prépare les dessins des produits (utilisés si les photos ne s'affichent pas)
     const P = PARTS;
-    // façade continue de maisons à colombages
-    let facade = '', fx = 10, i = 0;
-    const walls = ['#F3E9D2', '#E86F5A', '#F6E7C1', '#E8C7C7', '#D8E2C8', '#F3D9B0', '#C9D6E8'];
-    const roofs = ['#7A4E2D', '#3E5A4A', '#7A3A3A', '#5E3B22', '#2F4A6A'];
-    while (fx < WW - 80) {
-      const w = 104 + (i * 37) % 52, h = 120 + (i * 53) % 60;
-      if (fx > 1960 && fx < 2080 && !facade.includes('église')) { // l'église de la place
-        facade += `<g data-k="église" transform="translate(0 70)"><rect x="${fx}" y="${470 - 120}" width="80" height="120" fill="#EDE3D2" stroke="${INK}" stroke-width="1.6"/><path d="M${fx - 6} ${352} L${fx + 40} ${300} L${fx + 86} ${352}Z" fill="#5A6470" stroke="${INK}" stroke-width="1.6"/>${snowRoof(fx - 4, 350, 88)}
-          <rect x="${fx + 26}" y="${210}" width="28" height="92" fill="#EDE3D2" stroke="${INK}" stroke-width="1.6"/><path d="M${fx + 20} ${212} L${fx + 40} ${140} L${fx + 60} ${212}Z" fill="#5A6470" stroke="${INK}" stroke-width="1.6"/>${snowRoof(fx + 22, 210, 36)}<path d="M${fx + 40} 140 v-16 M${fx + 33} 132 h14" stroke="${INK}" stroke-width="2"/>
-          <path d="M${fx + 32} 262 a8 8 0 0 1 16 0 v18 h-16z" class="lit" fill="#FFD35A" stroke="${INK}" stroke-width="1.2"/>${[fx + 12, fx + 56].map((wx) => `<path d="M${wx} 420 a6 6 0 0 1 12 0 v24 h-12z" class="lit" fill="#FFD35A" stroke="${INK}" stroke-width="1.2"/>`).join('')}
-          <path d="M${fx + 30} 470 v-26 a10 10 0 0 1 20 0 v26z" fill="#7A3A2A" stroke="${INK}" stroke-width="1.2"/><circle cx="${fx + 40}" cy="${236}" r="9" fill="#FBF6E6" stroke="${INK}" stroke-width="1"/></g>`;
-        fx += 92; continue;
-      }
-      facade += tudor(fx, 540, w, h, walls[i % walls.length], roofs[i % roofs.length], i % 3 === 1 ? { sign: SIGNS[(i / 3 | 0) % SIGNS.length] } : {});
-      fx += w + 8; i++;
-    }
-    // guirlande continue le long des façades
-    let gar = '';
-    for (let x = 0; x < WW; x += 120) { gar += `<path d="M${x} 412 Q${x + 60} 432 ${x + 120} 412" fill="none" stroke="#2F5A3A" stroke-width="1.4"/>`; for (let k = 1; k < 6; k++) { const t = k / 6, y = 412 + 4 * t * (1 - t) * 20; gar += `<circle cx="${x + 120 * t}" cy="${y + 3}" r="3" class="bulb b${(x / 120 + k) % 3}" stroke="${INK}" stroke-width=".6"/>`; } }
-    // décor du fond (parallaxe)
+    // décor neutre de maquette : ciel, montagne, neige, rue pavée
     const bgMount = [0, 1300, 2600, 3900].map((dx) => shift(dx, P.mountain)).join('');
-    const sky = `<rect x="-200" y="0" width="${WW + 400}" height="820" fill="url(#sky)"/><g class="stars">${Array.from({ length: 160 }, (_, k) => `<circle cx="${(k * 283) % WW}" cy="${(k * 97) % 300 + 10}" r="${k % 4 ? 1.5 : 2.4}" fill="#fff" style="animation-delay:${(k % 7) * .4}s"/>`).join('')}</g>
-      <g class="moon"><circle cx="900" cy="90" r="38" fill="#FFF3C4" stroke="${INK}" stroke-width="2"/><circle cx="918" cy="80" r="34" class="moon-cut"/></g>`;
-    const hills = `<path d="M-200 340 ${Array.from({ length: 30 }, (_, k) => `Q${k * 200 - 100} ${300 + (k % 3) * 20} ${k * 200} 340`).join(' ')} V820 H-200Z" fill="#EEF4FA" stroke="${INK}" stroke-width="2"/>`;
-    const ground = `<path d="M-50 520 ${Array.from({ length: 30 }, (_, k) => `Q${k * 200 + 100} ${510 + (k % 2) * 14} ${(k + 1) * 200} 520`).join(' ')} V820 H-50Z" fill="#FFFFFF" stroke="${INK}" stroke-width="2"/>
-      <path d="M3500 372 Q3600 408 3760 474" stroke="#D5E3F0" stroke-width="22" fill="none" stroke-linecap="round"/>`;
-    // la rue pavée où l'on marche
-    const street = `<defs><pattern id="cob" width="26" height="14" patternUnits="userSpaceOnUse"><rect width="26" height="14" fill="#D9D2C4"/><path d="M0 7 h26 M13 0 v7 M0 7 v7 M26 7 v7" stroke="#B5AC9C" stroke-width="1.2"/><circle cx="6" cy="3" r="1" fill="#fff" opacity=".7"/></pattern></defs>
-      <path d="M-50 742 ${Array.from({ length: 60 }, (_, k) => `q50 -6 100 0`).join(' ')} V808 ${Array.from({ length: 60 }, () => `q-50 6 -100 0`).join(' ')}Z" fill="url(#cob)" stroke="${INK}" stroke-width="1.6"/>
-      <path d="M-50 744 ${Array.from({ length: 60 }, (_, k) => `q50 -8 100 0`).join(' ')}" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/>`;
-    const lamps = Array.from({ length: 16 }, (_, k) => lamp(160 + k * 340, 746)).join('');
-    const posts = ZONES_N.map((z) => `<g transform="translate(${z.x + 70} 742)"><path d="M0 0 v-80" stroke="#7E5432" stroke-width="5"/><path d="M-6 -86 h120 l14 14 l-14 14 h-120z" fill="#F3E9D2" stroke="${INK}" stroke-width="1.6"/><text x="56" y="-68" text-anchor="middle" class="zone-post">${z.name}</text>${snowRoof(-8, -92, 128)}</g>`).join('');
-    const arch = `<g transform="translate(150 742)"><path d="M-110 0 v-200 M110 0 v-200" stroke="#7E5432" stroke-width="10"/><path d="M-120 -196 Q0 -260 120 -196 L120 -170 Q0 -232 -120 -170Z" fill="#C8243C" stroke="${INK}" stroke-width="2"/>
-      <text x="0" y="-200" text-anchor="middle" class="arch-txt">Marché de Noël</text>${snowRoof(-124, -232, 248)}${fir(-110, 0, .55)}${fir(110, 0, .55)}
-      ${Array.from({ length: 12 }, (_, k) => `<circle cx="${-110 + k * 20}" cy="${-168 + Math.sin(k / 11 * Math.PI) * -28}" r="3" class="bulb b${k % 3}" stroke="${INK}" stroke-width=".6"/>`).join('')}</g>`;
-    const crowd = [[400, '#2E4A8A', '#C8243C', 18], [1150, '#7A3A3A', '#fff', 24], [1600, '#2F7A44', '#2B2B2B', 20], [2250, '#F0A830', '#fff', 26], [2700, '#C8243C', '#2B2B2B', 22], [3300, '#5B8FD6', '#F0A830', 19], [3900, '#7A8A4A', '#fff', 25], [4600, '#2E4A8A', '#C8243C', 21], [5000, '#EE9AAE', '#fff', 23]]
-      .map(([x, c, h, d], k) => `<g>${person(0, 0, c, k % 2 ? .95 : .7, h, k % 3 === 0 ? '<rect x="7" y="-18" width="8" height="10" fill="#F0A830" stroke="#1F3A2E" stroke-width=".8"/>' : '')}<animateMotion dur="${d}s" repeatCount="indefinite" path="M${x} 772 h${220 + (k % 3) * 80}" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="linear"/></g>`).join('');
+    const sky = `<rect x="-200" y="0" width="${WW + 400}" height="820" fill="url(#sky)"/><defs><linearGradient id="skyPale" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DCEAF5"/><stop offset="1" stop-color="#F7FAFD"/></linearGradient></defs><rect class="sky-pale" x="-200" y="0" width="${WW + 400}" height="820" fill="url(#skyPale)"/><g class="stars">${Array.from({ length: 160 }, (_, k) => `<circle cx="${(k * 283) % WW}" cy="${(k * 97) % 300 + 10}" r="${k % 4 ? 1.5 : 2.4}" fill="#fff" style="animation-delay:${(k % 7) * .4}s"/>`).join('')}</g>
+      <g class="moon"><circle cx="900" cy="150" r="38" fill="#FFF3C4" stroke="${INK}" stroke-width="2"/><circle cx="918" cy="140" r="34" class="moon-cut"/></g>`;
+    const hills = `<path d="M-200 400 ${Array.from({ length: 30 }, (_, k) => `Q${k * 200 - 100} ${360 + (k % 3) * 20} ${k * 200} 400`).join(' ')} V820 H-200Z" fill="#EEF4FA" stroke="${INK}" stroke-width="2"/>`;
+    const ground = `<path d="M-50 520 ${Array.from({ length: 30 }, (_, k) => `Q${k * 200 + 100} ${506 + (k % 2) * 16} ${(k + 1) * 200} 520`).join(' ')} V820 H-50Z" fill="#FFFFFF" stroke="${INK}" stroke-width="2"/>
+      <g fill="#C9DCEB" opacity=".8">${Array.from({ length: 220 }, (_, k) => `<circle cx="${(k * 197) % WW}" cy="${530 + (k * 61) % 200}" r="${k % 5 ? 1 : 1.8}"/>`).join('')}</g>`;
+    const street = `<defs><pattern id="cob" width="26" height="14" patternUnits="userSpaceOnUse"><rect width="26" height="14" fill="#D9D2C4"/><path d="M0 7 h26 M13 0 v7 M0 7 v7 M26 7 v7" stroke="#B5AC9C" stroke-width="1.2"/><circle cx="6" cy="3" r="1" fill="#fff" opacity=".7"/></pattern>
+        <radialGradient id="phHalo"><stop offset=".55" stop-color="#fff"/><stop offset=".8" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><radialGradient id="phFade"><stop offset=".62" stop-color="#fff"/><stop offset="1" stop-color="#000"/></radialGradient><mask id="phMask" maskContentUnits="objectBoundingBox"><rect width="1" height="1" fill="url(#phFade)"/></mask></defs>
+      <path d="M-50 742 ${Array.from({ length: 60 }, () => `q50 -6 100 0`).join(' ')} V808 ${Array.from({ length: 60 }, () => `q-50 6 -100 0`).join(' ')}Z" fill="url(#cob)" stroke="${INK}" stroke-width="1.6"/>
+      <path d="M-50 744 ${Array.from({ length: 60 }, () => `q50 -8 100 0`).join(' ')}" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/>`;
+    const posts = ZONES_N.map((z) => `<g transform="translate(${Math.max(20, z.x - 60)} 742)"><path d="M0 0 v-80" stroke="#7E5432" stroke-width="5"/><path d="M-6 -86 h120 l14 14 l-14 14 h-120z" fill="#F3E9D2" stroke="${INK}" stroke-width="1.6"/><text x="56" y="-68" text-anchor="middle" class="zone-post">${z.name}</text>${snowRoof(-8, -92, 128)}</g>`).join('');
+    // les vraies photos des produits
+    const photos = STREET.map(([id, x, yb, sz, fx]) => { const v = it(id); if (!v || !v.img) return '';
+      return `<g class="vitem ph-s ${fx || ''}" data-id="${id}" tabindex="0" role="button" aria-label="${esc(v.name)}"><ellipse cx="${x}" cy="${yb - sz * .44}" rx="${sz * .62}" ry="${sz * .58}" fill="url(#phHalo)"/><image href="${v.img}?width=700&height=700&store=fr&image-type=image" x="${x - sz / 2}" y="${yb - sz * .92}" width="${sz}" height="${sz}" mask="url(#phMask)" preserveAspectRatio="xMidYMid meet"/></g>`; }).join('');
+    // les mêmes produits dessinés (secours)
+    const firItem = (x, y, sc) => item('sapin', fir(x, y, sc), 'Sapin de Noël enneigé pour village miniature');
+    const drawn = [firItem(80, 600, 1.1), firItem(780, 600, 1), firItem(5110, 610, 1.2), firItem(5300, 600, 1),
+      shift(440, P.ecureuils), shift(310, P.puits), shift(690, P.stands), shift(870, P.marrons || ''), shift(1215, P.shoppers),
+      shift(1190, P.cloches), shift(1240, P.ledTree), shift(1230, item('tour', P.tower.replace('class="decor" aria-hidden="true" ', ''), it('tour').name)), shift(1560, P.tasses), shift(1910, P.horloge),
+      shift(2385, P.train), shift(2600, P.chef), shift(3375, P.pond), shift(3540, P.ski), shift(3320, P.scout, 270),
+      shift(3780, P.rennes, 210), shift(3300, P.sleigh), shift(3260, P.feu), shift(3550, P.caravane), shift(3620, P.niche)].join('');
     const banks = [0, 1400, 2800, 4200].map((dx) => shift(dx, P.bank)).join('');
-    const decoStall = (x, sign, roof) => `<g class="decor" aria-hidden="true">${stand(x, 660, roof, sign, `${person(22, -2, '#F6E7C1', .7, '#C8243C')}`)}</g>`;
-    const litFir = (x, y, sc) => `<g class="decor" aria-hidden="true">${fir(x, y, sc)}${Array.from({ length: 8 }, (_, k) => `<circle cx="${x + Math.sin(k * 1.9) * (6 + k * 3) * sc}" cy="${y - (14 + k * 9) * sc}" r="${2.2 * sc}" class="bulb b${k % 3}" stroke="${INK}" stroke-width=".5"/>`).join('')}</g>`;
-    const sitting = (x) => `<g class="decor" aria-hidden="true">${bench(x, 700)}${person(x - 8, 690, '#7A3A3A', .7, '#fff')}${person(x + 9, 690, '#2E4A8A', .75, '#C8243C')}</g>`;
-    const middle = [decoStall(520, 'Vin chaud', '#7A3A3A'), decoStall(660, 'Pain d’épices', '#C8243C'), decoStall(2700, 'Marrons', '#5E3B22'), decoStall(3900, 'Fondue', '#7A3A3A'), decoStall(5100, 'Gaufres', '#C8243C'), decoStall(5240, 'Nougat', '#2F7A44')].join('')
-      + [[300, 640, .8], [880, 600, .6], [1800, 640, .9], [2620, 640, .8], [3720, 650, .9], [4020, 640, .7], [4800, 650, .9], [5330, 640, .8]].map(([x, y, sc]) => litFir(x, y, sc)).join('')
-      + [760, 1560, 2850, 4700].map(sitting).join('');
-    const towerItem = item('tour', P.tower.replace('class="decor" aria-hidden="true" ', ''), it('tour').name);
-    const bigTreeItem = item('sapin', P.bigTree.replace('class="decor" aria-hidden="true"', ''), 'Sapin de Noël enneigé');
     const walker = `<g id="nwalker" transform="translate(${walk.x} 792)"><g class="nhop"><g class="nface" transform="scale(${walk.f} 1)">${person(0, 0, '#2F5A3A', 2.1, '#C8243C', '<path d="M8 -20 h9 l2 14 h-13z" fill="#C8243C" stroke="#1F3A2E" stroke-width=".8"/><path d="M10 -20 q2 -5 5 0" fill="none" stroke="#1F3A2E" stroke-width=".8"/><circle cx="13" cy="-16" r="1.5" fill="#F6D36A"/>')}</g></g></g>`;
-    return { W: WW, svg: `<svg class="village-svg walk-svg ${night ? 'night' : 'day'}" viewBox="0 110 ${WW} 710" role="group" aria-label="La rue du marché de Noël">${P.glow}
+    return { W: WW, svg: `<svg class="village-svg walk-svg ${night ? 'night' : 'day'} ${photoState}" viewBox="0 110 ${WW} 710" role="group" aria-label="La rue du marché de Noël">${P.glow}
       <g id="nbg">${P.sky.replace(/<rect width="1400" height="820" fill="url\(#sky\)"\/>[\s\S]*$/, '')}${sky}${bgMount}${hills}</g>
-      ${ground}${facade}${gar}${posts}${arch}
-      ${middle}${shift(340, P.ecureuils)}${shift(0, P.puits)}${shift(3700, P.rennes, 190)}${shift(1150, P.scout, 190)}${shift(0, P.snowman)}
-      ${shift(700, P.garlandLights)}${shift(700, P.stands)}${shift(700, P.shoppers)}${shift(400, P.carolers)}
-      ${shift(1300, P.cloches)}${shift(1300, P.ledTree)}${shift(1400, towerItem)}${shift(1300, P.horloge)}${shift(1300, P.tasses)}
-      ${shift(3500, P.ski)}${shift(2400, P.train)}${shift(2440, P.chef)}${shift(3450, P.pond)}
-      ${shift(3100, P.sleigh)}${shift(3150, P.feu)}${shift(3120, P.caravane)}${shift(3150, P.niche)}${shift(3165, bigTreeItem)}
-      ${street}${lamps}${crowd}${walker}${banks}</svg>` };
+      ${ground}${street.replace(/<path d="M-50 742[\s\S]*$/, '')}
+      <g class="layer-photo">${photos}</g><g class="layer-drawn">${drawn}</g>${posts}
+      ${street.replace(/^[\s\S]*?<\/defs>/, '')}${walker}${banks}</svg>` };
   }
   function nearest() {
     const list = Object.entries(ANCHORS).map(([id, x]) => ({ id, d: Math.abs(x - walk.x) })).filter((o) => o.d < 150).sort((a, b) => a.d - b.d).slice(0, 2);
@@ -3049,7 +3040,7 @@ const Noel = (() => {
       ${Deco.head('Le village de Noël', 'Un village où il neige tous les jours et où même le chef de gare est de bonne humeur. Tout ce qui bouge et brille ici existe en miniature chez Truffaut : clique pour voir le produit.',
         ['Même en miniature, je reste le plus lent du village.', 'Le traîneau me double tous les soirs. Vexant.', 'Les churros, c’est pour qui ? Pour moi ? Non ? D’accord.'], 1)}
       <div class="walk-bar"><div class="v-ctrl">
-        <span class="seg-mode" role="group" aria-label="Affichage"><button class="btn small ${mode === 'walk' ? '' : 'white'}" data-mode="walk" type="button" aria-pressed="${mode === 'walk'}">Se promener</button><button class="btn small ${mode === 'photo' ? '' : 'white'}" data-mode="photo" type="button" aria-pressed="${mode === 'photo'}">Photos des produits</button></span>
+        <span class="seg-mode" role="group" aria-label="Affichage"><button class="btn small ${mode === 'walk' ? '' : 'white'}" data-mode="walk" type="button" aria-pressed="${mode === 'walk'}">Se promener</button><button class="btn small ${mode === 'photo' ? '' : 'white'}" data-mode="photo" type="button" aria-pressed="${mode === 'photo'}">Vue d’ensemble</button></span>
         ${mode === 'walk' ? `<button class="btn white small" id="daynight" type="button" aria-pressed="${!night}">${night ? '☀️ Journée' : '🌙 Nuit'}</button>` : `<span class="zoom" role="group" aria-label="Zoom"><button class="btn white small" id="z-out" type="button" aria-label="Dézoomer">−</button><span id="z-val">${Math.round(zoom * 100)} %</span><button class="btn white small" id="z-in" type="button" aria-label="Zoomer">+</button></span>`}</div></div>
       ${mode === 'walk' ? `<div class="nwalk-ctrl"><button class="btn white" id="n-l" type="button" aria-label="Marcher vers la gauche">◀</button>
           <select id="n-zone" aria-label="Aller directement à">${ZONES_N.map((z) => `<option value="${z.x}">${z.name}</option>`).join('')}</select>
@@ -3057,7 +3048,7 @@ const Noel = (() => {
         <div class="walkbox"><div class="village-wrap walkwrap panel" id="vwrap" tabindex="0" aria-label="La rue du marché. Flèches gauche et droite pour marcher.">${walkScene().svg}</div>
           <svg class="walk-snow" viewBox="0 0 1400 820" preserveAspectRatio="none" aria-hidden="true">${Array.from({ length: 90 }, (_, i) => `<circle cx="${(i * 173) % 1400}" cy="-10" r="${1.4 + (i % 3)}" fill="#fff" opacity=".9" style="animation-duration:${6 + (i % 5) * 1.6}s;animation-delay:${-(i % 13)}s"/>`).join('')}</svg>
           <div class="npass" id="npass" aria-live="polite"></div></div>
-        <p class="hand hint">Flèches du clavier ou boutons pour marcher. Clique sur un chalet, une scène ou la bulle pour voir le produit.</p>`
+        <p class="hand hint">Flèches du clavier ou boutons pour marcher. Tout ce que tu croises est un produit vendu chez Truffaut : clique dessus ou sur la bulle pour voir sa fiche.</p>`
       : `<div class="village-wrap panel" id="vwrap"><div class="vzoom" style="width:${zoom * 100}%">${photoScene()}</div></div>
         <p class="hand hint">Chaque pièce est la vraie photo du produit vendu chez Truffaut. Zoome, fais glisser, clique pour ouvrir la fiche.</p>`}
       <section class="v-list panel"><h2>Dans le village</h2>
@@ -3085,6 +3076,10 @@ const Noel = (() => {
       const svgEl = $('.walk-svg', el);
       const sizeIt = () => { const h = Math.min(window.innerHeight * .68, 640, Math.max(380, window.innerWidth * .62)); walk.k = h / 710; svgEl.style.height = h + 'px'; svgEl.style.width = (WW * walk.k) + 'px'; follow(true); };
       sizeIt(); nearest();
+      if (photoState === 'photo-wait') { const test = new Image(); const first = STREET.map(([id]) => it(id)).find((v) => v && v.img);
+        test.onload = () => { photoState = 'photo-ok'; svgEl.classList.remove('photo-wait'); svgEl.classList.add('photo-ok'); };
+        test.onerror = () => { photoState = 'photo-ko'; svgEl.classList.remove('photo-wait'); svgEl.classList.add('photo-ko'); };
+        test.src = first.img + '?width=700&height=700&store=fr&image-type=image'; }
       const move = (dir) => walkTo(walk.target + dir * 300);
       let hold = null;
       const holdStart = (dir) => { move(dir); clearInterval(hold); hold = setInterval(() => move(dir), 260); };

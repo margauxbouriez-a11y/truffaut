@@ -101,3 +101,15 @@
 .zone-post { font-family: var(--hand); font-size: 20px; font-weight: 700; fill: var(--ink); }
 .arch-txt { font-family: var(--display); font-style: italic; font-size: 26px; font-weight: 600; fill: #F6D36A; }
 .walking .nhop { animation: hop .32s ease-in-out infinite; }
+
+.walk-svg .layer-photo image { mix-blend-mode: multiply; }
+.walk-svg.photo-wait .layer-photo, .walk-svg.photo-ko .layer-photo { display: none; }
+.walk-svg.photo-ok .layer-drawn { display: none; }
+.walk-svg.photo-wait .layer-drawn { opacity: .0; }
+.walk-svg .ph-s { transition: transform .25s; transform-box: fill-box; transform-origin: 50% 100%; }
+.walk-svg .ph-s:hover, .walk-svg .ph-s:focus { transform: translateY(-6px) scale(1.04); filter: none; }
+.walk-svg .ph-s.fly { animation: fly 6s ease-in-out infinite; }
+
+.walk-svg .sky-pale { display: none; }
+.walk-svg.photo-ok .sky-pale { display: inline; }
+.walk-svg.photo-ok .stars, .walk-svg.photo-ok .moon { display: none; }
