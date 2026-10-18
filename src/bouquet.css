@@ -54,3 +54,9 @@
 .table-props { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
 .table .stem { z-index: 3; }
 .b-name { font-size: 17px; font-weight: 700; }
+
+.bq-cats { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 10px; }
+.bq-cat { border: 2px solid var(--line); border-radius: 999px; background: #fff; padding: 6px 14px; font: inherit; font-weight: 700; font-size: 15px; cursor: pointer; }
+.bq-cat small { font-weight: 400; opacity: .7; margin-left: 2px; }
+.bq-cat:hover { background: #FFF6E2; }
+.bq-cat.on { background: var(--sun); }

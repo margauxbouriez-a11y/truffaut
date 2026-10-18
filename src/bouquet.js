@@ -2,14 +2,24 @@
    MON BOUQUET — la table du fleuriste
    ============================================================ */
 const Bouquet = (() => {
-  let el, table, inHand = null, stems = [], selected = null, finished = false, moveHandler = null, keyHandler = null;
+  let el, table, cat = 'roses', inHand = null, stems = [], selected = null, finished = false, moveHandler = null, keyHandler = null;
   const SW = 80, SH = 240; // taille d'une tige dessinée (base au milieu du bas)
 
   const stemSVG = (f, v = 0) => Fleurs.stem(f, v, SW, SH);
 
+  const fromText = (f) => (f.from || []).map((k) => BOUQUETS[k] ? BOUQUETS[k][0] : '').filter((v, i, a) => v && a.indexOf(v) === i).join(', ');
   function bucketsHTML() {
-    return STEMS.map((f) => `<button class="bucket ${inHand === f.id ? 'on' : ''}" data-id="${f.id}" type="button" aria-pressed="${inHand === f.id}" aria-label="Prendre : ${esc(f.name)}">
+    return STEMS.filter((f) => f.cat === cat).map((f) => `<button class="bucket ${inHand === f.id ? 'on' : ''}" data-id="${f.id}" type="button" aria-pressed="${inHand === f.id}" aria-label="Prendre : ${esc(f.name)}" title="${esc(f.name)} — dans : ${esc(fromText(f))}">
       ${Fleurs.bucket(f)}<span class="b-name">${esc(f.name)}</span></button>`).join('');
+  }
+  function catsHTML() {
+    return STEM_CATS.map((c) => `<button class="bq-cat ${c.id === cat ? 'on' : ''}" type="button" data-cat="${c.id}" aria-pressed="${c.id === cat}">${esc(c.name)} <small>${STEMS.filter((f) => f.cat === c.id).length}</small></button>`).join('');
+  }
+  function showCat(id) {
+    cat = id;
+    $$('.bq-cat', el).forEach((b) => { b.classList.toggle('on', b.dataset.cat === id); b.setAttribute('aria-pressed', b.dataset.cat === id); });
+    const sh = $('#shelf', el); sh.innerHTML = bucketsHTML(); sh.scrollLeft = 0;
+    $$('.bucket', sh).forEach((b) => b.addEventListener('click', () => take(b.dataset.id)));
   }
 
   function draw() {
@@ -17,7 +27,8 @@ const Bouquet = (() => {
       ${Deco.head('Mon bouquet', 'À toi le tablier de fleuriste. Prends une fleur dans un seau, pose-la sur la table, recommence. Arrange, tourne, hésite, puis rassemble le tout dans ta main.',
         ['Un chou dans un bouquet ? Audacieux. J’adore.', 'Moi, je mange les fleurs. Mais je respecte ton art.', 'L’eucalyptus, c’est le jean blanc du bouquet : ça va avec tout.'], 2,
         '<div class="bq-stats"><span class="tag" id="bq-count">0 tige</span><span class="tag" id="bq-price">0,00 €</span></div>')}
-      <div class="shelf panel" role="group" aria-label="Les seaux de fleurs">${bucketsHTML()}</div>
+      <div class="bq-cats" role="group" aria-label="Familles de fleurs">${catsHTML()}</div>
+      <div class="shelf panel" id="shelf" role="group" aria-label="Les seaux de fleurs">${bucketsHTML()}</div>
       <div class="workbench">
         <div class="table" id="table" aria-label="La table du fleuriste">
           <p class="table-empty hand" id="table-empty">Clique sur un seau pour prendre une fleur en main, puis clique sur la table pour la poser.</p>
@@ -35,10 +46,11 @@ const Bouquet = (() => {
         </div>
         <aside class="bq-side panel" id="bq-side"></aside>
       </div>
-      <p class="small ref">Fleurs de la composition « ${esc(BOUQUET_REF.label)} » Création Truffaut (${euro(BOUQUET_REF.price)}). Prix à la tige indicatif : ${euro(STEM_PRICE)}.</p>
+      <p class="small ref">${STEMS.length} fleurs et feuillages : toutes les variétés des bouquets de fleurs fraîches vendus par Truffaut (relevé du 18/10/2026). Survole un seau pour voir dans quels bouquets on la trouve. Prix à la tige indicatif : ${euro(STEM_PRICE)} (${esc(BOUQUET_REF.label)} à ${euro(BOUQUET_REF.price)} ÷ 22).</p>
     </div>`;
     table = $('#table', el);
     $$('.bucket', el).forEach((b) => b.addEventListener('click', () => take(b.dataset.id)));
+    $$('.bq-cat', el).forEach((b) => b.addEventListener('click', () => showCat(b.dataset.cat)));
     table.addEventListener('click', onTableClick);
     moveHandler = (e) => {
       const r = table.getBoundingClientRect();
@@ -82,7 +94,7 @@ const Bouquet = (() => {
     d.setAttribute('role', 'button'); d.setAttribute('aria-label', `${f.name} sur la table. Glisser pour déplacer, flèches pour tourner, Suppr pour retirer.`);
     d.innerHTML = stemSVG(f, s.v || 0) + `<span class="stem-tools"><button type="button" data-a="l" aria-label="Tourner à gauche">↺</button><button type="button" data-a="r" aria-label="Tourner à droite">↻</button><button type="button" data-a="x" aria-label="Retirer">✕</button></span>`;
     place(d, s);
-    d.style.zIndex = ['foliage', 'euca'].includes(f.type) ? 2 : 5 + stems.indexOf(s);
+    d.style.zIndex = Fleurs.FOLIAGE.includes(f.type) ? 2 : 5 + stems.indexOf(s);
     table.appendChild(d);
     $('#table-empty', el).hidden = true;
     let drag = null;
