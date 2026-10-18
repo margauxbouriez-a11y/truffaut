@@ -29,7 +29,7 @@ On arrive sur une carte d'île : chaque lieu ouvre un espace. Gaston l'escargot 
 ## Fichiers
 
 - `index.html` : le site complet, en un seul fichier (s'ouvre aussi en double-cliquant dessus).
-- `src/` : les sources, une partie par espace (`potager.js`, `jardin.js`, `bouquet.js`, `noel.js`, `galerie.js`, `clinique.js`…), les données produits dans `data.js`, le décor fleuri et Gaston dans `deco.js`.
+- `src/` : les sources, une partie par espace (`potager.js`, `jardin.js`, `bouquet.js`, `noel.js`, `galerie.js`, `clinique.js`…), les données produits dans `data.js`, le décor fleuri et Gaston dans `deco.js`, les fleurs illustrées de l’atelier bouquet dans `fleurs.js`.
 - `build.py` : rassemble `src/` en `index.html`. Après une modification : `python3 build.py`.
 
 ## Mettre le site en ligne (GitHub Pages)

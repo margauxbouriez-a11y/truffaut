@@ -5,39 +5,15 @@ const Bouquet = (() => {
   let el, table, inHand = null, stems = [], selected = null, finished = false, moveHandler = null, keyHandler = null;
   const SW = 80, SH = 240; // taille d'une tige dessinée (base au milieu du bas)
 
-  function headSVG(f) {
-    const p = f.petal, h = f.heart;
-    switch (f.type) {
-      case 'rose': return Deco.rose(40, 34, 23, p) + Deco.leaf(22, 52, 18, 160, '#4E7D3A') + Deco.leaf(58, 52, 18, 20, '#5E9446');
-      case 'pompom': return `<g transform="translate(40 34)">${[[22, 16, -0.12], [16, 13, 0], [10, 10, 0.25]].map(([R, n, k]) => Array.from({ length: n }, (_, i) => `<path d="M0 0 C-4 ${-R * .4} -3 ${-R} 0 ${-R} C3 ${-R} 4 ${-R * .4} 0 0Z" fill="${Deco.shade(p, k)}" stroke="${INK}" stroke-width="1.1" transform="rotate(${i * 360 / n + R})"/>`).join('')).join('')}<circle r="5" fill="${h}" stroke="${INK}" stroke-width="1.2"/><circle r="23" fill="url(#petalShade)"/></g>`;
-      case 'daisy': return Deco.daisy(40, 34, 27, p, h, 16);
-      case 'cloud': return Array.from({ length: 14 }, (_, i) => `<circle cx="${40 + Math.cos(i * 2.4) * (6 + i * 1.3)}" cy="${34 + Math.sin(i * 2.4) * (5 + i * 1)}" r="${6 - i * .15}" fill="${i % 3 ? p : h}" stroke="${INK}" stroke-width="1.8"/>`).join('');
-      case 'spray': return `<path d="M40 70 L26 30 M40 70 L54 26 M40 70 L40 18" stroke="#5E8C61" stroke-width="2.5"/>` + Array.from({ length: 16 }, (_, i) => `<circle cx="${26 + (i * 37) % 30}" cy="${16 + (i * 23) % 30}" r="4" fill="${p}" stroke="${INK}" stroke-width="1.5"/>`).join('');
-      case 'cabbage': return [26, 20, 13].map((r, i) => `<path d="${blob(40, 36, r, r * .9, 9, .2, i + 2)}" fill="${['#B7D7A8', p, h][i]}" stroke="${INK}" stroke-width="2.5"/>`).join('');
-      case 'spike': return Array.from({ length: 6 }, (_, i) => `<path d="M${40 + (i % 2 ? 6 : -6)} ${72 - i * 11} q-10 -6 -6 -14 q8 -2 10 8 q4 -8 10 -6 q2 8 -10 12z" fill="${i > 3 ? h : p}" stroke="${INK}" stroke-width="2"/>`).join('');
-      case 'foliage': return Array.from({ length: 5 }, (_, i) => `<path d="M40 ${84 - i * 15} q-22 -4 -26 -16 q18 -2 26 14z M40 ${84 - i * 15} q22 -4 26 -16 q-18 -2 -26 14z" fill="${i % 2 ? p : h}" stroke="${INK}" stroke-width="2"/>`).join('') + `<path d="M40 30 q-6 -14 0 -22 q6 8 0 22z" fill="${p}" stroke="${INK}" stroke-width="2"/>`;
-      case 'euca': return Array.from({ length: 7 }, (_, i) => `<ellipse cx="${40 + (i % 2 ? 11 : -11)}" cy="${90 - i * 12}" rx="10" ry="8" fill="${p}" stroke="${INK}" stroke-width="2"/>`).join('');
-      default: return '';
-    }
-  }
-  function stemSVG(f) {
-    const leafy = !['foliage', 'euca', 'spray'].includes(f.type);
-    return `<svg viewBox="0 0 ${SW} ${SH}" width="${SW}" height="${SH}" aria-hidden="true">
-      <path d="M40 ${SH - 2} Q36 ${SH * .55} 40 50" stroke="${INK}" stroke-width="6" fill="none" stroke-linecap="round"/>
-      <path d="M40 ${SH - 2} Q36 ${SH * .55} 40 50" stroke="#5E9E4E" stroke-width="3" fill="none" stroke-linecap="round"/>
-      ${leafy ? Deco.leaf(38, 150, 30, -150, '#5E9446', .4) + Deco.leaf(39, 118, 30, -30, '#4E7D3A', .4) : ''}
-      ${headSVG(f)}</svg>`;
-  }
+  const stemSVG = (f, v = 0) => Fleurs.stem(f, v, SW, SH);
 
   function bucketsHTML() {
     return STEMS.map((f) => `<button class="bucket ${inHand === f.id ? 'on' : ''}" data-id="${f.id}" type="button" aria-pressed="${inHand === f.id}" aria-label="Prendre : ${esc(f.name)}">
-      <span class="b-flowers">${[0, 1, 2].map((i) => `<span style="transform:rotate(${(i - 1) * 14}deg)">${stemSVG(f)}</span>`).join('')}</span>
-      <svg class="b-pail" viewBox="0 0 90 60" aria-hidden="true"><path d="M8 4 H82 L72 56 H18 Z" fill="#B9C6CC" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/><path d="M12 18 H78" stroke="${INK}" stroke-width="2" opacity=".5"/></svg>
-      <span class="b-name">${esc(f.name)}</span></button>`).join('');
+      ${Fleurs.bucket(f)}<span class="b-name">${esc(f.name)}</span></button>`).join('');
   }
 
   function draw() {
-    el.innerHTML = `<div class="page bouquet-page">
+    el.innerHTML = `${Fleurs.DEFS}<div class="page bouquet-page">
       ${Deco.head('Mon bouquet', 'À toi le tablier de fleuriste. Prends une fleur dans un seau, pose-la sur la table, recommence. Arrange, tourne, hésite, puis rassemble le tout dans ta main.',
         ['Un chou dans un bouquet ? Audacieux. J’adore.', 'Moi, je mange les fleurs. Mais je respecte ton art.', 'L’eucalyptus, c’est le jean blanc du bouquet : ça va avec tout.'], 2,
         '<div class="bq-stats"><span class="tag" id="bq-count">0 tige</span><span class="tag" id="bq-price">0,00 €</span></div>')}
@@ -88,13 +64,13 @@ const Bouquet = (() => {
       hc.style.transform = `translate(${r.width / 2 - SW / 2}px, ${r.height / 3}px)`;
     } else { hc.style.display = 'none'; table.classList.remove('holding'); }
   }
-  const handSVG = () => `<svg class="hand-svg" viewBox="0 0 80 70"><path d="M18 30 q-6 -18 8 -18 q6 0 8 10 q2 -14 12 -12 q8 2 6 14 q6 -10 14 -4 q6 6 -2 18 q-4 24 -26 26 q-22 0 -24 -20 q-8 -8 -2 -14z" fill="#F6D2B5" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/><path d="M34 22 v14 M46 24 v12" stroke="${INK}" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+  const handSVG = Fleurs.hand;
 
   function onTableClick(e) {
     if (!inHand || e.target.closest('.stem')) return;
     const r = table.getBoundingClientRect();
     const x = e.clientX - r.left, y = e.clientY - r.top;
-    const s = { uid: Date.now() + Math.random(), id: inHand, x, y: Math.min(y + SH - 50, r.height + 40), rot: rand(-12, 12) };
+    const s = { uid: Date.now() + Math.random(), id: inHand, x, y: Math.min(y + SH - 50, r.height + 40), rot: rand(-12, 12), v: Math.floor(rand(0, 1000)) };
     stems.push(s); renderStem(s); side();
     if (stems.length === 1) toast('🌸', 'Première fleur posée', 'Clique encore sur la table pour en ajouter une autre, ou change de seau.', 2400);
   }
@@ -104,7 +80,7 @@ const Bouquet = (() => {
     const d = document.createElement('div');
     d.className = 'stem'; d.dataset.uid = s.uid; d.tabIndex = 0;
     d.setAttribute('role', 'button'); d.setAttribute('aria-label', `${f.name} sur la table. Glisser pour déplacer, flèches pour tourner, Suppr pour retirer.`);
-    d.innerHTML = stemSVG(f) + `<span class="stem-tools"><button type="button" data-a="l" aria-label="Tourner à gauche">↺</button><button type="button" data-a="r" aria-label="Tourner à droite">↻</button><button type="button" data-a="x" aria-label="Retirer">✕</button></span>`;
+    d.innerHTML = stemSVG(f, s.v || 0) + `<span class="stem-tools"><button type="button" data-a="l" aria-label="Tourner à gauche">↺</button><button type="button" data-a="r" aria-label="Tourner à droite">↻</button><button type="button" data-a="x" aria-label="Retirer">✕</button></span>`;
     place(d, s);
     d.style.zIndex = ['foliage', 'euca'].includes(f.type) ? 2 : 5 + stems.indexOf(s);
     table.appendChild(d);
@@ -172,11 +148,8 @@ const Bouquet = (() => {
       const cx = 0, cy = 0;
       w.setAttribute('viewBox', `0 0 ${r.width} ${r.height}`);
       w.innerHTML = `<g transform="translate(${bx} ${by - 30}) scale(1.5)"><g class="wrap-in">
-        <path d="M${cx - 70} ${cy - 70} L${cx + 70} ${cy - 70} L${cx + 14} ${cy + 30} L${cx - 14} ${cy + 30} Z" fill="#D9B98A" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/>
-        <path d="M${cx - 70} ${cy - 70} L${cx - 40} ${cy - 50} L${cx - 14} ${cy + 30} M${cx + 70} ${cy - 70} L${cx + 42} ${cy - 48} L${cx + 14} ${cy + 30}" fill="none" stroke="${INK}" stroke-width="1.5" opacity=".5"/>
-        <path d="M${cx - 22} ${cy - 6} q-24 -18 -6 -22 q14 0 6 22 q16 -24 26 -12 q4 14 -26 12" fill="#EE5D45" stroke="${INK}" stroke-width="2.5"/>
-        <path d="M${cx - 4} ${cy - 4} l-10 26 M${cx + 2} ${cy - 4} l12 24" stroke="#EE5D45" stroke-width="4" stroke-linecap="round"/>
-        <g transform="translate(${cx - 26} ${cy + 4}) scale(.65)">${handSVG().replace('<svg class="hand-svg" viewBox="0 0 80 70">', '').replace('</svg>', '')}</g>
+        ${Fleurs.wrap(cx, cy)}
+        <g transform="translate(${cx - 26} ${cy + 4}) scale(.65)">${handSVG().replace('<svg class="hand-svg" viewBox="0 0 80 70" overflow="visible">', '').replace('</svg>', '')}</g>
       </g></g>`;
       side();
       toast('💐', 'Bouquet terminé', 'Le fleuriste du magasin est un peu jaloux. Tu peux le commander.');
