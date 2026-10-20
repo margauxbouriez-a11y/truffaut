@@ -261,6 +261,21 @@ const STEM_PRICE = Math.round((BOUQUET_REF.price / 22) * 100) / 100; // ≈ 1,77
 /* ---------- Village de Noël (gamme Lemax et villages de Noël) ---------- */
 const VIMG = 'https://images.truffaut.com/media/catalog/';
 const VILLAGE = [
+  // équivalents des bâtiments dessinés dans la promenade (catalogue Lemax de truffaut.com, relevé le 21/10/2026)
+  { id: 'brasserie', img: VIMG + 'productcdn:///Articles/jpg/1132000/1132055_2982684.jpg', name: "Scène animée 'Yulesteiner Brewery', la brasserie", price: 139.0, url: T + 'scene-animee-noel-yulesteiner-brewery-27cm-1132055.html',
+    note: 'La brasserie du village, en version miniature animée (H. 27 cm).' },
+  { id: 'atelier', img: VIMG + 'productcdn:///Articles/jpg/0481000/481122_2569007.jpg', name: "Le magasin du Père Noël 'Santa's Workshop'", price: 139.0, url: T + 'le-magasin-pere-noel-481122.html',
+    note: 'L’atelier du Père Noël en scène lumineuse.' },
+  { id: 'jouets', img: VIMG + 'productcdn:///Articles/jpg/1132000/1132059_2969049.jpg', name: "Scène animée 'Fabrique de jouets Elf Made'", price: 139.0, url: T + 'scene-animee-noel-fabrique-jouets-elf-made-26-5cm-1132059.html',
+    note: 'La fabrique où les lutins préparent les jouets (H. 26,5 cm).' },
+  { id: 'lucy', img: VIMG + 'productcdn:///Articles/jpg/0163000/163106_2820859.jpg', name: 'La boutique aux chocolats de Lucy', price: 36.99, url: T + 'maison-lucys-chocolate-163106.html' },
+  { id: 'hollyjolly', img: VIMG + 'productcdn:///Articles/jpg/1132000/1132058_2953983.jpg', name: "Scène animée 'Chocolaterie Holly Jolly café Mme Claus'", price: 199.0, url: T + 'scene-animee-chocolaterie-holly-jolly-cafe-mme-claus-28cm-1132058.html' },
+  { id: 'patisserie', img: VIMG + 'productcdn:///Articles/jpg/0142000/142438_2820778.jpg', name: 'Pâtisserie Devaney', price: 35.99, url: T + 'patisserie-devaney-142438.html' },
+  { id: 'christkindl', img: VIMG + 'productcdn:///Articles/jpg/1132000/1132051_2953863.jpg', name: "Scène lumineuse 'Place Christkindl'", price: 129.0, url: T + 'scene-lumineuse-noel-place-christkind-27-5cm-1132051.html' },
+  { id: 'patinage', img: VIMG + 'productcdn:///Articles/jpg/0324000/324514_1508284.jpg', name: "Patinage d'hiver 'Winter Skating'", price: 39.99, url: T + 'patinoire-danse-s-glace-4-5-v-324514.html' },
+  { id: 'patins', img: VIMG + 'productcdn:///Articles/jpg/0365000/365380_1383631.jpg', name: 'Stand de location de patins, 3 éléments', price: 21.99, url: T + 'stand-location-patin-set3-365380.html' },
+  { id: 'visite', img: VIMG + 'productcdn:///Articles/jpg/1132000/1132039_2968911.jpg', name: 'Lot de 3 figurines : visite au Père Noël', price: 15.99, url: T + 'lot-3-figurines-visite-au-pere-noel-7-2cm-1132039.html' },
+  { id: 'promenade', img: VIMG + 'productcdn:///Articles/jpg/1132000/1132044_2953842.jpg', name: 'Figurine : promenade en traîneau', price: 24.99, url: T + 'figurine-noel-promenade-en-traineau-pendant-vacances-1132044.html' },
   { id: 'tour', img: VIMG + 'productcdn:///Articles/jpg/0516000/516798_2569040.jpg', name: "Tour horloge illuminée 'Christmas Clock Tower' + adaptateur 4,5 V", price: 89.0, url: T + 'tour-horloge-illumine-avec-adaptateur-4-5v-516798.html',
     note: 'L’horloge s’illumine, s’anime et sonne les douze coups de minuit.' },
   { id: 'place', img: VIMG + 'product/6/3/636c464b370071.84502216.jpg', name: 'La Place du Village et ses boutiques, lumineuse et animée', price: null, url: T + 'village-de-noel-lumineux-et-anime-la-place-du-village-et-ses-boutiques.html',
