@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 340" width="300" height="340">
+<title>Citronnier chargé de citrons en pot de terre cuite</title>
+<defs>
+<radialGradient id="ci-bg" cx="50%" cy="42%" r="65%"><stop offset="0" stop-color="#FBF2D2"></stop><stop offset="1" stop-color="#FFFFFF"></stop></radialGradient>
+<radialGradient id="ci-can" cx="38%" cy="30%" r="75%"><stop offset="0" stop-color="#74BA5D"></stop><stop offset="0.6" stop-color="#2F7A35"></stop><stop offset="1" stop-color="#17461E"></stop></radialGradient>
+<pattern id="ci-lv" patternUnits="userSpaceOnUse" width="14" height="12"><ellipse cx="4" cy="4" rx="4.4" ry="2.2" transform="rotate(-30 4 4)" fill="#A2D886" opacity="0.38"></ellipse><ellipse cx="11" cy="9.5" rx="4" ry="2" transform="rotate(25 11 9.5)" fill="#0F3516" opacity="0.3"></ellipse></pattern>
+<radialGradient id="ci-lem" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#FFF8B4"></stop><stop offset="0.55" stop-color="#F7D628"></stop><stop offset="1" stop-color="#C49300"></stop></radialGradient>
+<linearGradient id="ci-tr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4E4132"></stop><stop offset="0.45" stop-color="#93806A"></stop><stop offset="1" stop-color="#4A3D2F"></stop></linearGradient>
+<linearGradient id="ci-pot" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8E4426"></stop><stop offset="0.3" stop-color="#E5936A"></stop><stop offset="0.6" stop-color="#CC7148"></stop><stop offset="1" stop-color="#7A381E"></stop></linearGradient>
+<linearGradient id="ci-rim" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#A2502F"></stop><stop offset="0.3" stop-color="#F3AA82"></stop><stop offset="0.6" stop-color="#DA845A"></stop><stop offset="1" stop-color="#8A4428"></stop></linearGradient>
+<filter id="ci-blur" x="-30%" y="-100%" width="160%" height="300%"><feGaussianBlur stdDeviation="5"></feGaussianBlur></filter>
+<g id="ci-Lm">
+<ellipse cx="0" cy="0" rx="10" ry="7.6" fill="url(#ci-lem)"></ellipse>
+<ellipse cx="10" cy="0" rx="2" ry="1.6" fill="#E0B80E"></ellipse>
+<ellipse cx="-10" cy="0" rx="1.6" ry="1.4" fill="#D4AC0B"></ellipse>
+<ellipse cx="-3.5" cy="-3.2" rx="3" ry="1.5" fill="#FFFFFF" opacity="0.55"></ellipse>
+</g>
+<g id="ci-F">
+<ellipse cx="0" cy="-3.6" rx="2.2" ry="3.6" fill="#FFFFFF"></ellipse>
+<ellipse cx="0" cy="-3.6" rx="2.2" ry="3.6" transform="rotate(72)" fill="#FFFFFF"></ellipse>
+<ellipse cx="0" cy="-3.6" rx="2.2" ry="3.6" transform="rotate(144)" fill="#F4F1EA"></ellipse>
+<ellipse cx="0" cy="-3.6" rx="2.2" ry="3.6" transform="rotate(216)" fill="#F4F1EA"></ellipse>
+<ellipse cx="0" cy="-3.6" rx="2.2" ry="3.6" transform="rotate(288)" fill="#FFFFFF"></ellipse>
+<circle cx="0" cy="0" r="1.4" fill="#F5D65A"></circle>
+</g>
+</defs>
+<rect width="300" height="340" fill="url(#ci-bg)"></rect>
+<ellipse cx="150" cy="322" rx="80" ry="9" fill="#1E2A22" opacity="0.25" filter="url(#ci-blur)"></ellipse>
+<ellipse cx="150" cy="236" rx="66" ry="9" fill="#8A4024"></ellipse>
+<ellipse cx="150" cy="237.5" rx="58" ry="6.5" fill="#3A2A20"></ellipse>
+<path d="M145 242 L146 176 Q147 164 150 158 Q153 164 154 176 L155 242 Z" fill="url(#ci-tr)"></path>
+<g stroke="#6B5A44" stroke-width="3" stroke-linecap="round" fill="none"><path d="M150 170 Q136 156 124 140"></path><path d="M150 168 Q166 152 178 140"></path></g>
+<g fill="url(#ci-can)"><circle cx="104" cy="118" r="36"></circle><circle cx="196" cy="116" r="36"></circle><circle cx="124" cy="72" r="30"></circle><circle cx="178" cy="72" r="30"></circle><circle cx="150" cy="104" r="60"></circle><circle cx="150" cy="146" r="32"></circle></g>
+<g fill="url(#ci-lv)"><circle cx="104" cy="118" r="36"></circle><circle cx="196" cy="116" r="36"></circle><circle cx="124" cy="72" r="30"></circle><circle cx="178" cy="72" r="30"></circle><circle cx="150" cy="104" r="60"></circle><circle cx="150" cy="146" r="32"></circle></g>
+<use href="#ci-Lm" transform="translate(90 104) rotate(-40)"></use>
+<use href="#ci-Lm" transform="translate(128 88) rotate(-10)"></use>
+<use href="#ci-Lm" transform="translate(204 92) rotate(30)"></use>
+<use href="#ci-Lm" transform="translate(168 112) rotate(-15)"></use>
+<use href="#ci-Lm" transform="translate(110 132) rotate(-25)"></use>
+<use href="#ci-Lm" transform="translate(186 128) rotate(20)"></use>
+<use href="#ci-Lm" transform="translate(150 156) rotate(5)"></use>
+<use href="#ci-F" transform="translate(172 80)"></use>
+<use href="#ci-F" transform="translate(118 112)"></use>
+<use href="#ci-F" transform="translate(214 124) scale(0.9)"></use>
+<use href="#ci-F" transform="translate(146 58) scale(0.9)"></use>
+<path d="M90 248 A60 8 0 0 0 210 248 L198 316 Q150 326 102 316 Z" fill="url(#ci-pot)"></path>
+<path d="M84 236 A66 9 0 0 0 216 236 L214 249 A64 9 0 0 1 86 249 Z" fill="url(#ci-rim)"></path>
+<path d="M88 251 A62 8 0 0 0 212 251" stroke="#6B2E18" stroke-width="2" fill="none" opacity="0.35"></path>
+<path d="M86 238 A64 9 0 0 0 214 238" stroke="#FFD9C2" stroke-width="1.5" fill="none" opacity="0.7"></path>
+</svg>

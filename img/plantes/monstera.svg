@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 340" width="300" height="340">
+<title>Monstera deliciosa en pot blanc avec tuteur en mousse</title>
+<defs>
+<radialGradient id="mo-bg" cx="50%" cy="58%" r="62%"><stop offset="0" stop-color="#DCEFD9"></stop><stop offset="1" stop-color="#FFFFFF"></stop></radialGradient>
+<linearGradient id="mo-leaf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5DBB72"></stop><stop offset="0.5" stop-color="#2B7D48"></stop><stop offset="1" stop-color="#164A2B"></stop></linearGradient>
+<linearGradient id="mo-pot" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B4B8B1"></stop><stop offset="0.32" stop-color="#FFFFFF"></stop><stop offset="0.62" stop-color="#E6E8E3"></stop><stop offset="1" stop-color="#9A9E97"></stop></linearGradient>
+<linearGradient id="mo-pole" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4A3526"></stop><stop offset="0.45" stop-color="#8C6B4C"></stop><stop offset="1" stop-color="#3E2C20"></stop></linearGradient>
+<filter id="mo-blur" x="-30%" y="-100%" width="160%" height="300%"><feGaussianBlur stdDeviation="5"></feGaussianBlur></filter>
+<mask id="mo-m" maskUnits="userSpaceOnUse" x="-80" y="-125" width="160" height="135">
+<path d="M0 -6 C-34 0 -66 -22 -66 -58 C-66 -94 -32 -114 0 -108 C32 -114 66 -94 66 -58 C66 -22 34 0 0 -6 Z" fill="#FFFFFF"></path>
+<path d="M-72 -60 L-24 -56 M-68 -88 L-22 -72 M-64 -26 L-24 -38 M-42 -114 L-14 -84 M-38 -2 L-14 -22 M72 -60 L24 -56 M68 -88 L22 -72 M64 -26 L24 -38 M42 -114 L14 -84 M38 -2 L14 -22" stroke="#000000" stroke-width="5" stroke-linecap="round" fill="none"></path>
+<ellipse cx="-40" cy="-45" rx="3" ry="5" fill="#000000"></ellipse><ellipse cx="40" cy="-45" rx="3" ry="5" fill="#000000"></ellipse><ellipse cx="-36" cy="-79" rx="2.5" ry="4.5" fill="#000000"></ellipse><ellipse cx="36" cy="-79" rx="2.5" ry="4.5" fill="#000000"></ellipse>
+</mask>
+<g id="mo-L" mask="url(#mo-m)">
+<path d="M0 -6 C-34 0 -66 -22 -66 -58 C-66 -94 -32 -114 0 -108 C32 -114 66 -94 66 -58 C66 -22 34 0 0 -6 Z" fill="url(#mo-leaf)"></path>
+<path d="M0 -6 C-34 0 -66 -22 -66 -58 C-66 -94 -32 -114 0 -108 Z" fill="#FFFFFF" opacity="0.12"></path>
+<path d="M0 -6 Q2 -58 0 -104" stroke="#A9DFB2" stroke-width="2" fill="none"></path>
+<path d="M0 -40 Q-14 -44 -26 -48 M0 -40 Q14 -44 26 -48 M0 -66 Q-12 -70 -24 -66 M0 -66 Q12 -70 24 -66" stroke="#8ACB98" stroke-width="1.2" fill="none" opacity="0.55"></path>
+</g>
+</defs>
+<rect width="300" height="340" fill="url(#mo-bg)"></rect>
+<ellipse cx="150" cy="322" rx="78" ry="9" fill="#1E2A22" opacity="0.25" filter="url(#mo-blur)"></ellipse>
+<ellipse cx="150" cy="236" rx="62" ry="8" fill="#C7CAC4"></ellipse>
+<ellipse cx="150" cy="237.5" rx="56" ry="6.5" fill="#3A2C22"></ellipse>
+<rect x="143" y="58" width="14" height="184" rx="7" fill="url(#mo-pole)"></rect>
+<g fill="#7E9A45" opacity="0.75"><circle cx="147" cy="74" r="1.6"></circle><circle cx="153" cy="92" r="1.4"></circle><circle cx="146" cy="118" r="1.8"></circle><circle cx="154" cy="140" r="1.5"></circle><circle cx="148" cy="168" r="1.7"></circle><circle cx="152" cy="196" r="1.4"></circle></g>
+<g stroke="#3E7A43" stroke-width="4" stroke-linecap="round" fill="none"><path d="M152 242 Q150 170 152 112"></path><path d="M142 242 Q122 200 104 152"></path><path d="M158 242 Q184 200 200 146"></path><path d="M140 244 Q112 230 88 210"></path><path d="M160 244 Q190 230 214 208"></path></g>
+<path d="M88 236 A62 8 0 0 0 212 236 L200 316 Q150 326 100 316 Z" fill="url(#mo-pot)"></path>
+<path d="M90 238 A60 8 0 0 0 210 238" stroke="#FFFFFF" stroke-width="2" fill="none" opacity="0.85"></path>
+<use href="#mo-L" transform="translate(152 112) scale(0.8)"></use>
+<use href="#mo-L" transform="translate(104 152) rotate(-38) scale(0.88)"></use>
+<use href="#mo-L" transform="translate(200 146) rotate(36) scale(0.84)"></use>
+<use href="#mo-L" transform="translate(88 210) rotate(-72) scale(0.66)"></use>
+<use href="#mo-L" transform="translate(214 208) rotate(70) scale(0.66)"></use>
+</svg>

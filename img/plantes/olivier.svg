@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 340" width="300" height="340">
+<title>Olivier en pot gris</title>
+<defs>
+<radialGradient id="ol-bg" cx="50%" cy="45%" r="65%"><stop offset="0" stop-color="#EEF0E2"></stop><stop offset="1" stop-color="#FFFFFF"></stop></radialGradient>
+<linearGradient id="ol-pot" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6A6F6A"></stop><stop offset="0.33" stop-color="#CBCFCA"></stop><stop offset="0.6" stop-color="#A6ABA5"></stop><stop offset="1" stop-color="#5E635E"></stop></linearGradient>
+<linearGradient id="ol-trunk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5D5040"></stop><stop offset="0.4" stop-color="#A39276"></stop><stop offset="0.7" stop-color="#6E6150"></stop><stop offset="1" stop-color="#4C4134"></stop></linearGradient>
+<radialGradient id="ol-can" cx="40%" cy="30%" r="75%"><stop offset="0" stop-color="#DDE6CC"></stop><stop offset="0.5" stop-color="#9FB08A"></stop><stop offset="1" stop-color="#5F704C"></stop></radialGradient>
+<radialGradient id="ol-olive" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#7A5872"></stop><stop offset="1" stop-color="#2B1C28"></stop></radialGradient>
+<pattern id="ol-lv" patternUnits="userSpaceOnUse" width="12" height="10"><path d="M1 6 L8 2.5" stroke="#F1F5E8" stroke-width="1.6" stroke-linecap="round" opacity="0.6"></path><path d="M5 9.5 L11 7" stroke="#4F5F42" stroke-width="1.4" stroke-linecap="round" opacity="0.45"></path></pattern>
+<filter id="ol-blur" x="-30%" y="-100%" width="160%" height="300%"><feGaussianBlur stdDeviation="5"></feGaussianBlur></filter>
+</defs>
+<rect width="300" height="340" fill="url(#ol-bg)"></rect>
+<ellipse cx="150" cy="322" rx="76" ry="9" fill="#1E2A22" opacity="0.25" filter="url(#ol-blur)"></ellipse>
+<ellipse cx="150" cy="228" rx="60" ry="9" fill="#7D827D"></ellipse>
+<ellipse cx="150" cy="229.5" rx="54" ry="7" fill="#3A2C22"></ellipse>
+<path d="M140 232 C136 204 150 184 142 162 C136 146 144 132 148 122 L156 122 C160 136 154 150 160 166 C168 186 158 206 162 232 Z" fill="url(#ol-trunk)"></path>
+<path d="M146 220 C144 200 152 186 147 168 M156 214 C158 196 152 180 154 160" stroke="#3F352B" stroke-width="1.2" fill="none" opacity="0.5"></path>
+<g stroke="#6A5C4A" stroke-width="4" stroke-linecap="round" fill="none"><path d="M146 130 C132 112 114 102 92 94"></path><path d="M156 130 C168 110 186 100 208 92"></path><path d="M151 126 C150 104 150 86 152 66"></path></g>
+<g fill="url(#ol-can)"><ellipse cx="92" cy="90" rx="38" ry="26"></ellipse><ellipse cx="208" cy="88" rx="38" ry="26"></ellipse><ellipse cx="150" cy="58" rx="44" ry="30"></ellipse><ellipse cx="118" cy="70" rx="30" ry="22"></ellipse><ellipse cx="184" cy="68" rx="30" ry="22"></ellipse><ellipse cx="150" cy="98" rx="34" ry="20"></ellipse></g>
+<g fill="url(#ol-lv)"><ellipse cx="92" cy="90" rx="38" ry="26"></ellipse><ellipse cx="208" cy="88" rx="38" ry="26"></ellipse><ellipse cx="150" cy="58" rx="44" ry="30"></ellipse><ellipse cx="118" cy="70" rx="30" ry="22"></ellipse><ellipse cx="184" cy="68" rx="30" ry="22"></ellipse><ellipse cx="150" cy="98" rx="34" ry="20"></ellipse></g>
+<g fill="url(#ol-olive)"><ellipse cx="96" cy="108" rx="3.6" ry="4.6"></ellipse><ellipse cx="104" cy="104" rx="3.6" ry="4.6"></ellipse><ellipse cx="198" cy="106" rx="3.6" ry="4.6"></ellipse><ellipse cx="170" cy="106" rx="3.6" ry="4.6"></ellipse><ellipse cx="128" cy="106" rx="3.6" ry="4.6"></ellipse></g>
+<path d="M90 228 A60 9 0 0 0 210 228 L200 318 Q150 326 100 318 Z" fill="url(#ol-pot)"></path>
+<path d="M92 230 A58 9 0 0 0 208 230" stroke="#F2F4F1" stroke-width="1.6" fill="none" opacity="0.8"></path>
+<path d="M96 246 A56 8 0 0 0 204 246" stroke="#4F544F" stroke-width="1.2" fill="none" opacity="0.35"></path>
+</svg>

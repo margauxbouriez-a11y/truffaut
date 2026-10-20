@@ -60,3 +60,15 @@
 .bq-cat small { font-weight: 400; opacity: .7; margin-left: 2px; }
 .bq-cat:hover { background: #FFF6E2; }
 .bq-cat.on { background: var(--sun); }
+
+/* plantes en pot à offrir avec le bouquet */
+.bq-pots { margin-top: 26px; }
+.bq-pots h2 { margin: 0; font-size: 26px; }
+.bq-pots > .hand { margin: 2px 0 14px; font-size: 20px; color: var(--ink-soft); }
+.pot-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px; }
+.pot-card { display: grid; gap: 2px; padding: 0 0 12px; background: #fff; border: 2px solid var(--line); border-radius: 18px; overflow: hidden; text-align: center; box-shadow: 0 6px 0 rgba(46,58,42,.12); transition: transform .2s; }
+.pot-card:hover { transform: translateY(-3px); }
+.pot-card img { display: block; width: 100%; height: auto; aspect-ratio: 300 / 340; margin-bottom: 4px; }
+.pot-card b { font-size: 17px; padding: 0 10px; }
+.pot-card i { font-size: 14px; color: var(--ink-soft); padding: 0 10px; }
+.pot-card span { justify-self: center; margin-top: 6px; padding: 3px 10px; border-radius: 999px; background: #EAF6EE; font-size: 13px; font-weight: 600; }
