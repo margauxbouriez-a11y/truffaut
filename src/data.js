@@ -52,6 +52,22 @@ const STAGE_AT = [0, 0.06, 0.22, 0.48, 0.75, 1];
 /* ---------- Jardin-boutique ---------- */
 // forms : 'plante' (en pot / en godet) et/ou 'bulbe'. Seuls les formats réellement vendus ont un prix.
 const SHOP = [
+  { id: 'monstera', zone: 'serre', name: 'Monstera deliciosa', kind: 'monstera', color: '#3F8F4E',
+    forms: { plante: { label: 'H 45-50 cm, pot 14 cm', price: 10.49, url: T + 'monstera-deliciosa-45-50-cm-pot-d14-cm-1024371.html' } } },
+  { id: 'ficus-lyrata', zone: 'serre', name: 'Ficus lyrata', kind: 'lyrata', color: '#4A8A3E',
+    forms: { plante: { label: 'Pot de 17 cm', price: 25.99, url: T + 'ficus-lyrata-pot-d-17cm-1092183.html' } } },
+  { id: 'sansevieria', zone: 'serre', name: "Sansevieria 'Laurentii'", tag: 'Sansevieria', kind: 'sansevieria', color: '#3B7445',
+    forms: { plante: { label: 'H 55 cm, pot 17 cm', price: 16.99, url: T + 'sansevieria-laurentii-h55-cm-pot-d17-cm-873392.html' } } },
+  { id: 'pothos', zone: 'serre', name: 'Pothos en suspension', tag: 'Pothos', kind: 'pothos', color: '#6DB04A',
+    forms: { plante: { label: 'Suspension Ø 18/20 cm', price: 15.99, url: T + 'pothos-suspension-18-20cm-63130.html' } } },
+  { id: 'orchidee', zone: 'serre', name: 'Orchidée Phalaenopsis 2 tiges', tag: 'Orchidée', kind: 'orchid', color: '#F2A0C8',
+    forms: { plante: { label: 'Pot de 12 cm, coloris variables', price: 17.99, url: T + 'phaleno-plante-12cm-2-tiges-pot-coloris-variables-261303.html' } } },
+  { id: 'anthurium', zone: 'serre', name: 'Anthurium', kind: 'anthurium', color: '#D8263A',
+    forms: { plante: { label: 'Pot de 12 cm, H 35 cm, 4-5 fleurs', price: 10.99, url: T + 'anthurium-plante-12cm-35cm-4-5-fleurs-pot-296367.html' } } },
+  { id: 'cactee', zone: 'serre', name: 'Cactée', kind: 'cactus', color: '#4E9A5E',
+    forms: { plante: { label: 'Pot de 15 cm', price: 14.99, url: T + 'cactee-pot-d-15cm-63236.html' } } },
+  { id: 'ficus-ginseng', zone: 'serre', name: 'Bonsaï Ficus Ginseng', tag: 'Ficus Ginseng', kind: 'bonsai', color: '#5DA64E',
+    forms: { plante: { label: 'H 30-40 cm, pot 17 cm', price: 33.99, url: T + 'ficus-ginseng-bonsai-plantes-d-interieur-depolluante-30-40-cm-de-haut-pot-17-cm.html' } } },
   { id: 'rosier-jv', zone: 'roseraie', name: "Rosier 'Jules Verne®'", kind: 'rose', color: '#F3A6B8',
     forms: { plante: { label: 'Pot de 5 L', price: 29.99, url: T + 'rosier-jules-verne-adecohuit-c5l-627891.html' } } },
   { id: 'rosier-ep', zone: 'roseraie', name: "Rosier 'Edith Piaf®'", kind: 'rose', color: '#C8243C',
@@ -106,6 +122,7 @@ const SHOP = [
     forms: { bulbe: { label: 'Filet de 250 g', price: 3.99, url: T + 'bulbes-echalotes-griselle-en-filet-250g-677706.html' } } },
 ];
 const ZONES = [
+  { id: 'serre', name: 'La serre tropicale' },
   { id: 'roseraie', name: 'La roseraie' },
   { id: 'mediterranee', name: 'Le coin méditerranéen' },
   { id: 'ombre', name: 'Le sous-bois' },
