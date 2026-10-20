@@ -13,7 +13,7 @@ On arrive sur une carte d'île : chaque lieu ouvre un espace. Gaston l'escargot 
 | **Silence ça truffe** | Recréer son potager (graine, bulbe ou plante déjà poussée + photo). Les plantes grandissent avec la vraie météo de sa ville, on note ses arrosages avec l'arrosoir, alertes (soif, gel, récolte, pluie) et conseils du mois. |
 | **Le jardin-boutique** | Se promener dans un jardin dessiné avec un panier, cliquer sur une plante pour la cueillir en pot ou en bulbe. 26 vrais produits. |
 | **Mon bouquet** | 82 fleurs et feuillages dessinés : toutes les variétés des bouquets de fleurs fraîches Truffaut, rangées en 5 familles (roses, fleurs vedettes, fleurs légères, feuillages, exotiques). Prendre les fleurs dans les seaux, les poser sur la table du fleuriste, les arranger, rassembler le bouquet dans la main et le commander. |
-| **Le village de Noël** | Promenade dans une rue de marché de Noël (5 quartiers, façades à colombages, chalets, place, gare, camp) où chaque produit Truffaut dessiné est cliquable ; ou maquette enneigée composée des **vraies photos** de 27 produits Lemax vendus par Truffaut (tour-horloge, boutiques, scènes animées, train…), chargées depuis truffaut.com ; chaque pièce ouvre sa fiche produit. Zoom et déplacement. Une version dessinée prend le relais si les photos ne peuvent pas s’afficher. |
+| **Le village de Noël** | Une balade en 5 scènes illustrées (entrée du village, grande rue, marché de Noël, patinoire, atelier du Père Noël) : on avance de scène en scène, les panneaux de l'entrée mènent aux autres lieux, et des points lumineux posés dans chaque scène ouvrent la fiche des produits du village de Noël vendus par Truffaut. La « Vue d'ensemble » garde la maquette enneigée composée des **vraies photos** de 27 produits Lemax. |
 | **Montre ton jardin** | Publier une photo de son jardin ou potager et recevoir un bon de réduction (exemple). |
 | **Ma plante est envahie** | Choisir l'image qui ressemble à sa plante (14 ravageurs et maladies), obtenir le remède doux, le remède fort et des plantes résistantes ; sinon photo + Google Lens. |
 | **Dans les coulisses** | Les automatisations qui rendent tout ça possible (météo, alertes, catalogue synchronisé, IA photo, bons automatiques…). |
@@ -28,7 +28,8 @@ On arrive sur une carte d'île : chaque lieu ouvre un espace. Gaston l'escargot 
 
 ## Fichiers
 
-- `index.html` : le site complet, en un seul fichier (s'ouvre aussi en double-cliquant dessus).
+- `index.html` : le site complet (s'ouvre aussi en double-cliquant dessus).
+- `img/noel/` : les 5 scènes illustrées du village de Noël (et leurs vignettes).
 - `src/` : les sources, une partie par espace (`potager.js`, `jardin.js`, `bouquet.js`, `noel.js`, `galerie.js`, `clinique.js`…), les données produits dans `data.js`, le décor fleuri et Gaston dans `deco.js`, les fleurs illustrées de l’atelier bouquet dans `fleurs.js`.
 - `build.py` : rassemble `src/` en `index.html`. Après une modification : `python3 build.py`.
 
