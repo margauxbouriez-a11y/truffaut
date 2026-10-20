@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 340" width="300" height="340">
+<title>Orchidée Phalaenopsis rose en pot blanc</title>
+<defs>
+<radialGradient id="ph-bg" cx="55%" cy="45%" r="65%"><stop offset="0" stop-color="#F7E2EC"></stop><stop offset="1" stop-color="#FFFFFF"></stop></radialGradient>
+<linearGradient id="ph-leaf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6AA858"></stop><stop offset="1" stop-color="#2A5A28"></stop></linearGradient>
+<radialGradient id="ph-pet" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#FFFFFF"></stop><stop offset="0.55" stop-color="#FCE6F0"></stop><stop offset="1" stop-color="#EC97C0"></stop></radialGradient>
+<linearGradient id="ph-lip" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D93A86"></stop><stop offset="1" stop-color="#8A1450"></stop></linearGradient>
+<radialGradient id="ph-bud" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#FCEFF5"></stop><stop offset="1" stop-color="#C9DCA6"></stop></radialGradient>
+<linearGradient id="ph-pot" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B4B8B1"></stop><stop offset="0.32" stop-color="#FFFFFF"></stop><stop offset="0.62" stop-color="#E6E8E3"></stop><stop offset="1" stop-color="#9A9E97"></stop></linearGradient>
+<filter id="ph-blur" x="-30%" y="-100%" width="160%" height="300%"><feGaussianBlur stdDeviation="5"></feGaussianBlur></filter>
+<g id="ph-F">
+<ellipse cx="0" cy="-17" rx="9" ry="15" fill="url(#ph-pet)"></ellipse>
+<ellipse cx="0" cy="16" rx="7.5" ry="14" transform="rotate(38)" fill="url(#ph-pet)"></ellipse>
+<ellipse cx="0" cy="16" rx="7.5" ry="14" transform="rotate(-38)" fill="url(#ph-pet)"></ellipse>
+<ellipse cx="-17" cy="-1" rx="16" ry="14" fill="url(#ph-pet)"></ellipse>
+<ellipse cx="17" cy="-1" rx="16" ry="14" fill="url(#ph-pet)"></ellipse>
+<path d="M-7 4 C-11 14 -5 22 0 22 C5 22 11 14 7 4 C4 1 -4 1 -7 4 Z" fill="url(#ph-lip)"></path>
+<path d="M-4 3 C-7 -1 -9 -3 -10 -6 M4 3 C7 -1 9 -3 10 -6" stroke="#B0185F" stroke-width="2" stroke-linecap="round" fill="none"></path>
+<ellipse cx="0" cy="-1" rx="3.2" ry="4.2" fill="#FFF3D9"></ellipse>
+<circle cx="0" cy="5" r="2.4" fill="#F2BE2E"></circle>
+</g>
+<g id="ph-Lf">
+<path d="M0 0 C18 -18 58 -22 80 -8 C86 -4 84 6 74 8 C50 13 18 10 0 0 Z" fill="url(#ph-leaf)"></path>
+<path d="M2 0 Q40 -8 78 -2" stroke="#9CCB84" stroke-width="1.6" fill="none"></path>
+<path d="M8 -6 C26 -16 52 -18 72 -10" stroke="#FFFFFF" stroke-width="2" fill="none" opacity="0.22"></path>
+</g>
+</defs>
+<rect width="300" height="340" fill="url(#ph-bg)"></rect>
+<ellipse cx="150" cy="322" rx="70" ry="9" fill="#1E2A22" opacity="0.25" filter="url(#ph-blur)"></ellipse>
+<ellipse cx="150" cy="236" rx="48" ry="7" fill="#C7CAC4"></ellipse>
+<ellipse cx="150" cy="237" rx="43" ry="5.5" fill="#6B4A30"></ellipse>
+<g fill="#9A7350"><ellipse cx="132" cy="236" rx="4" ry="2"></ellipse><ellipse cx="160" cy="235" rx="5" ry="2"></ellipse><ellipse cx="176" cy="237" rx="3.5" ry="1.8"></ellipse></g>
+<path d="M156 240 L162 70" stroke="#A88B5C" stroke-width="3" stroke-linecap="round"></path>
+<path d="M156 238 C158 170 160 104 166 80 C172 58 198 52 220 66 C236 78 246 100 250 122" stroke="#5B7A34" stroke-width="2.6" fill="none" stroke-linecap="round"></path>
+<use href="#ph-F" transform="translate(178 62) rotate(-8) scale(0.78)"></use>
+<use href="#ph-F" transform="translate(205 62) rotate(6) scale(0.88)"></use>
+<use href="#ph-F" transform="translate(228 82) rotate(14) scale(0.9)"></use>
+<use href="#ph-F" transform="translate(242 106) rotate(22) scale(0.8)"></use>
+<ellipse cx="250" cy="128" rx="5" ry="7" fill="url(#ph-bud)"></ellipse>
+<ellipse cx="251" cy="140" rx="3.6" ry="5" fill="url(#ph-bud)"></ellipse>
+<path d="M102 236 A48 7 0 0 0 198 236 L190 318 Q150 326 110 318 Z" fill="url(#ph-pot)"></path>
+<path d="M104 238 A46 7 0 0 0 196 238" stroke="#FFFFFF" stroke-width="2" fill="none" opacity="0.85"></path>
+<use href="#ph-Lf" transform="translate(152 238) rotate(-38) scale(0.72)"></use>
+<use href="#ph-Lf" transform="translate(146 240) scale(-1 1) rotate(-14)"></use>
+<use href="#ph-Lf" transform="translate(154 240) rotate(-10)"></use>
+<g stroke-linecap="round" fill="none"><path d="M128 244 C116 252 112 264 120 272" stroke="#A9BBA0" stroke-width="3.5"></path><path d="M176 244 C190 250 194 262 186 270" stroke="#A9BBA0" stroke-width="3.5"></path><path d="M120 272 L121 274" stroke="#7FA36B" stroke-width="3.5"></path><path d="M186 270 L185 272" stroke="#7FA36B" stroke-width="3.5"></path></g>
+</svg>

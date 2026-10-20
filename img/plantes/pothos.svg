@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 340" width="300" height="340">
+<title>Pothos retombant en pot suspendu</title>
+<defs>
+<radialGradient id="po-bg" cx="50%" cy="45%" r="65%"><stop offset="0" stop-color="#E5F1D9"></stop><stop offset="1" stop-color="#FFFFFF"></stop></radialGradient>
+<linearGradient id="po-leaf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#93CC5E"></stop><stop offset="0.5" stop-color="#438F3C"></stop><stop offset="1" stop-color="#28602A"></stop></linearGradient>
+<linearGradient id="po-pot" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4F6B58"></stop><stop offset="0.33" stop-color="#BAD4C0"></stop><stop offset="0.6" stop-color="#8FB09A"></stop><stop offset="1" stop-color="#44604E"></stop></linearGradient>
+<g id="po-L">
+<path d="M0 0 C-7 -3 -17 0 -17 10 C-17 20 -7 25 0 32 C7 25 17 20 17 10 C17 0 7 -3 0 0 Z" fill="url(#po-leaf)"></path>
+<path d="M-2 4 C-8 10 -6 20 0 28 C2 18 4 10 -2 4 Z" fill="#ECE27C" opacity="0.55"></path>
+<path d="M0 2 L0 29" stroke="#D3EAAE" stroke-width="1" fill="none"></path>
+<path d="M-12 6 C-15 10 -15 16 -11 21" stroke="#FFFFFF" stroke-width="1.4" fill="none" opacity="0.3"></path>
+</g>
+</defs>
+<rect width="300" height="340" fill="url(#po-bg)"></rect>
+<ellipse cx="150" cy="330" rx="70" ry="5" fill="#1E2A22" opacity="0.08"></ellipse>
+<ellipse cx="150" cy="100" rx="50" ry="7" fill="#5E7B67"></ellipse>
+<ellipse cx="150" cy="101" rx="45" ry="5.5" fill="#3A2C22"></ellipse>
+<use href="#po-L" transform="translate(118 102) rotate(140) scale(0.9)"></use>
+<use href="#po-L" transform="translate(132 98) rotate(160)"></use>
+<use href="#po-L" transform="translate(168 98) rotate(200)"></use>
+<use href="#po-L" transform="translate(182 102) rotate(220) scale(0.9)"></use>
+<use href="#po-L" transform="translate(150 97) rotate(180)"></use>
+<path d="M100 100 A50 7 0 0 0 200 100 L188 156 Q150 166 112 156 Z" fill="url(#po-pot)"></path>
+<path d="M102 102 A48 7 0 0 0 198 102" stroke="#E4F1E7" stroke-width="1.6" fill="none" opacity="0.8"></path>
+<g stroke="#B9A47E" stroke-width="1.6" fill="none" stroke-linecap="round"><path d="M150 16 L101 100"></path><path d="M150 16 L199 100"></path><path d="M150 16 L150 107"></path></g>
+<circle cx="150" cy="10" r="6" stroke="#9E8A66" stroke-width="2.5" fill="none"></circle>
+<g stroke="#5C8F3E" stroke-width="2.2" fill="none" stroke-linecap="round">
+<path d="M106 104 C90 140 96 200 82 260 C76 290 82 310 77 330"></path>
+<path d="M194 104 C214 150 204 210 220 270 C226 300 218 318 224 330"></path>
+<path d="M132 106 C122 160 136 220 126 288"></path>
+<path d="M172 106 C182 150 170 200 184 252"></path>
+</g>
+<use href="#po-L" transform="translate(100 130) rotate(30)"></use>
+<use href="#po-L" transform="translate(91 165) rotate(-35)"></use>
+<use href="#po-L" transform="translate(94 196) rotate(30) scale(1.05)"></use>
+<use href="#po-L" transform="translate(86 230) rotate(-30)"></use>
+<use href="#po-L" transform="translate(81 262) rotate(25) scale(0.95)"></use>
+<use href="#po-L" transform="translate(78 294) rotate(-20) scale(0.9)"></use>
+<use href="#po-L" transform="translate(205 136) rotate(-30)"></use>
+<use href="#po-L" transform="translate(209 170) rotate(35) scale(1.05)"></use>
+<use href="#po-L" transform="translate(207 205) rotate(-30)"></use>
+<use href="#po-L" transform="translate(215 240) rotate(30)"></use>
+<use href="#po-L" transform="translate(221 272) rotate(-25) scale(0.95)"></use>
+<use href="#po-L" transform="translate(221 304) rotate(20) scale(0.85)"></use>
+<use href="#po-L" transform="translate(127 168) rotate(25) scale(0.95)"></use>
+<use href="#po-L" transform="translate(131 205) rotate(-30)"></use>
+<use href="#po-L" transform="translate(131 240) rotate(25) scale(0.95)"></use>
+<use href="#po-L" transform="translate(127 272) rotate(-20) scale(0.85)"></use>
+<use href="#po-L" transform="translate(178 160) rotate(-25) scale(0.95)"></use>
+<use href="#po-L" transform="translate(175 192) rotate(30)"></use>
+<use href="#po-L" transform="translate(179 225) rotate(-25) scale(0.9)"></use>
+</svg>

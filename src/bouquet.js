@@ -22,6 +22,30 @@ const Bouquet = (() => {
     $$('.bucket', sh).forEach((b) => b.addEventListener('click', () => take(b.dataset.id)));
   }
 
+  const POTS = [
+    ['monstera', 'Monstera', 'Monstera deliciosa', 'Lumière vive indirecte'],
+    ['ficus-lyrata', 'Figuier lyre', 'Ficus lyrata', 'Lumière vive'],
+    ['sansevieria', 'Langue de belle-mère', 'Sansevieria trifasciata', 'Arrosage rare'],
+    ['pothos', 'Pothos', 'Epipremnum aureum', 'Mi-ombre, en suspension'],
+    ['orchidee', 'Orchidée papillon', 'Phalaenopsis', 'Sans soleil direct'],
+    ['anthurium', 'Anthurium', 'Anthurium andreanum', 'Air humide'],
+    ['cactus', 'Cierge du Pérou', 'Cereus peruvianus', 'Plein soleil'],
+    ['bonsai', 'Bonsaï Ficus Ginseng', 'Ficus microcarpa', 'Substrat légèrement humide'],
+    ['olivier', 'Olivier', 'Olea europaea', 'Plein soleil, sol drainant'],
+    ['lavande', 'Lavande vraie', 'Lavandula angustifolia', 'Plein soleil, sol sec'],
+    ['hortensia', 'Hortensia', 'Hydrangea macrophylla', 'Mi-ombre, sol frais'],
+    ['citronnier', 'Citronnier', 'Citrus limon', 'Hivernage hors gel'],
+  ];
+  function potsHTML() {
+    return `<section class="bq-pots" aria-labelledby="bq-pots-t">
+      <h2 id="bq-pots-t">Et une plante en pot avec ton bouquet ?</h2>
+      <p class="hand">Des fleurs qui durent une semaine, une plante qui dure des années : le duo parfait à offrir.</p>
+      <ul class="pot-grid">${POTS.map(([id, name, latin, tip]) => `<li class="pot-card">
+        <img src="img/plantes/${id}.svg" alt="${esc(name)} en pot, illustration" width="300" height="340" loading="lazy">
+        <b>${esc(name)}</b><i>${esc(latin)}</i><span>${esc(tip)}</span></li>`).join('')}</ul>
+    </section>`;
+  }
+
   function draw() {
     el.innerHTML = `${Fleurs.DEFS}<div class="page bouquet-page">
       ${Deco.head('Mon bouquet', 'À toi le tablier de fleuriste. Prends une fleur dans un seau, pose-la sur la table, recommence. Arrange, tourne, hésite, puis rassemble le tout dans ta main.',
@@ -46,6 +70,7 @@ const Bouquet = (() => {
         </div>
         <aside class="bq-side panel" id="bq-side"></aside>
       </div>
+      ${potsHTML()}
       <p class="small ref">${STEMS.length} fleurs et feuillages : toutes les variétés des bouquets de fleurs fraîches vendus par Truffaut (relevé du 18/10/2026). Survole un seau pour voir dans quels bouquets on la trouve. Prix à la tige indicatif : ${euro(STEM_PRICE)} (${esc(BOUQUET_REF.label)} à ${euro(BOUQUET_REF.price)} ÷ 22).</p>
     </div>`;
     table = $('#table', el);

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 340" width="300" height="340">
+<title>Bonsaï Ficus Ginseng dans une coupe émaillée</title>
+<defs>
+<radialGradient id="bo-bg" cx="50%" cy="50%" r="62%"><stop offset="0" stop-color="#E2EEDA"></stop><stop offset="1" stop-color="#FFFFFF"></stop></radialGradient>
+<linearGradient id="bo-pot" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3E271C"></stop><stop offset="0.33" stop-color="#97654A"></stop><stop offset="0.6" stop-color="#6B4430"></stop><stop offset="1" stop-color="#2E1D16"></stop></linearGradient>
+<linearGradient id="bo-trunk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6B4C33"></stop><stop offset="0.38" stop-color="#C9A47C"></stop><stop offset="0.7" stop-color="#93704F"></stop><stop offset="1" stop-color="#5A3E28"></stop></linearGradient>
+<radialGradient id="bo-ball" cx="38%" cy="32%" r="72%"><stop offset="0" stop-color="#A6DD80"></stop><stop offset="0.55" stop-color="#4E9A44"></stop><stop offset="1" stop-color="#245526"></stop></radialGradient>
+<pattern id="bo-lv" patternUnits="userSpaceOnUse" width="10" height="9"><ellipse cx="5" cy="4" rx="3" ry="1.8" transform="rotate(-25 5 4)" fill="#D2F2AE" opacity="0.4"></ellipse><ellipse cx="1" cy="8" rx="2.6" ry="1.5" transform="rotate(20 1 8)" fill="#1B4A1E" opacity="0.3"></ellipse></pattern>
+<filter id="bo-blur" x="-30%" y="-100%" width="160%" height="300%"><feGaussianBlur stdDeviation="5"></feGaussianBlur></filter>
+</defs>
+<rect width="300" height="340" fill="url(#bo-bg)"></rect>
+<ellipse cx="150" cy="306" rx="104" ry="8" fill="#1E2A22" opacity="0.28" filter="url(#bo-blur)"></ellipse>
+<rect x="76" y="292" width="20" height="12" rx="2" fill="#2B1A13"></rect>
+<rect x="204" y="292" width="20" height="12" rx="2" fill="#2B1A13"></rect>
+<ellipse cx="150" cy="262" rx="96" ry="10" fill="#3B261B"></ellipse>
+<ellipse cx="150" cy="263" rx="90" ry="8" fill="#5F8F35"></ellipse>
+<g fill="#7FAF4A"><ellipse cx="110" cy="261" rx="10" ry="3"></ellipse><ellipse cx="192" cy="262" rx="12" ry="3"></ellipse><ellipse cx="226" cy="264" rx="7" ry="2.4"></ellipse></g>
+<g stroke="#6E4C33" stroke-linecap="round" fill="none"><path d="M150 156 C140 132 122 120 100 112" stroke-width="4.5"></path><path d="M150 156 C162 130 180 118 202 108" stroke-width="4.5"></path><path d="M150 158 C150 132 149 110 150 82" stroke-width="4"></path><path d="M142 170 C120 156 96 140 72 126" stroke-width="3.5"></path><path d="M160 168 C184 150 206 134 230 122" stroke-width="3.5"></path></g>
+<path d="M112 262 C108 244 120 232 128 222 C134 212 130 196 136 180 C140 168 146 160 150 150 C156 162 158 172 164 182 C170 196 166 212 172 222 C180 232 192 244 188 262 Z" fill="url(#bo-trunk)"></path>
+<path d="M118 262 C122 250 130 244 134 236 M182 262 C178 250 170 244 166 236 M150 262 C148 246 152 232 150 216" stroke="#5A3E28" stroke-width="1.4" fill="none" opacity="0.5"></path>
+<path d="M138 200 C140 186 146 176 148 164" stroke="#F1DDBF" stroke-width="2.4" fill="none" stroke-linecap="round" opacity="0.5"></path>
+<g fill="url(#bo-ball)"><circle cx="70" cy="124" r="19"></circle><circle cx="232" cy="120" r="19"></circle><circle cx="98" cy="108" r="30"></circle><circle cx="204" cy="104" r="30"></circle><circle cx="150" cy="74" r="34"></circle><circle cx="118" cy="84" r="24"></circle><circle cx="184" cy="82" r="24"></circle><circle cx="150" cy="108" r="20"></circle></g>
+<g fill="url(#bo-lv)"><circle cx="70" cy="124" r="19"></circle><circle cx="232" cy="120" r="19"></circle><circle cx="98" cy="108" r="30"></circle><circle cx="204" cy="104" r="30"></circle><circle cx="150" cy="74" r="34"></circle><circle cx="118" cy="84" r="24"></circle><circle cx="184" cy="82" r="24"></circle><circle cx="150" cy="108" r="20"></circle></g>
+<path d="M54 262 A96 10 0 0 0 246 262 L236 294 Q150 304 64 294 Z" fill="url(#bo-pot)"></path>
+<path d="M56 264 A94 10 0 0 0 244 264" stroke="#E2B796" stroke-width="1.6" fill="none" opacity="0.7"></path>
+<path d="M70 278 Q150 288 230 278" stroke="#FFFFFF" stroke-width="3" fill="none" opacity="0.12" stroke-linecap="round"></path>
+</svg>

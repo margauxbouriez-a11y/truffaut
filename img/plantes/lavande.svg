@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 340" width="300" height="340">
+<title>Touffe de lavande en fleurs en pot de terre cuite</title>
+<defs>
+<radialGradient id="la-bg" cx="50%" cy="45%" r="65%"><stop offset="0" stop-color="#ECE5F7"></stop><stop offset="1" stop-color="#FFFFFF"></stop></radialGradient>
+<radialGradient id="la-fl" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#D2BEF5"></stop><stop offset="0.6" stop-color="#8565CF"></stop><stop offset="1" stop-color="#523895"></stop></radialGradient>
+<radialGradient id="la-mound" cx="45%" cy="25%" r="80%"><stop offset="0" stop-color="#C6D2B7"></stop><stop offset="0.55" stop-color="#7F9474"></stop><stop offset="1" stop-color="#52644B"></stop></radialGradient>
+<pattern id="la-lv" patternUnits="userSpaceOnUse" width="8" height="8"><path d="M2 7 L4 1" stroke="#E2EAD8" stroke-width="1" stroke-linecap="round" opacity="0.55"></path><path d="M6 8 L7 3" stroke="#41523C" stroke-width="1" stroke-linecap="round" opacity="0.4"></path></pattern>
+<linearGradient id="la-pot" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8E4426"></stop><stop offset="0.3" stop-color="#E5936A"></stop><stop offset="0.6" stop-color="#CC7148"></stop><stop offset="1" stop-color="#7A381E"></stop></linearGradient>
+<linearGradient id="la-rim" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#A2502F"></stop><stop offset="0.3" stop-color="#F3AA82"></stop><stop offset="0.6" stop-color="#DA845A"></stop><stop offset="1" stop-color="#8A4428"></stop></linearGradient>
+<filter id="la-blur" x="-30%" y="-100%" width="160%" height="300%"><feGaussianBlur stdDeviation="5"></feGaussianBlur></filter>
+<g id="la-S" fill="url(#la-fl)">
+<ellipse cx="0" cy="-6" rx="4.4" ry="4.2"></ellipse>
+<ellipse cx="0.6" cy="-13" rx="4.2" ry="4"></ellipse>
+<ellipse cx="-0.5" cy="-20" rx="4" ry="3.8"></ellipse>
+<ellipse cx="0.5" cy="-27" rx="3.6" ry="3.6"></ellipse>
+<ellipse cx="-0.3" cy="-33" rx="3.1" ry="3.2"></ellipse>
+<ellipse cx="0.2" cy="-38.5" rx="2.5" ry="2.8"></ellipse>
+<ellipse cx="0" cy="-43" rx="1.8" ry="2.2"></ellipse>
+</g>
+</defs>
+<rect width="300" height="340" fill="url(#la-bg)"></rect>
+<ellipse cx="150" cy="322" rx="80" ry="9" fill="#1E2A22" opacity="0.25" filter="url(#la-blur)"></ellipse>
+<ellipse cx="150" cy="236" rx="66" ry="9" fill="#8A4024"></ellipse>
+<ellipse cx="150" cy="237.5" rx="58" ry="6.5" fill="#3A2A20"></ellipse>
+<g stroke="#8DA07A" stroke-width="1.5" stroke-linecap="round" fill="none">
+<path d="M114 206 L68 158"></path><path d="M120 206 L73 142"></path><path d="M126 206 L82 126"></path><path d="M132 206 L95 111"></path><path d="M138 206 L111 98"></path><path d="M144 206 L129 90"></path><path d="M150 206 L150 86"></path><path d="M156 206 L171 90"></path><path d="M162 206 L189 98"></path><path d="M168 206 L205 111"></path><path d="M174 206 L218 126"></path><path d="M180 206 L227 142"></path><path d="M186 206 L232 158"></path>
+<path d="M126 206 L93 149"></path><path d="M144 206 L129 129"></path><path d="M156 206 L171 129"></path><path d="M174 206 L207 149"></path>
+</g>
+<use href="#la-S" transform="translate(93 149) rotate(-45) scale(0.85)"></use>
+<use href="#la-S" transform="translate(129 129) rotate(-15) scale(0.85)"></use>
+<use href="#la-S" transform="translate(171 129) rotate(15) scale(0.85)"></use>
+<use href="#la-S" transform="translate(207 149) rotate(45) scale(0.85)"></use>
+<use href="#la-S" transform="translate(68 158) rotate(-60)"></use>
+<use href="#la-S" transform="translate(73 142) rotate(-50)"></use>
+<use href="#la-S" transform="translate(82 126) rotate(-40)"></use>
+<use href="#la-S" transform="translate(95 111) rotate(-30)"></use>
+<use href="#la-S" transform="translate(111 98) rotate(-20)"></use>
+<use href="#la-S" transform="translate(129 90) rotate(-10)"></use>
+<use href="#la-S" transform="translate(150 86)"></use>
+<use href="#la-S" transform="translate(171 90) rotate(10)"></use>
+<use href="#la-S" transform="translate(189 98) rotate(20)"></use>
+<use href="#la-S" transform="translate(205 111) rotate(30)"></use>
+<use href="#la-S" transform="translate(218 126) rotate(40)"></use>
+<use href="#la-S" transform="translate(227 142) rotate(50)"></use>
+<use href="#la-S" transform="translate(232 158) rotate(60)"></use>
+<ellipse cx="150" cy="212" rx="74" ry="32" fill="url(#la-mound)"></ellipse>
+<ellipse cx="150" cy="212" rx="74" ry="32" fill="url(#la-lv)"></ellipse>
+<path d="M90 248 A60 8 0 0 0 210 248 L198 316 Q150 326 102 316 Z" fill="url(#la-pot)"></path>
+<path d="M84 236 A66 9 0 0 0 216 236 L214 249 A64 9 0 0 1 86 249 Z" fill="url(#la-rim)"></path>
+<path d="M88 251 A62 8 0 0 0 212 251" stroke="#6B2E18" stroke-width="2" fill="none" opacity="0.35"></path>
+<path d="M86 238 A64 9 0 0 0 214 238" stroke="#FFD9C2" stroke-width="1.5" fill="none" opacity="0.7"></path>
+</svg>
