@@ -57,26 +57,36 @@ const Noel = (() => {
       items: [['sapin', 14, 40], ['arbre-led', 88, 36], ['acheteurs', 50, 63]],
       nav: [[2, 22.5, 51, 'Marché de Noël'], [4, 21.5, 60.5, 'Atelier du Père Noël'], [1, 34.5, 47, 'Grande rue'], [3, 34.5, 56, 'Patinoire'], [1, 50, 42, 'Entrer dans le village']] },
     { id: 'rue', name: 'La grande rue', img: 'img/noel/2-grande-rue',
-      intro: 'Vitrines, guirlandes et sucres d’orge : la rue des boutiques.',
-      items: [['choco', 16, 35], ['bonbons', 77.5, 64], ['acheteurs', 53, 63], ['photo', 25, 62]] },
+      intro: 'Chocolatiers, pâtisserie et brasserie : chaque vitrine existe en miniature.',
+      items: [['lucy', 16.5, 33], ['patisserie', 28.6, 46.5], ['brasserie', 73.4, 52], ['hollyjolly', 95, 39], ['photo', 25, 62], ['bonbons', 77.5, 64], ['acheteurs', 53, 63]],
+      signs: [{ pts: '1129,407 1228,384 1228,422 1129,442', text: 'Brasserie', x: 1178, y: 421, size: 21, len: 84, sk: -13.5 }] },
     { id: 'marche', name: 'Le marché de Noël', img: 'img/noel/3-marche',
       intro: 'Une allée de chalets en bois. Chaque stand existe en miniature.',
-      items: [['churros', 9, 70], ['crepes', 26, 64], ['marrons', 38, 62], ['choco', 70, 66], ['bretzels', 88, 70]] },
+      items: [['churros', 8, 20], ['bretzels', 32, 36], ['crepes', 82, 38], ['marrons', 30, 62], ['choco', 70, 66]],
+      signs: [{ pts: '-4,-8 148,42 205,134 205,187 -4,86', text: 'Churros', x: 98, y: 118, size: 64, len: 190, rot: 26 },
+        { pts: '1226,230 1412,193 1412,238 1228,307', text: 'Crêpes', x: 1318, y: 283, size: 52, len: 160, sk: -11.5 }] },
     { id: 'patinoire', name: 'La patinoire', img: 'img/noel/4-patinoire',
-      intro: 'On patine autour du sapin, la grande roue tourne au-dessus des toits.',
-      items: [['glace', 58, 54], ['arbre-led', 49, 38], ['tasses', 63, 18], ['place', 34, 28], ['acheteurs', 13, 72]] },
+      intro: 'On patine autour du sapin, sur la place bordée de maisons illuminées.',
+      items: [['place', 30, 28], ['christkindl', 78, 33], ['arbre-led', 49, 38], ['patinage', 60, 56], ['glace', 41, 55], ['patins', 20, 69], ['acheteurs', 86, 70]] },
     { id: 'atelier', name: 'L’atelier du Père Noël', img: 'img/noel/5-atelier',
       intro: 'Sous l’aurore boréale, l’atelier où naissent les jouets.',
-      items: [['tour', 50, 13], ['traineau', 8, 82], ['rennes', 5, 47], ['cloches', 50, 47]] },
+      items: [['atelier', 50, 47], ['tour', 50, 13], ['jouets', 93, 67], ['rennes', 4, 47], ['visite', 59, 74], ['promenade', 8, 82], ['traineau', 24, 15]],
+      signs: [{ pts: '1426,520 1600,520 1600,547 1426,547', text: 'Fabrique de jouets', x: 1510, y: 540, size: 17, len: 150 }] },
   ];
   let sc = 0, busy = false;
   const pin = (id, x, y, i) => { const v = it(id); if (!v) return '';
     return `<button class="spot" type="button" data-id="${id}" style="left:${x}%;top:${y}%;animation-delay:${(i * .37) % 2}s" aria-label="${esc(v.name)}${v.price ? ', ' + euro(v.price) : ''}">
       <span class="spot-dot" aria-hidden="true"></span><span class="spot-tag"><b>${esc(v.name.replace(/\s*\+\s*adaptateur.*$/i, ''))}</b><span>${v.price ? euro(v.price) : 'Prix en magasin'}</span></span></button>`; };
   const navPin = ([to, x, y, label]) => `<button class="spot-nav" type="button" data-go="${to}" style="left:${x}%;top:${y}%" aria-label="Aller à : ${esc(label)}"><span>${esc(label)} ›</span></button>`;
+  // enseignes repeintes sur le décor, pour que chaque bâtiment porte le nom de son équivalent Truffaut
+  const tfOf = (g, x, y) => `translate(${x} ${y})${g.sk ? ` skewY(${g.sk})` : ''}${g.rot ? ` rotate(${g.rot})` : ''} translate(${-x} ${-y})`;
+  const signsSVG = (S) => !S.signs ? '' : `<svg class="sc-signs" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true">${S.signs.map((g) => `
+    <polygon points="${g.pts}" fill="#2A1A10" stroke="#2A1A10" stroke-width="6" stroke-linejoin="round"/><polygon points="${g.pts}" fill="#E2B04A"/>
+    <g transform="${tfOf(g, g.x, g.y)}"><text x="${g.x}" y="${g.y}" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="${g.size}" fill="#FFF4D6" textLength="${g.len}" lengthAdjust="spacingAndGlyphs">${esc(g.text)}</text></g>
+    ${g.mug ? `<g transform="${tfOf(g, g.mug[0], g.mug[1])} translate(${g.mug[0]} ${g.mug[1]})"><rect x="-6" y="-9" width="10" height="13" rx="1.5" fill="#F6C343" stroke="#2A1A10" stroke-width="1.4"/><path d="M-6 -9 q5 -5 10 0" fill="#FFF8E8" stroke="#2A1A10" stroke-width="1.2"/><path d="M4 -6 h3 a2 2 0 0 1 0 6 h-3" fill="none" stroke="#2A1A10" stroke-width="1.4"/></g>` : ''}`).join('')}</svg>`;
   function sceneHTML(i) {
     const S = SCENES[i];
-    return `<picture><img class="sc-img" src="${S.img}.webp" alt="${esc(S.name)}" width="1600" height="900" decoding="async"></picture>
+    return `<picture><img class="sc-img" src="${S.img}.webp" alt="${esc(S.name)}" width="1600" height="900" decoding="async"></picture>${signsSVG(S)}
       ${S.items.map(([id, x, y], k) => pin(id, x, y, k)).join('')}${(S.nav || []).map(navPin).join('')}`;
   }
   function stage() {

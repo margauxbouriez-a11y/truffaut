@@ -237,7 +237,11 @@ svg [stroke-width="5"] { stroke-width: 3; }
 
 /* ---------- Accueil : carte illustrée ---------- */
 .hub2 { width: min(1320px, 100% - 24px); margin: 0 auto; padding: 22px 0 56px; }
-.hub2-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 10px 28px; margin: 0 6px 18px; }
+.hub2-head { position: relative; isolation: isolate; overflow: hidden; display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 10px 28px; min-height: 250px; box-sizing: border-box; margin: 0 0 18px; padding: 96px 40px 34px; border: 2px solid var(--line); border-radius: 22px; box-shadow: 8px 10px 0 rgba(31, 58, 46, .2); background: #CDE9F1; }
+.hub2-sky { position: absolute; inset: 0; z-index: -1; }
+.hub2-sky svg { display: block; width: 100%; height: 100%; }
+.hub2-head h1 { text-shadow: 0 2px 0 rgba(255, 255, 255, .55); }
+.hub2-head p { padding: 8px 14px; border-radius: 14px; background: rgba(255, 252, 242, .72); }
 .hub2-head h1 { margin: 0; font-size: clamp(44px, 7.4vw, 96px); line-height: .9; color: #1F5A3A; letter-spacing: -.03em; }
 .hub2-head p { margin: 0; font-family: var(--display); font-size: clamp(20px, 2.2vw, 28px); line-height: 1.2; color: #D9487A; font-style: italic; text-align: right; }
 .map2 { border: 2px solid var(--line); border-radius: 22px; overflow: hidden; box-shadow: 8px 10px 0 rgba(31, 58, 46, .2); background: #1F8FA8; }
@@ -257,7 +261,7 @@ svg [stroke-width="5"] { stroke-width: 3; }
 .tile b { font-family: var(--display); font-weight: 600; font-size: 21px; line-height: 1.1; }
 .tile span { font-size: 15px; opacity: .92; }
 .tile-ghost { background: #FBFAF4; color: var(--ink); }
-@media (max-width: 640px) { .hub2-head p { text-align: left; } .tiles { grid-template-columns: 1fr 1fr; } .tile b { font-size: 18px; } .tile span { font-size: 13px; } }
+@media (max-width: 640px) { .hub2-head { padding: 80px 20px 22px; min-height: 0; } .hub2-head p { text-align: left; } .tiles { grid-template-columns: 1fr 1fr; } .tile b { font-size: 18px; } .tile span { font-size: 13px; } }
 
 .hchalk { font-family: var(--hand); font-size: 8px; fill: #FBF5E8; }
 

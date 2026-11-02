@@ -52,6 +52,22 @@ const STAGE_AT = [0, 0.06, 0.22, 0.48, 0.75, 1];
 /* ---------- Jardin-boutique ---------- */
 // forms : 'plante' (en pot / en godet) et/ou 'bulbe'. Seuls les formats réellement vendus ont un prix.
 const SHOP = [
+  { id: 'monstera', zone: 'serre', name: 'Monstera deliciosa', kind: 'monstera', color: '#3F8F4E',
+    forms: { plante: { label: 'H 45-50 cm, pot 14 cm', price: 10.49, url: T + 'monstera-deliciosa-45-50-cm-pot-d14-cm-1024371.html' } } },
+  { id: 'ficus-lyrata', zone: 'serre', name: 'Ficus lyrata', kind: 'lyrata', color: '#4A8A3E',
+    forms: { plante: { label: 'Pot de 17 cm', price: 25.99, url: T + 'ficus-lyrata-pot-d-17cm-1092183.html' } } },
+  { id: 'sansevieria', zone: 'serre', name: "Sansevieria 'Laurentii'", tag: 'Sansevieria', kind: 'sansevieria', color: '#3B7445',
+    forms: { plante: { label: 'H 55 cm, pot 17 cm', price: 16.99, url: T + 'sansevieria-laurentii-h55-cm-pot-d17-cm-873392.html' } } },
+  { id: 'pothos', zone: 'serre', name: 'Pothos en suspension', tag: 'Pothos', kind: 'pothos', color: '#6DB04A',
+    forms: { plante: { label: 'Suspension Ø 18/20 cm', price: 15.99, url: T + 'pothos-suspension-18-20cm-63130.html' } } },
+  { id: 'orchidee', zone: 'serre', name: 'Orchidée Phalaenopsis 2 tiges', tag: 'Orchidée', kind: 'orchid', color: '#F2A0C8',
+    forms: { plante: { label: 'Pot de 12 cm, coloris variables', price: 17.99, url: T + 'phaleno-plante-12cm-2-tiges-pot-coloris-variables-261303.html' } } },
+  { id: 'anthurium', zone: 'serre', name: 'Anthurium', kind: 'anthurium', color: '#D8263A',
+    forms: { plante: { label: 'Pot de 12 cm, H 35 cm, 4-5 fleurs', price: 10.99, url: T + 'anthurium-plante-12cm-35cm-4-5-fleurs-pot-296367.html' } } },
+  { id: 'cactee', zone: 'serre', name: 'Cactée', kind: 'cactus', color: '#4E9A5E',
+    forms: { plante: { label: 'Pot de 15 cm', price: 14.99, url: T + 'cactee-pot-d-15cm-63236.html' } } },
+  { id: 'ficus-ginseng', zone: 'serre', name: 'Bonsaï Ficus Ginseng', tag: 'Ficus Ginseng', kind: 'bonsai', color: '#5DA64E',
+    forms: { plante: { label: 'H 30-40 cm, pot 17 cm', price: 33.99, url: T + 'ficus-ginseng-bonsai-plantes-d-interieur-depolluante-30-40-cm-de-haut-pot-17-cm.html' } } },
   { id: 'rosier-jv', zone: 'roseraie', name: "Rosier 'Jules Verne®'", kind: 'rose', color: '#F3A6B8',
     forms: { plante: { label: 'Pot de 5 L', price: 29.99, url: T + 'rosier-jules-verne-adecohuit-c5l-627891.html' } } },
   { id: 'rosier-ep', zone: 'roseraie', name: "Rosier 'Edith Piaf®'", kind: 'rose', color: '#C8243C',
@@ -106,6 +122,7 @@ const SHOP = [
     forms: { bulbe: { label: 'Filet de 250 g', price: 3.99, url: T + 'bulbes-echalotes-griselle-en-filet-250g-677706.html' } } },
 ];
 const ZONES = [
+  { id: 'serre', name: 'La serre tropicale' },
   { id: 'roseraie', name: 'La roseraie' },
   { id: 'mediterranee', name: 'Le coin méditerranéen' },
   { id: 'ombre', name: 'Le sous-bois' },
@@ -244,6 +261,21 @@ const STEM_PRICE = Math.round((BOUQUET_REF.price / 22) * 100) / 100; // ≈ 1,77
 /* ---------- Village de Noël (gamme Lemax et villages de Noël) ---------- */
 const VIMG = 'https://images.truffaut.com/media/catalog/';
 const VILLAGE = [
+  // équivalents des bâtiments dessinés dans la promenade (catalogue Lemax de truffaut.com, relevé le 21/10/2026)
+  { id: 'brasserie', img: VIMG + 'productcdn:///Articles/jpg/1132000/1132055_2982684.jpg', name: "Scène animée 'Yulesteiner Brewery', la brasserie", price: 139.0, url: T + 'scene-animee-noel-yulesteiner-brewery-27cm-1132055.html',
+    note: 'La brasserie du village, en version miniature animée (H. 27 cm).' },
+  { id: 'atelier', img: VIMG + 'productcdn:///Articles/jpg/0481000/481122_2569007.jpg', name: "Le magasin du Père Noël 'Santa's Workshop'", price: 139.0, url: T + 'le-magasin-pere-noel-481122.html',
+    note: 'L’atelier du Père Noël en scène lumineuse.' },
+  { id: 'jouets', img: VIMG + 'productcdn:///Articles/jpg/1132000/1132059_2969049.jpg', name: "Scène animée 'Fabrique de jouets Elf Made'", price: 139.0, url: T + 'scene-animee-noel-fabrique-jouets-elf-made-26-5cm-1132059.html',
+    note: 'La fabrique où les lutins préparent les jouets (H. 26,5 cm).' },
+  { id: 'lucy', img: VIMG + 'productcdn:///Articles/jpg/0163000/163106_2820859.jpg', name: 'La boutique aux chocolats de Lucy', price: 36.99, url: T + 'maison-lucys-chocolate-163106.html' },
+  { id: 'hollyjolly', img: VIMG + 'productcdn:///Articles/jpg/1132000/1132058_2953983.jpg', name: "Scène animée 'Chocolaterie Holly Jolly café Mme Claus'", price: 199.0, url: T + 'scene-animee-chocolaterie-holly-jolly-cafe-mme-claus-28cm-1132058.html' },
+  { id: 'patisserie', img: VIMG + 'productcdn:///Articles/jpg/0142000/142438_2820778.jpg', name: 'Pâtisserie Devaney', price: 35.99, url: T + 'patisserie-devaney-142438.html' },
+  { id: 'christkindl', img: VIMG + 'productcdn:///Articles/jpg/1132000/1132051_2953863.jpg', name: "Scène lumineuse 'Place Christkindl'", price: 129.0, url: T + 'scene-lumineuse-noel-place-christkind-27-5cm-1132051.html' },
+  { id: 'patinage', img: VIMG + 'productcdn:///Articles/jpg/0324000/324514_1508284.jpg', name: "Patinage d'hiver 'Winter Skating'", price: 39.99, url: T + 'patinoire-danse-s-glace-4-5-v-324514.html' },
+  { id: 'patins', img: VIMG + 'productcdn:///Articles/jpg/0365000/365380_1383631.jpg', name: 'Stand de location de patins, 3 éléments', price: 21.99, url: T + 'stand-location-patin-set3-365380.html' },
+  { id: 'visite', img: VIMG + 'productcdn:///Articles/jpg/1132000/1132039_2968911.jpg', name: 'Lot de 3 figurines : visite au Père Noël', price: 15.99, url: T + 'lot-3-figurines-visite-au-pere-noel-7-2cm-1132039.html' },
+  { id: 'promenade', img: VIMG + 'productcdn:///Articles/jpg/1132000/1132044_2953842.jpg', name: 'Figurine : promenade en traîneau', price: 24.99, url: T + 'figurine-noel-promenade-en-traineau-pendant-vacances-1132044.html' },
   { id: 'tour', img: VIMG + 'productcdn:///Articles/jpg/0516000/516798_2569040.jpg', name: "Tour horloge illuminée 'Christmas Clock Tower' + adaptateur 4,5 V", price: 89.0, url: T + 'tour-horloge-illumine-avec-adaptateur-4-5v-516798.html',
     note: 'L’horloge s’illumine, s’anime et sonne les douze coups de minuit.' },
   { id: 'place', img: VIMG + 'product/6/3/636c464b370071.84502216.jpg', name: 'La Place du Village et ses boutiques, lumineuse et animée', price: null, url: T + 'village-de-noel-lumineux-et-anime-la-place-du-village-et-ses-boutiques.html',

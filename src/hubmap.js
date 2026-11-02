@@ -293,6 +293,49 @@ const HubMap = (() => {
     </svg>`;
   }
 
+  /* ---- le haut de l'accueil : un ciel de jardin peint à l'aquarelle ---- */
+  function paintedSky() {
+    const W = 1320, H = 250;
+    const flower = (x, y, r, c, k) => `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${k * 37})">${[0, 72, 144, 216, 288].map((a) => `<ellipse cx="0" cy="${-r * .62}" rx="${r * .42}" ry="${r * .62}" fill="${c}" ${sw(.9)} transform="rotate(${a})"/>`).join('')}<circle r="${r * .3}" fill="#F6C343" ${sw(.7)}/></g>`;
+    const leafy = (x, y, a, c) => `<path d="M0 0 C4 -5 11 -5 14 0 C11 5 4 5 0 0Z" fill="${c}" ${sw(.8)} transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${a})"/>`;
+    // guirlandes de fleurs suspendues en festons sur le haut
+    const cols = ['#F2A0C0', '#FFFFFF', '#F28C28', '#B79BE0', '#E8432E', '#FFE07A'];
+    let garl = '', k = 0;
+    const span = [[-20, 300, 62], [300, 640, 74], [640, 980, 66], [980, 1340, 70]];
+    span.forEach(([x1, x2, sag]) => {
+      const mx = (x1 + x2) / 2, my = sag * 2 - 4;
+      garl += `<path d="M${x1} -4 Q${mx} ${my} ${x2} -4" fill="none" stroke="#3F6B3A" stroke-width="2.2"/>`;
+      for (let i = 1; i < 12; i++) {
+        const t = i / 12, x = (1 - t) * (1 - t) * x1 + 2 * (1 - t) * t * mx + t * t * x2, y = (1 - t) * (1 - t) * -4 + 2 * (1 - t) * t * my + t * t * -4;
+        garl += leafy(x - 2, y + 2, (i % 2 ? 140 : 30) + i * 3, i % 3 ? '#6FA552' : '#4E8A3E');
+        garl += flower(x, y, i % 3 === 1 ? 9 : 7, cols[k++ % cols.length], k);
+      }
+      garl += `<path d="M${x1 + 2} -2 l0 10" stroke="#3F6B3A" stroke-width="2"/>${flower(x1 + 2, 10, 10, '#F2A0C0', k++)}`;
+    });
+    const cloud = (x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})" filter="url(#skyWc)"><ellipse cx="0" cy="0" rx="70" ry="22" fill="#fff" opacity=".9"/><ellipse cx="-28" cy="-14" rx="34" ry="22" fill="#fff" opacity=".9"/><ellipse cx="18" cy="-20" rx="38" ry="26" fill="#fff" opacity=".92"/><ellipse cx="10" cy="6" rx="60" ry="12" fill="#E3EEF6" opacity=".7"/></g>`;
+    const bird = (x, y, s) => `<path d="M${x - 9 * s} ${y} q${4.5 * s} ${-6 * s} ${9 * s} 0 q${4.5 * s} ${-6 * s} ${9 * s} 0" fill="none" stroke="${K}" stroke-width="1.6" stroke-linecap="round"/>`;
+    const tufts = Array.from({ length: 34 }, (_, i) => { const x = 10 + i * 40 + (i % 3) * 7, y = 244 - (i % 4) * 3; return `<path d="M${x} ${y} q-3 -12 -8 -16 M${x} ${y} q0 -14 2 -20 M${x} ${y} q4 -10 9 -13" fill="none" stroke="#5E9446" stroke-width="2" stroke-linecap="round" opacity=".8"/>`; }).join('');
+    return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMin slice" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9FD3EC"/><stop offset=".55" stop-color="#CDE9F1"/><stop offset="1" stop-color="#FCEFD6"/></linearGradient>
+        <radialGradient id="skyGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFE9A6" stop-opacity=".95"/><stop offset=".5" stop-color="#FFE9A6" stop-opacity=".35"/><stop offset="1" stop-color="#FFE9A6" stop-opacity="0"/></radialGradient>
+        <filter id="skyWc" x="-20%" y="-30%" width="140%" height="160%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="3" seed="7"/><feDisplacementMap in="SourceGraphic" scale="14"/><feGaussianBlur stdDeviation="1.4"/></filter>
+        <filter id="skyPaper"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .45  0 0 0 0 .38  0 0 0 0 .25  0 0 0 .09 0"/></filter>
+      </defs>
+      <rect width="${W}" height="${H}" fill="url(#skyGrad)"/>
+      <g filter="url(#skyWc)" opacity=".5"><path d="M0 70 C200 40 420 110 640 74 C860 40 1080 100 ${W} 66 V120 C1080 150 860 96 640 128 C420 160 200 92 0 124Z" fill="#B9DDF0"/></g>
+      <circle cx="1130" cy="104" r="120" fill="url(#skyGlow)"/>
+      <circle cx="1130" cy="104" r="44" fill="#FFD66B" filter="url(#skyWc)"/><circle cx="1118" cy="92" r="20" fill="#FFF1B8" opacity=".7" filter="url(#skyWc)"/>
+      ${cloud(250, 120, 1)}${cloud(620, 96, .8)}${cloud(900, 140, .65)}${cloud(1290, 150, .7)}
+      ${bird(470, 104, 1.2)}${bird(500, 96, .9)}${bird(790, 112, 1)}${bird(1010, 92, .8)}
+      <g filter="url(#skyWc)"><path d="M0 206 C140 166 300 188 440 174 C600 158 760 194 900 180 C1060 164 1200 186 ${W} 172 V${H} H0Z" fill="#BFDDA8" opacity=".85"/>
+        <path d="M0 232 C180 206 360 222 560 212 C760 202 980 228 1160 214 C1240 208 1290 214 ${W} 210 V${H} H0Z" fill="#9CCB86"/></g>
+      ${tufts}
+      ${garl}
+      <rect width="${W}" height="${H}" filter="url(#skyPaper)"/>
+    </svg>`;
+  }
+
   const TILES = [
     ['potager', 'Le potager', 'Il pousse avec ta météo.', '#E8432E'],
     ['jardin', 'La grande serre', 'Cueille. En pot ou en bulbe.', '#2F8A6A'],
@@ -303,7 +346,7 @@ const HubMap = (() => {
   ];
   function mount(el) {
     el.innerHTML = `<div class="hub2">
-      <header class="hub2-head"><h1>Le Grand Jardin</h1><p>Six lieux. Un seul jardin.<br>Clique pour entrer.</p></header>
+      <header class="hub2-head"><div class="hub2-sky" aria-hidden="true">${paintedSky()}</div><h1>Le Grand Jardin</h1><p>Six lieux. Un seul jardin.<br>Clique pour entrer.</p></header>
       <div class="map2">${svg()}</div>
       <nav class="tiles" aria-label="Tous les espaces">${TILES.map(([p, n, t, c]) => `<a class="tile" href="#${p}" style="--c:${c}"><b>${n}</b><span>${t}</span></a>`).join('')}
         <a class="tile tile-ghost" href="#coulisses" style="--c:#22303A"><b>Les coulisses</b><span>Ce qui fait tourner l’île.</span></a></nav>
