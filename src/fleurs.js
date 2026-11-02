@@ -848,8 +848,12 @@ const Fleurs = (() => {
 
   /* ---------- seau en zinc garni ---------- */
   function bucket(f) {
-    const fan = FOLIAGE.includes(f.type) ? [-16, 0, 16] : [-15, -5, 5, 15];
-    const stems = fan.map((a, i) => `<g transform="translate(55 128) rotate(${a}) translate(-20 -118) scale(.5)">${stemInner(f, i + 1)}</g>`).join('');
+    // brassée naturelle : tiges de hauteurs et d'inclinaisons différentes, les plus hautes au fond
+    const fan = FOLIAGE.includes(f.type)
+      ? [[-22, .47, 6], [-8, .52, 0], [6, .5, 2], [20, .46, 6]]
+      : [[-4, .53, -4], [-22, .48, 4], [14, .52, -1], [-12, .5, 1], [24, .46, 6], [3, .49, 5]];
+    const stems = fan.map(([a, sc, dy], i) => `<g transform="translate(55 ${128 + dy}) rotate(${a}) translate(${-40 * sc} ${-236 * sc}) scale(${sc})">${stemInner(f, i + 1)}</g>`).join('');
+    const price = typeof STEM_PRICE === 'number' ? euro(STEM_PRICE) : '';
     return `<svg class="b-scene" viewBox="0 0 110 160" overflow="visible" aria-hidden="true">
       <ellipse cx="55" cy="156" rx="34" ry="4" fill="url(#fl-shadow)"/>
       <ellipse cx="55" cy="104" rx="33" ry="7" fill="url(#fl-water)"/>
@@ -860,6 +864,7 @@ const Fleurs = (() => {
       <path d="M21 104 Q55 114 89 104" fill="none" stroke="#E9EFF1" stroke-width="3.4" stroke-linecap="round"/><path d="M21 104 Q55 114 89 104" fill="none" stroke="#4E5B62" stroke-width=".7"/>
       <circle cx="24.5" cy="110" r="2.4" fill="#9AA8AF" stroke="#4E5B62" stroke-width=".6"/><circle cx="85.5" cy="110" r="2.4" fill="#9AA8AF" stroke="#4E5B62" stroke-width=".6"/>
       <path d="M36 112 L39 150" stroke="#fff" stroke-width="3" opacity=".25" stroke-linecap="round"/>
+      ${price ? `<g transform="translate(70 128) rotate(8)"><path d="M0 -14 Q-6 -20 -12 -16" fill="none" stroke="#8A6236" stroke-width=".7"/><path d="M-1 -12 h26 l6 9 l-6 9 h-26z" fill="url(#fl-kraft)" stroke="#8A6236" stroke-width=".7"/><circle cx="2.5" cy="-3" r="1.4" fill="#F4F1E6" stroke="#8A6236" stroke-width=".5"/><text x="15" y=".2" text-anchor="middle" class="b-price">${price}</text></g>` : ''}
     </svg>`;
   }
 

@@ -4,21 +4,47 @@
 .walk-ctrl select { padding: 9px 12px; border: 2px solid var(--line); border-radius: 999px; background: #fff; font-weight: 700; }
 .garden-scroll { overflow-x: auto; overflow-y: hidden; border-radius: 30px; padding: 0; scrollbar-color: var(--leaf) transparent; }
 .garden-svg { display: block; }
-.zone-sign { font-family: var(--hand); font-size: 23px; fill: var(--ink); }
-.plant-tag { font-family: var(--hand); font-size: 15px; fill: var(--ink); }
+.garden-scroll { background: #DDEEF0; box-shadow: inset 0 0 0 1px rgba(31,58,46,.08); cursor: pointer; }
+.garden-svg text { pointer-events: none; }
+.zone-sign { font-family: var(--display); font-size: 21px; font-weight: 600; fill: #F7F3E6; letter-spacing: .01em; }
+.store-sign { font-family: var(--display); font-size: 23px; font-weight: 600; fill: #F7F3E6; }
+.store-sub { font-family: var(--ui); font-size: 9px; font-weight: 700; letter-spacing: .06em; fill: #CFE3C9; }
+.door-label { font-family: var(--hand); font-size: 20px; fill: #F7F3E6; opacity: .9; }
+.rack-head { font-family: var(--ui); font-size: 10px; font-weight: 800; letter-spacing: .22em; fill: #F7F3E6; }
+.till { font-family: var(--ui); font-size: 11px; font-weight: 700; fill: #1F3A2E; }
+.till-note { font-family: var(--hand); font-size: 11px; fill: #1F3A2E; }
+.ptag-name { font-family: var(--ui); font-size: 12px; font-weight: 700; fill: #1F3A2E; }
+.ptag-price { font-family: var(--ui); font-size: 15px; font-weight: 800; fill: #2E6B3F; }
+.ptag-note { font-family: var(--ui); font-size: 10.5px; fill: #6B776F; }
 .shop-plant { cursor: pointer; }
 .shop-plant:focus { outline: none; }
-.shop-plant:hover .sway, .shop-plant:focus .sway { animation: shake .5s ease-in-out; }
-.shop-plant:focus > g:nth-child(2) rect { stroke-width: 5; }
+.shop-plant .glow { fill: #FFF6C8; opacity: 0; transition: opacity .25s; }
+.shop-plant:hover .glow, .shop-plant:focus-visible .glow { opacity: .75; }
+.shop-plant .ptag { transition: transform .2s; }
+.shop-plant:hover .ptag, .shop-plant:focus-visible .ptag { transform: translateY(-4px); }
+.shop-plant:hover .ptag rect:first-child, .shop-plant:focus-visible .ptag rect:first-child { stroke: #2E6B3F; stroke-width: 2.5; }
+.shop-plant:hover .sway, .shop-plant:focus-visible .sway { animation: shake .6s ease-in-out; }
 .sway { transform-box: fill-box; transform-origin: 50% 100%; }
-@keyframes shake { 25% { transform: rotate(-4deg); } 75% { transform: rotate(4deg); } }
-.walking .hopper { animation: hop .35s ease-in-out infinite; }
-.walking .l1 { animation: legA .35s ease-in-out infinite; }
-.walking .l2 { animation: legA .35s ease-in-out infinite reverse; }
-@keyframes hop { 50% { transform: translateY(-5px); } }
+@keyframes shake { 25% { transform: rotate(-2.5deg); } 75% { transform: rotate(2.5deg); } }
+.hang { animation: hang 5s ease-in-out infinite alternate; }
+@keyframes hang { from { transform: rotate(-1.6deg); } to { transform: rotate(1.6deg); } }
+.checkout { cursor: pointer; }
+.checkout:focus { outline: none; }
+.checkout:hover rect:first-of-type, .checkout:focus-visible rect:first-of-type { stroke: #F0A830; stroke-width: 3; }
+.walking .hopper { animation: hop .36s ease-in-out infinite; }
+.walking .l1 { animation: legA .36s ease-in-out infinite; }
+.walking .l2 { animation: legA .36s ease-in-out infinite reverse; }
+.walking .wheel { animation: roll .5s linear infinite; }
+.wheel { transform-box: fill-box; transform-origin: center; }
+@keyframes roll { to { transform: rotate(360deg); } }
+@keyframes hop { 50% { transform: translateY(-3px); } }
 @keyframes legA { 50% { transform: translateY(-4px); } }
 .fly { animation: flyleaf .9s cubic-bezier(.4, -0.3, .6, 1) forwards; }
-@keyframes flyleaf { to { transform: translate(var(--dx), var(--dy)) scale(.4) rotate(220deg); opacity: .6; } }
+@keyframes flyleaf { to { transform: translate(var(--dx), var(--dy)) scale(.6); opacity: .7; } }
+.pick-head { display: flex; gap: 14px; align-items: center; margin-bottom: 8px; }
+.pick-head h2 { margin: 0 0 4px; }
+.pick-art { width: 110px; height: 148px; flex: 0 0 auto; background: radial-gradient(circle at 50% 60%, #F1F5EA, #fff 70%); border-radius: 16px; }
+@media (prefers-reduced-motion: reduce) { .hang, .walking .hopper, .walking .wheel, .walking .l1, .walking .l2 { animation: none; } }
 .hint { color: var(--ink-soft); font-size: 18px; margin: 10px 4px 0; }
 .form-opt { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 12px; margin: 8px 0; border: 2px solid var(--line); border-radius: 18px; background: #fff; }
 .form-opt.off { opacity: .55; border-style: dashed; grid-template-columns: auto 1fr; }
