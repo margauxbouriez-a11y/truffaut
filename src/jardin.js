@@ -1,436 +1,333 @@
 /* ============================================================
-   LE JARDIN-BOUTIQUE — balade dans une jardinerie dessinée
-   Entrée → pépinière (roseraie, coin méditerranéen) → ombrière (sous-bois)
-   → serre vitrée (massifs à bulbes, potager) → caisses.
-   Les dessins des plantes sont dans jardin-art.js (JArt).
+   LA GRANDE SERRE — allée en perspective, à hauteur d'œil
+   On avance de table en table ; chaque groupe de plantes est cliquable.
+   Dessins : JArt.DRAW (jardin-art.js) ou illustrations img/serre/*.svg.
    ============================================================ */
 const Jardin = (() => {
-  let el, walkerX = 210, target = 210, raf = null, facing = 1, keyHandler = null, k = 1, geo = null;
-  const H = 640, BACK = 470, FLOOR = 548, TOP = 458, FEET = 624;
-  const { grad, shadow, crown, nursery, priceTag, tint, rng, f, at, sh } = JArt;
+  const VW = 1440, VH = 836, VX = 720, VY = 300, F = 720, CAM = 1.72;
+  const STEP = 3.2;            // distance entre deux tables (m)
+  const START = 3.0;           // première table devant la caméra
+  const TABLE_Y = .78;
+  const U = .005;              // 1 unité de dessin JArt = 5 mm
   const DRAW = JArt.DRAW;
+
+  let el, camZ = 0, slot = 0, anim = null, keyHandler = null, resizeHandler = null, vbW = VW;
   const basket = () => store.get('basket', []);
   const setBasket = (b) => { store.set('basket', b); updateCount(); };
   function updateCount() { const n = basket().reduce((s, x) => s + x.qty, 0); const c = $('#basket-count'); if (c) c.textContent = n || ''; }
 
-  const STYLE = { roseraie: 'outdoor', mediterranee: 'outdoor', ombre: 'shade', massif: 'serre', potager: 'serre' };
-  const TABLE = ['lavender', 'cyclamen', 'pansy', 'strawberry', 'lettuce', 'tomato', 'herb', 'chive'];
-  const WIDTH = { rose: 200, climber: 230, olive: 250, lemon: 240, mimosa: 270, hydrangea: 240, camellia: 205, bamboo: 210, dahlia: 200, lily: 196, gladiolus: 196, freesia: 196, garlic: 196, lavender: 230, cyclamen: 200, pansy: 200, strawberry: 200, lettuce: 210, tomato: 220, herb: 210, chive: 210 };
-  const SCALE = { pansy: 1.25, strawberry: 1.25, lettuce: 1.2, cyclamen: 1.15 };
-  const shortName = (n) => n.replace(/^Rosier( grimpant)? /, 'Rosier ').replace(/ (non traçant|décoratif|sur tige|officinale)/, '').replace(/ ?—.*$/, '').replace(/'([^']+)'.*$/, '‘$1’').replace(/ en (jardinière|mélange)$/, '').slice(0, 22);
-  const shortForm = (l) => l.split(',')[0].replace('Barquette de', 'Barq.').replace('Conteneur de', 'Cont.').replace('Bulbes, spécial pot', 'Spécial pot').replace('Bulbes en mélange', 'En mélange').slice(0, 15);
-
-  /* ---------- plan de la jardinerie ---------- */
+  /* ---------- rangement des produits dans l'allée ---------- */
+  const FLOOR = ['climber', 'olive', 'lemon', 'mimosa', 'hydrangea', 'camellia', 'bamboo', 'dahlia', 'lily', 'gladiolus', 'freesia', 'garlic'];
+  const ZNAMES = { roseraie: ['La roseraie', 'ROSIERS · GRIMPANTS'], mediterranee: ['Méditerranée', 'OLIVIERS · AGRUMES · LAVANDES'], ombre: ['Le sous-bois', 'OMBRE · MI-OMBRE'], interieur: ['Plantes d’intérieur', 'VERTES · FLEURIES · CACTÉES'], massif: ['Massifs à bulbes', 'BULBES · PLANTES À MASSIF'], potager: ['Le potager', 'PLANTS · AROMATIQUES'] };
+  const FLAGS = { 'rosier-ep': ['COUP DE CŒUR', '#E86B4F'], orchidee: ['FLEURI', '#D2527F'], sansevieria: ['FACILE', '#2EBB99'], fraisier: ['DE SAISON', '#E7A23A'], lavande: ['PARFUMÉ', '#8E72C8'] };
+  let BAYS = [], ZSTART = {}, END = 0;
   function layout() {
-    let x = 330; const items = [], zones = [];
+    BAYS = []; ZSTART = {};
+    let s = 0;
     ZONES.forEach((z) => {
-      const zone = { ...z, style: STYLE[z.id] || 'outdoor', x0: x - 40, signX: x + 70 };
-      x += 190;
-      SHOP.filter((p) => p.zone === z.id).forEach((p, i) => {
-        const w = WIDTH[p.kind] || 210;
-        items.push({ p, x: x + w / 2, w, table: TABLE.includes(p.kind), depth: TABLE.includes(p.kind) ? 0 : i % 2, zone: z.id });
-        x += w;
-      });
-      x += 80; zone.x1 = x; zones.push(zone);
+      const list = SHOP.filter((p) => p.zone === z.id);
+      if (!list.length) return;
+      ZSTART[z.id] = s;
+      list.forEach((p, i) => { BAYS.push({ p, side: i % 2 ? 1 : -1, slot: s + Math.floor(i / 2), zone: z.id, floor: FLOOR.includes(p.kind) && !p.img || ['olive', 'lemon'].includes(p.kind) }); });
+      s += Math.ceil(list.length / 2);
     });
-    // les tables de présentation regroupent les articles voisins de petite taille
-    const tables = [];
-    items.forEach((it, i) => {
-      if (!it.table) return;
-      const prev = items[i - 1];
-      if (prev && prev.table && prev.zone === it.zone) tables[tables.length - 1].x1 = it.x + it.w / 2 - 6;
-      else tables.push({ x0: it.x - it.w / 2 + 6, x1: it.x + it.w / 2 - 6 });
+    END = s;
+  }
+  const zOf = (sl) => START + sl * STEP;
+
+  /* ---------- symboles (un dessin par produit, réutilisé) ---------- */
+  function symbols() {
+    return SHOP.map((p) => p.img
+      ? `<symbol id="sp-${p.id}" viewBox="-150 -325 300 340" overflow="visible"><image href="img/serre/${p.img}.svg" x="-150" y="-325" width="300" height="340"/></symbol>`
+      : `<symbol id="sp-${p.id}" viewBox="-150 -345 300 350" overflow="visible">${DRAW[p.kind](p.color, 3, p)}</symbol>`).join('');
+  }
+  // taille réelle (m) d'un symbole : largeur, hauteur de la boîte
+  const symSize = (p) => (p.img ? [300 * p.h / 325, 340 * p.h / 325] : [300 * U, 350 * U]);
+  const symFoot = (p) => (p.img ? 325 / 340 : 345 / 350); // position du pied dans la boîte
+
+  /* ---------- projection ---------- */
+  const P = (X, Y, Z) => [VX + F * X / Z, VY + F * (CAM - Y) / Z];
+  const pts = (a) => a.map(([X, Y, Z]) => P(X, Y, Z).map((v) => v.toFixed(1)).join(',')).join(' ');
+  const q = (n) => n.toFixed(1);
+
+  /* ---------- la serre (structure) ---------- */
+  function shell(cz) {
+    const ZB = 46; let g = '';
+    const zw = (w) => w - cz; // monde -> caméra
+    g += `<rect x="-400" y="-50" width="2240" height="${VH + 100}" fill="url(#js-sky)"/>`;
+    [[260, 90, 90], [520, 60, 70], [980, 80, 110], [1240, 120, 80], [760, 150, 60], [60, 140, 70]].forEach(([x, y, r]) => { g += `<g opacity=".9"><ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r * .32}" fill="#fff"/><ellipse cx="${x + r * .35}" cy="${y - r * .18}" rx="${r * .55}" ry="${r * .3}" fill="#fff"/></g>`; });
+    g += `<polygon points="${pts([[-4.4, 0, ZB], [4.4, 0, ZB], [4.4, 3.1, ZB], [0, 4.9, ZB], [-4.4, 3.1, ZB]])}" fill="#F3F1E4"/><ellipse cx="${VX}" cy="${VY - 30}" rx="420" ry="260" fill="url(#js-glow)"/>`;
+    g += `<polygon points="${pts([[-4.4, 0, 1.2], [4.4, 0, 1.2], [4.4, 0, ZB], [-4.4, 0, ZB]])}" fill="url(#js-floor)"/>`;
+    // tapis central en carreaux et bordures vertes
+    const t0 = Math.floor((cz + 1.2) / .9) * .9;
+    for (let w = t0; w < cz + ZB; w += .9) { const z = zw(w); if (z < 1.2) continue; const k = Math.round(w / .9) % 2; g += `<polygon points="${pts([[-.55, 0, z], [.55, 0, z], [.55, 0, z + .82], [-.55, 0, z + .82]])}" fill="${k ? '#D9C3A3' : '#E3CFB0'}"/>`; }
+    [-1.25, 1.25].forEach((x) => { g += `<polygon points="${pts([[x - .05, 0, 1.2], [x + .05, 0, 1.2], [x + .05, 0, ZB], [x - .05, 0, ZB]])}" fill="#2EBB99" opacity=".7"/>`; });
+    // taches de soleil (fixes dans le monde)
+    for (let k = 0; k < 40; k++) { const w = 4 + k * 4.3, z = zw(w); if (z < 1.6 || z > ZB) continue; const x = [-1.6, 1.2, -.4, 1.6, -1.2][k % 5], r = [1.3, 1.1, 1, .9, .8][k % 5]; const [a, b] = P(x, 0, z); g += `<ellipse cx="${q(a)}" cy="${q(b)}" rx="${q(F / z * r)}" ry="${q(F / z * r * .22)}" fill="url(#js-sun)"/>`; }
+    // parois vitrées et soubassement
+    [-4.4, 4.4].forEach((x) => { g += `<polygon points="${pts([[x, 0, 1.2], [x, 0, ZB], [x, 3.1, ZB], [x, 3.1, 1.2]])}" fill="url(#js-wall)" opacity=".75"/><polygon points="${pts([[x, 0, 1.2], [x, 0, ZB], [x, .6, ZB], [x, .6, 1.2]])}" fill="#F3F4F1"/>`; });
+    for (let k = 0; k < 60; k++) { const w = k * 1.6, z = zw(w); if (z < 2 || z > ZB) continue; [-1, 1].forEach((s) => { const [x, y] = P(s * 5.2, 1.6, z), r = F / z * .9; g += `<ellipse cx="${q(x)}" cy="${q(y)}" rx="${q(r * .7)}" ry="${q(r)}" fill="#8DBF85" opacity=".45"/>`; }); }
+    // toiture
+    g += `<polygon points="${pts([[-4.4, 3.1, 1.2], [0, 4.9, 1.2], [0, 4.9, ZB], [-4.4, 3.1, ZB]])}" fill="#D8E9F0" opacity=".5"/><polygon points="${pts([[4.4, 3.1, 1.2], [0, 4.9, 1.2], [0, 4.9, ZB], [4.4, 3.1, ZB]])}" fill="#CFE3EC" opacity=".5"/>`;
+    for (let i = 0; i <= 8; i++) { const t = i / 8; [[-4.4 + 4.4 * t, 3.1 + 1.8 * t], [4.4 - 4.4 * t, 3.1 + 1.8 * t]].forEach(([x, y]) => { g += `<polyline points="${pts([[x, y, 1.2], [x, y, ZB]])}" stroke="#fff" stroke-width="1.2" fill="none" opacity=".85"/>`; }); }
+    [.6, 1.6, 2.4, 3.1].forEach((y) => [-4.4, 4.4].forEach((x) => { g += `<polyline points="${pts([[x, y, 1.2], [x, y, ZB]])}" stroke="#fff" stroke-width="2" fill="none"/>`; }));
+    // rayons de soleil
+    for (let k = 0; k < 14; k++) { const w = 2 + k * 5.5, z = zw(w); if (z < 1.5 || z > 30) continue; const x = [-3.6, -1.2, 1.8][k % 3], wd = [1.6, 1.2, 1.4][k % 3]; g += `<polygon points="${pts([[x - 1.2, 4.6, Math.max(1.2, z - 2)], [x - 1.2 + wd, 4.6, Math.max(1.2, z - 2)], [x + wd + 1.4, 0, z + 3], [x + 1.4, 0, z + 3]])}" fill="url(#js-ray)" opacity=".5"/>`; }
+    // portiques blancs tous les 3 m + rampes d'éclairage
+    const roof = (z) => [[-4.4, 3.1, z], [0, 4.9, z], [4.4, 3.1, z]];
+    const p0 = Math.ceil((cz + 1.3 - 2.2) / 3) * 3 + 2.2;
+    for (let w = p0; w < cz + ZB; w += 3) {
+      const z = zw(w), sw = q(F / z * .07);
+      g += `<polyline points="${pts([[-4.4, 0, z], ...roof(z), [4.4, 0, z]])}" stroke="#fff" stroke-width="${sw}" fill="none" stroke-linejoin="round"/><polyline points="${pts([[-4.4, 3.1, z], [4.4, 3.1, z]])}" stroke="#fff" stroke-width="${q(sw * .45)}" fill="none"/>`;
+      for (let k = 0; k < 8; k++) { const x0 = -4.4 + k * 1.1; g += `<polyline points="${pts([[x0, 3.1, z], [x0 + .55, 3.45, z], [x0 + 1.1, 3.1, z]])}" stroke="#fff" stroke-width="${q(sw * .22)}" fill="none" opacity=".9"/>`; }
+      [-2, 2].forEach((x) => { const [a, b] = P(x, 2.98, z + .4); g += `<ellipse cx="${q(a)}" cy="${q(b + 2)}" rx="${q(F / z * .12)}" ry="${q(F / z * .03)}" fill="#FFF7D6" opacity=".9"/>`; });
+    }
+    [-2, 2].forEach((x) => { g += `<polyline points="${pts([[x, 3.0, 1.2], [x, 3.0, ZB]])}" stroke="#2F3A36" stroke-width="2.4" fill="none" opacity=".5"/>`; });
+    return g;
+  }
+
+  /* ---------- objets de l'allée (triés par profondeur) ---------- */
+  function table(side, z1, z2) {
+    const s = side, xa = s * 1.45, xb = s * 3.6, Y = TABLE_Y; let t = '';
+    t += `<polygon points="${pts([[xa, 0, z1], [xb, 0, z1], [xb, 0, z2], [xa, 0, z2]])}" fill="#000" opacity=".1"/>`;
+    [[xa + s * .08, z1 + .1], [xb - s * .08, z1 + .1], [xa + s * .08, z2 - .1], [xb - s * .08, z2 - .1]].forEach(([x, z]) => {
+      t += `<polyline points="${pts([[x, .08, z], [x, Y - .04, z]])}" stroke="#1F5A43" stroke-width="${q(F / z * .035)}" fill="none"/>`;
+      const [cx, cy] = P(x, .04, z); t += `<circle cx="${q(cx)}" cy="${q(cy)}" r="${q(F / z * .045)}" fill="#2F3532"/>`;
     });
-    const checkout = { x0: x, x1: x + 400 };
-    return { items, zones, tables, checkout, W: x + 400 };
+    t += `<polygon points="${pts([[xa, .22, z1], [xa, .26, z1], [xa, .26, z2], [xa, .22, z2]])}" fill="#2A6B52"/>`;
+    t += `<polygon points="${pts([[xa, Y, z1], [xb, Y, z1], [xb, Y, z2], [xa, Y, z2]])}" fill="url(#js-top)"/>`;
+    for (let k = 1; k < 6; k++) { const xx = xa + (xb - xa) * k / 6; t += `<polyline points="${pts([[xx, Y, z1], [xx, Y, z2]])}" stroke="#A97C45" stroke-width="${q(F / z1 * .006)}" fill="none" opacity=".6"/>`; }
+    t += `<polygon points="${pts([[xa, Y - .11, z1], [xa, Y, z1], [xa, Y, z2], [xa, Y - .11, z2]])}" fill="#0F4D36"/><polygon points="${pts([[xa, Y - .11, z1], [xa, Y - .095, z1], [xa, Y - .095, z2], [xa, Y - .11, z2]])}" fill="#2EBB99"/>`;
+    t += `<polygon points="${pts([[xa, Y - .11, z1], [xb, Y - .11, z1], [xb, Y, z1], [xa, Y, z1]])}" fill="#1C6A50"/>`;
+    return t;
+  }
+  function use(p, X, Y, Z, k = 1) {
+    const [w, h] = symSize(p), wp = F * w * k / Z, hp = F * h * k / Z, [x, y] = P(X, Y, Z);
+    return `<ellipse cx="${q(x)}" cy="${q(y)}" rx="${q(wp * .22)}" ry="${q(wp * .045)}" fill="url(#js-shad)"/><use href="#sp-${p.id}" x="${q(x - wp / 2)}" y="${q(y - hp * symFoot(p))}" width="${q(wp)}" height="${q(hp)}"/>`;
+  }
+  // nombre de pots par rangée et pas entre rangées selon la taille du dessin
+  function stock(p) {
+    if (p.img) return p.h > .7 ? [2, .7] : [3, .45];
+    return { rose: [2, .8], cyclamen: [2, .6], pansy: [2, .5], strawberry: [2, .5], lettuce: [2, .5], tomato: [2, .7], herb: [2, .55], chive: [2, .55], lavender: [2, .6] }[p.kind] || [2, .7];
+  }
+  function tag(p, side, Z, Y) {
+    const f = p.forms.plante || p.forms.bulbe, [x, y] = P(side * 1.5, Y, Z), k = F / Z / 330, w = 156 * k, h = 52 * k;
+    const name = p.name.replace(/^Rosier( grimpant)? /, 'Rosier ').replace(/ en (jardinière|mélange)$/, '').replace(/'([^']+)'.*$/, '‘$1’').slice(0, 24);
+    const fmt = f.label.split(',')[0].slice(0, 16);
+    return `<g class="tag" transform="translate(${q(x - (side < 0 ? w * .12 : w * .88))} ${q(y - h * .6)})"><rect width="${q(w)}" height="${q(h)}" rx="${q(4 * k)}" fill="#fff" stroke="#D8DCD6" stroke-width="${q(.6 * k)}"/><rect width="${q(6 * k)}" height="${q(h)}" rx="${q(2 * k)}" fill="#0F4D36"/>
+      <text x="${q(12 * k)}" y="${q(18 * k)}" font-family="DM Sans, sans-serif" font-weight="600" font-size="${q(12.5 * k)}" fill="#1D2A24">${esc(name)}</text>
+      <text x="${q(12 * k)}" y="${q(41 * k)}" font-family="DM Sans, sans-serif" font-weight="700" font-size="${q(f.price == null ? 12 * k : 19 * k)}" fill="#0F4D36">${f.price == null ? 'Voir le prix' : euro(f.price)}</text>
+      <text x="${q(w - 8 * k)}" y="${q(41 * k)}" text-anchor="end" font-family="DM Sans, sans-serif" font-size="${q(9 * k)}" fill="#7A847E">${esc(fmt)}</text></g>`;
+  }
+  function flag(side, Z, Y, [txt, col]) {
+    const [x, y] = P(side * 1.62, Y, Z), [, y2] = P(side * 1.62, Y + .55, Z), k = F / Z / 250;
+    return `<line x1="${q(x)}" y1="${q(y)}" x2="${q(x)}" y2="${q(y2)}" stroke="#5E4630" stroke-width="${q(Math.max(1, 2 * k))}"/><path d="M${q(x)} ${q(y2)}h${q(70 * k)}l${q(-10 * k)} ${q(11 * k)}l${q(10 * k)} ${q(11 * k)}h${q(-70 * k)}z" fill="${col}"/><text x="${q(x + 6 * k)}" y="${q(y2 + 15 * k)}" font-family="DM Sans, sans-serif" font-weight="700" font-size="${q(8.6 * k)}" fill="#fff">${txt}</text>`;
+  }
+  function bay(b, cz) {
+    const z1 = zOf(b.slot) - cz, z2 = z1 + 2.6, s = b.side, p = b.p;
+    let o = `<g class="bay" data-id="${p.id}" tabindex="0" role="button" aria-label="${esc(p.name)}, ${esc(euro((p.forms.plante || p.forms.bulbe).price))}. Ouvrir la fiche.">`;
+    if (b.floor) {
+      // grands sujets posés au sol, deux exemplaires
+      const pos = [[s * 2.95, z1 + 1.9], [s * 2.05, z1 + 1.1]];
+      if (z1 + .9 > 1.3) pos.forEach(([X, Z]) => { if (Z > 1.3) o += use(p, X, 0, Z); });
+      o += `<polygon class="hit" points="${pts([[s * 1.4, 0, Math.max(1.3, z1)], [s * 3.6, 0, Math.max(1.3, z1)], [s * 3.6, 2.2, Math.max(1.3, z1)], [s * 1.4, 2.2, Math.max(1.3, z1)]])}"/>`;
+      if (z1 + .8 > 1.4) o += tag(p, s, z1 + .8, .9);
+    } else {
+      o += table(s, Math.max(1.25, z1), z2);
+      const [cols, step] = stock(p), gap = cols > 1 ? (3.4 - 1.72) / (cols - 1) : 0;
+      const items = [];
+      for (let z = z2 - .3; z > z1 + .15; z -= step) for (let c = 0; c < cols; c++) { if (z < 1.35) continue; items.push([s * (1.72 + c * gap + ((z * 7.3 + c) % 1) * .06), z, .94 + ((z * 13 + c * 3) % 1) * .1]); }
+      items.sort((a, c) => c[1] - a[1]).forEach(([X, Z, k]) => { o += use(p, X, TABLE_Y, Z, k); });
+      if (p.hang) [[s * 2.3, z1 + 1.4], [s * 3.1, z1 + 1.9]].forEach(([X, Z]) => { if (Z < 1.5) return; const [a, b2] = P(X, 3.0, Z), [, b3] = P(X, 2.25, Z); o += `<line x1="${q(a)}" y1="${q(b2)}" x2="${q(a)}" y2="${q(b3)}" stroke="#5E6662" stroke-width="1"/>` + use(p, X, 1.78, Z); });
+      if (z1 + .9 > 1.4) o += tag(p, s, z1 + .9, TABLE_Y);
+    }
+    if (FLAGS[p.id] && z1 + 2 > 1.5) o += flag(s, z1 + 2, b.floor ? 0 : TABLE_Y, FLAGS[p.id]);
+    return o + '</g>';
+  }
+  function sign(Z, title, sub) {
+    const w = 2.6, [x1, y1] = P(-w / 2, 2.72, Z), [x2, y2] = P(w / 2, 2.3, Z), [ax] = P(-w / 2 + .15, 3.05, Z), [bx] = P(w / 2 - .15, 3.05, Z), [, yt] = P(0, 3.05, Z), k = F / Z / 200;
+    return `<g class="zsign"><line x1="${q(ax)}" y1="${q(yt)}" x2="${q(ax)}" y2="${q(y1)}" stroke="#4A524E" stroke-width="${q(Math.max(.6, k))}"/><line x1="${q(bx)}" y1="${q(yt)}" x2="${q(bx)}" y2="${q(y1)}" stroke="#4A524E" stroke-width="${q(Math.max(.6, k))}"/>
+      <rect x="${q(x1)}" y="${q(y1)}" width="${q(x2 - x1)}" height="${q(y2 - y1)}" rx="${q(3 * k)}" fill="url(#js-sign)"/><rect x="${q(x1)}" y="${q(y2 - 4 * k)}" width="${q(x2 - x1)}" height="${q(4 * k)}" fill="#2EBB99"/>
+      <text x="${q((x1 + x2) / 2)}" y="${q(y1 + (y2 - y1) * .52)}" text-anchor="middle" font-family="Brygada 1918, serif" font-weight="600" font-size="${q((y2 - y1) * .34)}" fill="#fff">${esc(title)}</text>
+      <text x="${q((x1 + x2) / 2)}" y="${q(y1 + (y2 - y1) * .8)}" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="500" letter-spacing="${q(k)}" font-size="${q((y2 - y1) * .15)}" fill="#BFE6D8">${esc(sub)}</text></g>`;
+  }
+  function checkout(Z) {
+    // les caisses au fond de l'allée
+    let o = `<g class="checkout" tabindex="0" role="button" aria-label="Passer en caisse : ouvrir mon panier">`;
+    o += `<polygon points="${pts([[-2.4, 0, Z], [2.4, 0, Z], [2.4, 1.0, Z], [-2.4, 1.0, Z]])}" fill="#C39558"/><polygon points="${pts([[-2.5, 1.0, Z - .2], [2.5, 1.0, Z - .2], [2.5, 1.06, Z - .2], [-2.5, 1.06, Z - .2]])}" fill="#EDE7DA"/>`;
+    for (let k = 0; k < 6; k++) { const x = -2.2 + k * .88; o += `<polyline points="${pts([[x, .1, Z - .01], [x, .9, Z - .01]])}" stroke="#A97C45" stroke-width="${q(F / Z * .01)}" fill="none"/>`; }
+    const [a, b] = P(1.2, 1.06, Z - .2), k = F / Z / 100;
+    o += `<rect x="${q(a - 14 * k)}" y="${q(b - 18 * k)}" width="${q(28 * k)}" height="${q(18 * k)}" rx="${q(2 * k)}" fill="#3C4743"/><rect x="${q(a - 11 * k)}" y="${q(b - 15 * k)}" width="${q(22 * k)}" height="${q(9 * k)}" fill="#9FD3B2"/>`;
+    o += sign(Z - .3, 'Caisses', 'CLIQUEZ POUR PAYER');
+    return o + '</g>';
   }
 
-  /* ---------- décor lointain (parallaxe) ---------- */
-  function farLayer(W) {
-    const R = rng(7); let g = '';
-    const W2 = W * 1.4;
-    g += `<path d="M0 360 ${Array.from({ length: Math.ceil(W2 / 300) + 1 }, (_, i) => `Q${i * 300 + 150} ${300 + (i % 3) * 18} ${(i + 1) * 300} ${352 + (i % 2) * 14}`).join(' ')} V${BACK} H0Z" fill="#B9CFAE"/>`;
-    for (let x = -40; x < W2; x += 70 + R() * 50) {
-      const h = 70 + R() * 70, w = 34 + R() * 26, y = 400 + R() * 20;
-      g += `<path d="${blob(x, y - h * .5, w, h * .55, 9, .18, Math.round(x))}" fill="${sh('#7FA27A', (R() - .5) * .2)}" opacity=".85"/>`;
-    }
-    for (let x = 0; x < W2; x += 120 + R() * 60) g += `<path d="${blob(x, 438, 70, 26, 9, .2, Math.round(x) + 3)}" fill="#97B78A"/>`;
-    for (let x = 300; x < W2; x += 700 + R() * 400) {
-      const y = 70 + R() * 70;
-      g += `<g opacity=".95"><path d="${blob(x, y, 70, 20, 10, .2, Math.round(x))}" fill="#FFFFFF"/><path d="${blob(x + 30, y - 12, 44, 18, 9, .2, Math.round(x) + 1)}" fill="#FFFFFF"/><path d="${blob(x + 6, y + 8, 60, 9, 9, .1, Math.round(x) + 2)}" fill="#E4EEF2"/></g>`;
-    }
-    return g;
+  /* ---------- rendu ---------- */
+  function scene(cz) {
+    const parts = [];
+    BAYS.forEach((b) => { const z = zOf(b.slot) - cz; if (z + 2.6 > 1.25 && z < 34) parts.push([z + 1.3, () => bay(b, cz)]); });
+    ZONES.forEach((zn) => { if (ZSTART[zn.id] == null) return; const z = zOf(ZSTART[zn.id]) - cz + 1.6; if (z > 2.2 && z < 34) parts.push([z + .01, () => sign(z, ...ZNAMES[zn.id])]); });
+    const zc = zOf(END) - cz + .8; if (zc > 1.5 && zc < 40) parts.push([zc, () => checkout(zc)]);
+    parts.sort((a, b) => b[0] - a[0]);
+    return shell(cz) + parts.map(([, f]) => f()).join('');
+  }
+  function draw() {
+    const g = $('#js-world', el); if (!g) return;
+    g.innerHTML = scene(camZ);
+    bindBays();
+  }
+  function frame() {
+    const s = $('.serre-svg', el); if (!s) return;
+    const box = s.getBoundingClientRect(); const ratio = box.width / Math.max(1, box.height);
+    vbW = Math.max(640, Math.min(VW, VH * ratio));
+    s.setAttribute('viewBox', `${q(VX - vbW / 2)} 0 ${q(vbW)} ${VH}`);
+  }
+  function walkTo(target) {
+    target = clamp(target, 0, Math.max(0, END - 1));
+    if (target === slot && !anim) return;
+    slot = target;
+    const from = camZ, to = slot * STEP, t0 = performance.now(), dur = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : Math.min(1400, 420 + Math.abs(to - from) * 60);
+    if (anim) cancelAnimationFrame(anim);
+    hideCard();
+    const tick = (t) => {
+      const k = dur ? Math.min(1, (t - t0) / dur) : 1, e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      camZ = from + (to - from) * e; draw();
+      if (k < 1) anim = requestAnimationFrame(tick); else { anim = null; updateHud(); }
+    };
+    anim = requestAnimationFrame(tick);
+    updateHud();
+  }
+  function zoneAt(sl) { let z = ZONES[0].id; ZONES.forEach((zn) => { if (ZSTART[zn.id] != null && sl >= ZSTART[zn.id]) z = zn.id; }); return z; }
+  function updateHud() {
+    const z = zoneAt(slot), zn = ZONES.find((x) => x.id === z);
+    $('#serre-zone', el).textContent = ZNAMES[z][0];
+    $('#serre-sub', el).textContent = `${SHOP.filter((p) => p.zone === z).length} plantes · table ${slot - ZSTART[z] + 1}`;
+    $('#serre-crumb', el).textContent = zn ? zn.name : '';
+    $$('.serre-steps i', el).forEach((i) => i.classList.toggle('on', ZSTART[i.dataset.z] <= slot));
+    $$('.serre-mini li', el).forEach((li) => li.classList.toggle('on', li.dataset.z === z));
+    $('#go-back', el).disabled = slot <= 0; $('#go-fwd', el).disabled = slot >= END - 1;
   }
 
-  /* ---------- façade d'entrée ---------- */
-  function entrance() {
-    let g = `<rect x="0" y="150" width="320" height="${BACK - 150}" fill="${grad('v', '#EEE6D3', .1, -.1)}"/>`;
-    for (let x = 8; x < 320; x += 16) g += `<path d="M${x} 176V${BACK}" stroke="#D6CBB3" stroke-width="1"/>`;
-    g += `<path d="M-10 150H330L320 176H0Z" fill="${grad('v', '#2E6B3F', .15, -.25)}"/><path d="M0 176H320" stroke="#1E4A2B" stroke-width="2"/>`;
-    g += `<rect x="30" y="192" width="270" height="64" rx="8" fill="${grad('v', '#2E6B3F', .12, -.2)}" stroke="#1E4A2B" stroke-width="1.5"/>
-      <g transform="translate(70 224)"><circle r="17" fill="#F4F1E6"/><path d="M-8 8C-10 -6 0 -12 10 -10C10 2 2 10 -8 8ZM-8 8L4 -4" fill="#4E9A4E" stroke="#2E6B3F" stroke-width="1.6" stroke-linecap="round"/></g>
-      <text x="96" y="222" class="store-sign">Le Grand Jardin</text><text x="97" y="243" class="store-sub">JARDINERIE · FLEURS · POTAGER</text>`;
-    g += `<rect x="92" y="282" width="136" height="${BACK - 282}" fill="#2D3B35"/><rect x="98" y="288" width="60" height="${BACK - 288}" fill="${grad('v', '#5E7C70', .15, -.3)}" stroke="#AEB5B0" stroke-width="2"/><rect x="162" y="288" width="60" height="${BACK - 288}" fill="${grad('v', '#5E7C70', .15, -.3)}" stroke="#AEB5B0" stroke-width="2"/>
-      <path d="M104 300L150 260M112 420L156 370M168 330L214 290" stroke="#fff" stroke-width="8" opacity=".12"/><rect x="88" y="276" width="144" height="8" fill="#AEB5B0"/>
-      <text x="160" y="310" text-anchor="middle" class="door-label">Bienvenue</text>`;
-    [44, 276].forEach((x, i) => { g += at(x, BACK + 6, `${shadow(0, 0, 30)}<path d="M-3 -40V-78" stroke="#6B5236" stroke-width="5"/>${crown(0, -100, 30, 30, { c: '#3E7D3A', n: 50, L: 11, w: .5, seed: 40 + i })}${JArt.terracotta(40, 40, '#B65A35')}`); });
-    return g;
+  /* ---------- fiche au survol et cueillette ---------- */
+  const art = (p) => (p.img ? `<img src="img/serre/${p.img}.svg" alt="">` : `<svg viewBox="-150 -345 300 350" aria-hidden="true">${DRAW[p.kind](p.color, 3, p)}</svg>`);
+  function hideCard() { const c = $('.serre-card', el); if (c) c.hidden = true; }
+  function showCard(id, g) {
+    const p = SHOP.find((x) => x.id === id), c = $('.serre-card', el), f = p.forms.plante || p.forms.bulbe, zn = ZONES.find((z) => z.id === p.zone);
+    c.innerHTML = `<div class="sc-ph">${art(p)}</div><div class="bd"><div class="rayon">${esc(zn ? zn.name : '')}</div><h3>${esc(p.name)}</h3>${p.latin ? `<i>${esc(p.latin)}</i>` : ''}
+      <div class="row"><b>${f.price == null ? 'Prix sur la fiche' : euro(f.price)}</b><small>${esc(f.label)}</small></div>
+      <div class="opts"><span class="${p.forms.plante ? '' : 'off'}">Plante en pot</span><span class="${p.forms.bulbe ? '' : 'off'}">Bulbe</span></div>
+      <button class="btn" type="button" data-pick="${p.id}">Choisir et ajouter</button></div>`;
+    const sc = $('.serre-stage', el).getBoundingClientRect(), r = g.getBoundingClientRect();
+    const right = r.left + r.width / 2 > sc.left + sc.width / 2;
+    c.style.left = right ? `${Math.max(8, r.left - sc.left - 290)}px` : `${Math.min(sc.width - 290, r.right - sc.left + 10)}px`;
+    c.style.top = `${clamp(r.top - sc.top - 40, 70, sc.height - 360)}px`;
+    c.hidden = false;
+    $('[data-pick]', c).addEventListener('click', () => chooseForm(p));
   }
-
-  /* ---------- fonds de chaque espace ---------- */
-  function hedge(x0, x1, y = 396) {
-    let g = `<path d="M${x0} ${BACK}V${y + 20}${Array.from({ length: Math.ceil((x1 - x0) / 60) }, (_, i) => `q30 ${-22 - (i % 3) * 6} 60 0`).join('')}V${BACK}Z" fill="${grad('v', '#4A7C43', .1, -.3)}"/>`;
-    for (let x = x0 + 30; x < x1 - 10; x += 110) g += crown(x, y + 26, 52, 22, { c: '#4E8446', n: 26, L: 13, w: .5, seed: Math.round(x), base: false });
-    return g;
-  }
-  function backStock(x0, x1, y, palette, seed) {
-    const R = rng(seed); let g = '';
-    for (let x = x0 + 24; x < x1 - 20; x += 40 + R() * 10) {
-      const c = palette[Math.floor(R() * palette.length)], h = 18 + R() * 12;
-      g += at(x, y, `<path d="M-11 -14H11L9 0H-9Z" fill="#33393A"/><path d="${blob(0, -14 - h * .5, 15, h * .6, 8, .2, Math.round(x))}" fill="${grad('b', '#5F8C55', .2, -.3)}"/>`
-        + (c ? Array.from({ length: 5 }, (_, i) => `<circle cx="${f(-9 + i * 4.5 + R() * 2)}" cy="${f(-14 - h * (.4 + R() * .6))}" r="${f(2.4 + R() * 1.4)}" fill="${grad('b', c, .4, -.3)}"/>`).join('') : ''));
-    }
-    return `<g opacity=".92">${g}</g>`;
-  }
-  function pergola(x0, x1) {
-    let g = '';
-    for (let x = x0 + 60; x < x1; x += 220) g += `<rect x="${x - 6}" y="250" width="12" height="${BACK - 246}" fill="${grad('c', '#9A7650', .25, -.35)}" stroke="#5E4630" stroke-width=".8"/>`;
-    g += `<rect x="${x0}" y="240" width="${x1 - x0}" height="14" fill="${grad('v', '#A98258', .2, -.3)}" stroke="#5E4630" stroke-width=".8"/>`;
-    for (let x = x0 + 20; x < x1; x += 46) g += `<rect x="${x - 4}" y="232" width="8" height="30" rx="2" fill="${grad('c', '#B48C60', .2, -.3)}" stroke="#5E4630" stroke-width=".6"/>`;
-    const R = rng(x0);
-    for (let x = x0 + 30; x < x1; x += 90) {
-      g += crown(x, 246, 50, 16, { c: '#4A8440', n: 22, L: 12, w: .5, seed: Math.round(x), base: false });
-      for (let i = 0; i < 4; i++) g += `<circle cx="${f(x - 40 + R() * 80)}" cy="${f(236 + R() * 24)}" r="${f(4 + R() * 2)}" fill="${grad('b', R() > .5 ? '#F2B6C4' : '#E7859C', .4, -.3)}"/>`;
-    }
-    for (let x = x0 + 60; x < x1; x += 220) g += crown(x, 340, 14, 80, { c: '#4A8440', n: 24, L: 11, w: .5, seed: Math.round(x) + 9, base: false });
-    return g;
-  }
-  function stoneWall(x0, x1) {
-    const R = rng(x0 + 1);
-    let g = '';
-    for (let x = x0 + 50; x < x1; x += 130 + R() * 60) g += `<path d="M${f(x)} ${BACK - 30}C${f(x - 22)} 380 ${f(x - 10)} 260 ${f(x)} ${f(200 + R() * 30)}C${f(x + 10)} 260 ${f(x + 22)} 380 ${f(x)} ${BACK - 30}Z" fill="${grad('b', '#3E6A3E', .2, -.35)}"/>`;
-    g += `<rect x="${x0}" y="420" width="${x1 - x0}" height="${BACK - 420}" fill="#CDBA94"/>`;
-    for (let row = 0; row < 3; row++) for (let x = x0 - (row % 2) * 20; x < x1; x += 34 + R() * 12) {
-      const w = 28 + R() * 12, y = 422 + row * 16;
-      g += `<rect x="${f(x)}" y="${y}" width="${f(w)}" height="14" rx="5" fill="${grad('b', sh('#DCC9A2', (R() - .5) * .16), .25, -.2)}" stroke="#A48E66" stroke-width=".6"/>`;
-    }
-    g += `<rect x="${x0}" y="414" width="${x1 - x0}" height="9" rx="3" fill="${grad('v', '#E2D2AE', .1, -.15)}" stroke="#A48E66" stroke-width=".6"/>`;
-    return g;
-  }
-  function ombriere(x0, x1) {
-    const R = rng(x0 + 5);
-    let g = `<rect x="${x0}" y="60" width="${x1 - x0}" height="${BACK - 60}" fill="${grad('v', '#5F8A64', .1, -.35)}"/>`;
-    for (let x = x0 + 20; x < x1; x += 50 + R() * 40) g += `<path d="M${f(x)} ${BACK}V120" stroke="#3E5A40" stroke-width="${f(6 + R() * 8)}" opacity=".6"/>`;
-    for (let x = x0; x < x1; x += 90) g += `<path d="${blob(x + R() * 30, 160 + R() * 60, 80, 50, 9, .2, Math.round(x))}" fill="${sh('#4D7A50', (R() - .5) * .2)}" opacity=".7"/>`;
-    for (let x = x0 + 20; x < x1; x += 70) { const y = BACK - 2; for (let i = 0; i < 7; i++) { const a = -150 + i * 20; g += JArt.leaf(x, y, 34 + R() * 10, a, '#3F7A45', .22, false); } }
-    for (let x = x0 + 10; x < x1; x += 260) g += `<rect x="${x - 4}" y="62" width="8" height="${BACK - 62}" fill="${grad('c', '#3D4B42', .3, -.3)}"/>`;
-    const net = '#24402D';
-    g += `<path d="M${x0} 50${Array.from({ length: Math.ceil((x1 - x0) / 260) }, () => 'q130 26 260 0').join('')}V80${Array.from({ length: Math.ceil((x1 - x0) / 260) }, () => 'q-130 26 -260 0').join('')}Z" fill="${net}" opacity=".88"/>`;
-    g += `<path d="M${x0} 50${Array.from({ length: Math.ceil((x1 - x0) / 260) }, () => 'q130 26 260 0').join('')}" fill="none" stroke="#14261A" stroke-width="2"/>`;
-    for (let i = 0; i < 26; i++) { const x = x0 + R() * (x1 - x0), y = 120 + R() * 320; g += `<ellipse cx="${f(x)}" cy="${f(y)}" rx="${f(10 + R() * 18)}" ry="${f(4 + R() * 6)}" fill="#F7F3D0" opacity=".14"/>`; }
-    return g;
-  }
-  function serre(x0, x1) {
-    let g = `<rect x="${x0}" y="128" width="${x1 - x0}" height="${BACK - 128}" fill="#FFFFFF" opacity=".26"/>`;
-    // panneaux vitrés, reflets et montants
-    for (let x = x0; x < x1; x += 100) {
-      g += `<path d="M${x + 14} 330L${x + 60} 150M${x + 30} 440L${x + 90} 210" stroke="#FFFFFF" stroke-width="10" opacity=".14"/>`;
-      g += `<rect x="${x - 3}" y="128" width="6" height="${BACK - 128}" fill="${grad('c', '#F2F4F1', .3, -.2)}" stroke="#AFB8B2" stroke-width=".6"/>`;
-    }
-    g += `<rect x="${x0}" y="300" width="${x1 - x0}" height="5" fill="#E9ECE8" stroke="#AFB8B2" stroke-width=".6"/>`;
-    g += `<rect x="${x0}" y="430" width="${x1 - x0}" height="${BACK - 430}" fill="${grad('v', '#CFC9BC', .1, -.12)}"/><path d="M${x0} 430H${x1}" stroke="#A9A293" stroke-width="1.5"/>`;
-    // toit en dents de scie (serre Venlo)
-    let roof = '';
-    for (let x = x0; x < x1; x += 160) roof += `<path d="M${x} 128L${x + 80} 44L${x + 160} 128Z" fill="#FFFFFF" fill-opacity=".22" stroke="#E8EBE7" stroke-width="4"/><path d="M${x + 80} 44V128M${x + 40} 86V128M${x + 120} 86V128" stroke="#E8EBE7" stroke-width="2"/>`;
-    g += roof + `<rect x="${x0}" y="124" width="${x1 - x0}" height="10" fill="${grad('v', '#F4F6F3', .2, -.2)}" stroke="#AFB8B2" stroke-width=".7"/>`;
-    // poutre treillis
-    let tr = `<path d="M${x0} 150H${x1}M${x0} 168H${x1}" stroke="#EEF1ED" stroke-width="3"/>`;
-    for (let x = x0; x < x1; x += 24) tr += `<path d="M${x} 150L${x + 12} 168L${x + 24} 150" fill="none" stroke="#EEF1ED" stroke-width="1.6"/>`;
-    g += `<g opacity=".95">${tr}</g>`;
-    // tablette du fond chargée de plantes
-    g += `<rect x="${x0}" y="452" width="${x1 - x0}" height="8" fill="${grad('v', '#9AA49C', .2, -.2)}"/>`;
-    return g;
-  }
-  function hangingBasket(x, seed, flower) {
-    const R = rng(seed);
-    let g = `<path d="M${x} 168L${x - 16} 228M${x} 168L${x + 16} 228M${x} 168V226" stroke="#6F7570" stroke-width=".9"/>`;
-    let trail = '';
-    for (let s = 0; s < 6; s++) { const sx = x - 22 + s * 9, len = 30 + R() * 50; for (let y = 236; y < 236 + len; y += 9) trail += JArt.leaf(sx + Math.sin(y * .2 + s) * 3, y, 9, s % 2 ? 60 : 120, '#4F9A4A', .6, false); if (flower) trail += `<circle cx="${f(sx)}" cy="${f(236 + len)}" r="3.2" fill="${grad('b', flower, .4, -.3)}"/>`; }
-    g += `<path d="M${x - 24} 228Q${x} 262 ${x + 24} 228Z" fill="${grad('b', '#8C6A44', .25, -.35)}" stroke="#5E4630" stroke-width=".7"/>` + crown(x, 224, 26, 10, { c: '#4F9A4A', n: 22, L: 10, w: .6, seed, base: false }) + trail;
-    return `<g class="hang" style="transform-origin:${x}px 168px">${g}</g>`;
-  }
-  function zoneSign(z) {
-    if (z.style === 'serre') return `<g transform="translate(${z.signX} 0)"><path d="M-80 168V198M80 168V198" stroke="#6F7570" stroke-width="1"/><rect x="-128" y="196" width="256" height="46" rx="6" fill="${grad('v', '#2E6B3F', .12, -.2)}" stroke="#1E4A2B" stroke-width="1.2"/><text y="226" text-anchor="middle" class="zone-sign">${esc(z.name)}</text></g>`;
-    const top = z.style === 'shade' ? 280 : 300;
-    return `<g transform="translate(${z.signX} 0)">${shadow(0, FLOOR - 2, 50)}<rect x="-5" y="${top}" width="10" height="${FLOOR - top}" fill="${grad('c', '#3D4B42', .3, -.3)}"/>
-      <rect x="-106" y="${top - 26}" width="212" height="52" rx="6" fill="${grad('v', '#2E6B3F', .12, -.2)}" stroke="#1E4A2B" stroke-width="1.2"/><text y="${top + 7}" text-anchor="middle" class="zone-sign">${esc(z.name)}</text></g>`;
-  }
-
-  /* ---------- sol ---------- */
-  function floorSeg(x0, x1, style) {
-    const base = { outdoor: '#E2D5B3', shade: '#CDBB97', serre: '#D9D4C8', entry: '#DAD3C4', checkout: '#D9D4C8' }[style];
-    const pat = style === 'outdoor' || style === 'shade'
-      ? JArt.grad('v', base, .1, -.12)
-      : JArt.grad('v', base, .1, -.1);
-    let g = `<rect x="${x0}" y="${BACK}" width="${x1 - x0}" height="${H - BACK}" fill="${pat}"/>`;
-    if (style === 'outdoor' || style === 'shade') g += `<rect x="${x0}" y="${BACK}" width="${x1 - x0}" height="${H - BACK}" fill="url(#jgravel)"/>`;
-    else for (let x = x0 + 80; x < x1; x += 160) g += `<path d="M${x} ${BACK}L${x - 40} ${H}" stroke="#BFB8A8" stroke-width="1"/>`;
-    if (style !== 'outdoor' && style !== 'shade') g += `<path d="M${x0} 560H${x1}" stroke="#BFB8A8" stroke-width="1"/>`;
-    g += `<rect x="${x0}" y="${BACK}" width="${x1 - x0}" height="16" fill="#000" opacity=".06"/>`;
-    return g;
-  }
-
-  /* ---------- mobilier ---------- */
-  function table(x0, x1) {
-    let g = shadow((x0 + x1) / 2, FLOOR, (x1 - x0) / 2 + 10, 8);
-    for (let x = x0 + 14; x <= x1 - 10; x += Math.max(60, (x1 - x0 - 28) / Math.max(1, Math.round((x1 - x0) / 220)))) g += `<rect x="${f(x - 3)}" y="${TOP + 10}" width="6" height="${FLOOR - TOP - 10}" fill="${grad('c', '#566760', .3, -.3)}"/>`;
-    g += `<rect x="${x0 - 4}" y="${TOP - 4}" width="${x1 - x0 + 8}" height="10" fill="${grad('v', '#C99D69', .25, -.1)}"/>`;
-    for (let x = x0; x < x1; x += 34) g += `<path d="M${x} ${TOP - 4}v10" stroke="#9C7448" stroke-width=".8"/>`;
-    g += `<rect x="${x0 - 6}" y="${TOP + 6}" width="${x1 - x0 + 12}" height="12" rx="2" fill="${grad('v', '#A57A4C', .15, -.3)}" stroke="#6E4E2E" stroke-width=".8"/>`;
-    g += `<rect x="${x0 + 10}" y="${FLOOR - 26}" width="${x1 - x0 - 20}" height="4" fill="#566760" opacity=".8"/>`;
-    return g;
-  }
-  function checkoutSVG(c) {
-    const x = c.x0 + 170;
-    let g = floorSeg(c.x0, c.x1, 'checkout');
-    g += `<rect x="${c.x0}" y="150" width="${c.x1 - c.x0}" height="${BACK - 150}" fill="${grad('v', '#EEE6D3', .1, -.1)}"/>`;
-    for (let xx = c.x0 + 8; xx < c.x1; xx += 16) g += `<path d="M${xx} 150V${BACK}" stroke="#D6CBB3" stroke-width="1"/>`;
-    g += `<g class="checkout" tabindex="0" role="button" aria-label="Passer en caisse : ouvrir mon panier">
-      <path d="M${x - 80} 168V196M${x + 80} 168V196" stroke="#6F7570" stroke-width="1"/><path d="M${c.x0} 168H${c.x1}" stroke="#AFB8B2" stroke-width="3"/>
-      <rect x="${x - 110}" y="194" width="220" height="50" rx="6" fill="${grad('v', '#2E6B3F', .12, -.2)}" stroke="#1E4A2B" stroke-width="1.2"/><text x="${x}" y="226" text-anchor="middle" class="zone-sign">Caisses →</text>
-      ${shadow(x, FLOOR + 2, 130, 10)}
-      <path d="M${x - 120} ${FLOOR}V420H${x + 120}V${FLOOR}Z" fill="${grad('v', '#C99D69', .15, -.25)}" stroke="#6E4E2E" stroke-width="1"/>
-      <rect x="${x - 128}" y="410" width="256" height="14" rx="3" fill="${grad('v', '#E9E4D8', .2, -.15)}" stroke="#8E877A" stroke-width=".8"/>
-      ${Array.from({ length: 7 }, (_, i) => `<path d="M${x - 110 + i * 36} 430V${FLOOR - 8}" stroke="#9C7448" stroke-width="1"/>`).join('')}
-      <rect x="${x + 40}" y="366" width="56" height="40" rx="4" fill="${grad('v', '#3C4743', .2, -.3)}"/><rect x="${x + 46}" y="372" width="44" height="22" rx="2" fill="#9FD3B2"/><text x="${x + 68}" y="388" text-anchor="middle" class="till">0,00</text>
-      <rect x="${x + 50}" y="402" width="36" height="8" fill="#3C4743"/>
-      ${at(x - 80, 410, `<path d="M-20 0H20L16 -22H-16Z" fill="${grad('c', '#C66B40', .3, -.35)}"/>${crown(0, -34, 22, 16, { c: '#4C8A3E', n: 26, L: 9, w: .5, seed: 5 })}${JArt.roseHead(-8, -38, 6, '#F3A6B8')}${JArt.roseHead(8, -34, 5.5, '#F8F3E7')}`)}
-      <g transform="translate(${x - 20} 380)"><rect x="-26" y="0" width="52" height="30" rx="3" fill="#FBF8F0" stroke="#B9B4A4"/><text y="13" text-anchor="middle" class="till-note">Clique ici</text><text y="24" text-anchor="middle" class="till-note">pour payer</text></g>
-    </g>`;
-    return g;
-  }
-
-  /* ---------- la scène complète ---------- */
-  function sceneSVG() {
-    geo = layout();
-    const { items, zones, tables, checkout, W } = geo;
-    def();
-    let back = '', floor = floorSeg(0, 330, 'entry'), stock = '', signs = '', light = '';
-    zones.forEach((z, i) => {
-      const x0 = z.x0, x1 = (zones[i + 1] ? zones[i + 1].x0 : z.x1) + 1;
-      floor += floorSeg(x0, x1, z.style);
-      if (z.style === 'outdoor') {
-        back += hedge(x0, x1) + (z.id === 'roseraie' ? pergola(x0, x1) : stoneWall(x0, x1));
-        stock += backStock(x0, x1, BACK + 8, z.id === 'roseraie' ? ['#F3A6B8', '#C8243C', '#F8F3E7', null] : ['#9C7FD6', null, '#F5CF2E', null], i + 1);
-        for (let x = x0 + 100; x < x1; x += 520) light += `<path d="M${x} 0L${x + 140} 0L${x + 340} ${BACK}L${x + 120} ${BACK}Z" fill="url(#jray)"/>`;
-      } else if (z.style === 'shade') {
-        back += ombriere(x0, x1);
-        stock += backStock(x0, x1, BACK + 8, ['#F8F3E7', null, '#E14C8B', null], i + 9);
-      } else {
-        back += serre(x0, x1);
-        stock += backStock(x0, x1, 456, z.id === 'massif' ? ['#7A5BD0', '#FFD35A', '#F28DB2', '#F2694A'] : [null, '#E2402E', null, '#F5CF2E'], i + 17);
-        for (let x = x0 + 140; x < x1 - 60; x += 300) stock += hangingBasket(x, Math.round(x), ['#E0447A', '#F28DB2', null][Math.round(x / 300) % 3]);
-        for (let x = x0 + 60; x < x1; x += 480) light += `<path d="M${x} 130L${x + 70} 130L${x + 260} ${FLOOR}L${x + 120} ${FLOOR}Z" fill="url(#jray)"/>`;
-      }
-      signs += zoneSign(z);
+  function bindBays() {
+    $$('.bay', el).forEach((g) => {
+      g.addEventListener('mouseenter', () => { if (!anim) showCard(g.dataset.id, g); });
+      g.addEventListener('focus', () => showCard(g.dataset.id, g));
+      g.addEventListener('click', () => chooseForm(SHOP.find((x) => x.id === g.dataset.id)));
+      g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); chooseForm(SHOP.find((x) => x.id === g.dataset.id)); } });
     });
-    // la serre se termine par un pignon, l'ombrière par un poteau
-    zones.forEach((z, i) => { if (z.style === 'serre' && (!zones[i - 1] || zones[i - 1].style !== 'serre')) back += `<rect x="${z.x0 - 8}" y="40" width="16" height="${BACK - 40}" fill="${grad('c', '#F2F4F1', .3, -.25)}" stroke="#AFB8B2" stroke-width=".8"/>`; });
-
-    const tablesSVG = tables.map((t) => table(t.x0, t.x1)).join('');
-    const plants = items.map(({ p, x, table: onTable, depth }, i) => {
-      const y = onTable ? TOP : FLOOR + depth * 10, sc = (SCALE[p.kind] || 1) * (onTable ? 1 : 1 - depth * .04);
-      const form = p.forms.plante ? 'plante' : 'bulbe', fm = p.forms[form];
-      const price = fm.price == null ? 'Prix sur la fiche' : euro(fm.price);
-      const tagY = onTable ? TOP + 22 : FLOOR + 18;
-      const label = `${p.name}, ${form === 'bulbe' ? 'vendu en bulbes' : 'en plante'}, ${fm.price == null ? 'prix affiché sur la fiche produit' : euro(fm.price)}. Cliquer pour cueillir.`;
-      return `<g class="shop-plant" data-id="${p.id}" data-x="${f(x)}" tabindex="0" role="button" aria-label="${esc(label)}">
-        <ellipse class="glow" cx="${f(x)}" cy="${f(y - 4)}" rx="${f(WIDTH[p.kind] * .42)}" ry="16"/>
-        <g transform="translate(${f(x)} ${f(y)}) scale(${f(sc)})"><g class="sway">${DRAW[p.kind](p.color, i + 2, p)}</g></g>
-        ${onTable ? '' : `<path d="M${f(x - 50)} ${tagY - 2}V${tagY + 2}" stroke="#7E8781" stroke-width="2"/>`}
-        <g transform="translate(${f(x)} ${tagY})">${priceTag(shortName(p.name), price, fm.price == null ? '' : shortForm(fm.label))}</g>
-      </g>`;
-    }).join('');
-    const border = (() => { let g = `<rect x="0" y="${H - 12}" width="${W}" height="12" fill="${grad('v', '#7A5A3A', .2, -.2)}"/>`; const R = rng(3); for (let x = 6; x < W; x += 26 + R() * 30) { for (let j = 0; j < 5; j++) g += `<path d="M${f(x)} ${H - 10}q${f((j - 2) * 3)} -10 ${f((j - 2) * 6 + (R() - .5) * 4)} ${f(-14 - R() * 10)}" stroke="${sh('#5E8C3E', (R() - .5) * .3)}" stroke-width="1.6" fill="none" stroke-linecap="round"/>`; } return g; })();
-
-    const svg = `<svg class="garden-svg" viewBox="0 0 ${W} ${H}" style="width:${f(W * k)}px;height:${f(H * k)}px" role="group" aria-label="Le jardin-boutique, une jardinerie à parcourir">
-      <rect width="${W}" height="${H}" fill="url(#jsky)"/>
-      <g id="far">${farLayer(W)}</g>
-      ${entrance()}${back}${floor}${stock}${checkoutSVG(checkout)}${tablesSVG}${signs}${plants}
-      <g id="walker" transform="translate(${walkerX} ${FEET}) scale(1.1)">${walkerSVG()}</g>
-      <g id="flyfx"></g>${border}
-      <g class="light" pointer-events="none">${light}</g></svg>`;
-    return { W, svg };
-  }
-  // dégradés propres à la scène
-  function def() {
-    grad('v', '#FFFFFF');
-    const host = document.querySelector('svg[aria-hidden="true"] > defs');
-    if (!host || host.querySelector('#jsky')) return;
-    host.insertAdjacentHTML('beforeend', `<linearGradient id="jsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9D3E6"/><stop offset=".6" stop-color="#DDEEF0"/><stop offset="1" stop-color="#F2F0E2"/></linearGradient>
-      <linearGradient id="jray" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF8DC" stop-opacity=".34"/><stop offset="1" stop-color="#FFF8DC" stop-opacity="0"/></linearGradient>
-      <pattern id="jgravel" width="22" height="14" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.3" fill="#A8977A" opacity=".55"/><circle cx="14" cy="9" r="1.6" fill="#FFFFFF" opacity=".45"/><circle cx="9" cy="12" r="1" fill="#8E7E62" opacity=".5"/><circle cx="19" cy="4" r="1.1" fill="#C9BA98"/></pattern>`);
-  }
-
-  /* ---------- le jardinier et son chariot ---------- */
-  function walkerSVG() {
-    return `<g class="hopper"><g class="walker-body" transform="scale(${facing} 1)">
-      <ellipse cx="40" cy="2" rx="96" ry="9" fill="url(#jshadow)"/>
-      <g class="cart">
-        <path d="M40 -40V-112" stroke="#1E4A2B" stroke-width="5" stroke-linecap="round"/><path d="M40 -40V-112" stroke="#3C8A50" stroke-width="2.6" stroke-linecap="round"/>
-        <rect x="32" y="-118" width="16" height="7" rx="3.5" fill="#2A2F2C"/>
-        <rect x="40" y="-46" width="118" height="10" rx="2" fill="${grad('v', '#C99D69', .25, -.2)}" stroke="#6E4E2E" stroke-width="1"/>
-        <path d="M40 -36H158M48 -36V-12M150 -36V-12" stroke="#1E4A2B" stroke-width="3.5"/><path d="M40 -36H158" stroke="#3C8A50" stroke-width="1.6"/>
-        <g transform="translate(52 -9)"><g class="wheel"><circle r="9" fill="#2A2F2C"/><circle r="3.4" fill="#9AA39D"/><path d="M0 -9V9M-9 0H9" stroke="#5A615C" stroke-width="1"/></g></g>
-        <g transform="translate(146 -9)"><g class="wheel"><circle r="9" fill="#2A2F2C"/><circle r="3.4" fill="#9AA39D"/><path d="M0 -9V9M-9 0H9" stroke="#5A615C" stroke-width="1"/></g></g>
-        <g id="basket-load" transform="translate(99 -46)"></g>
-      </g>
-      <rect class="leg l1" x="-12" y="-36" width="10" height="36" rx="5" fill="${grad('c', '#4F5F94', .25, -.3)}" stroke="${INK}" stroke-width="1.6"/>
-      <rect class="leg l2" x="2" y="-36" width="10" height="36" rx="5" fill="${grad('c', '#4F5F94', .25, -.3)}" stroke="${INK}" stroke-width="1.6"/>
-      <rect x="-14" y="-5" width="13" height="7" rx="3.5" fill="#5E4630" stroke="${INK}" stroke-width="1.2"/><rect x="2" y="-5" width="13" height="7" rx="3.5" fill="#5E4630" stroke="${INK}" stroke-width="1.2"/>
-      <path d="M-22 -32Q-24 -86 0 -88Q24 -86 22 -32Z" fill="${grad('c', '#3F7D46', .25, -.35)}" stroke="${INK}" stroke-width="1.8"/>
-      <path d="M-14 -32L-12 -68Q0 -72 12 -68L14 -32Z" fill="${grad('v', '#E9D3A8', .2, -.1)}" stroke="${INK}" stroke-width="1.4"/><path d="M-12 -68L-18 -84M12 -68L18 -84" stroke="${INK}" stroke-width="1.4"/>
-      <rect x="-7" y="-54" width="14" height="10" rx="2" fill="none" stroke="${INK}" stroke-width="1"/><path d="M-4 -54v-6M3 -54v-8" stroke="#7E5432" stroke-width="1.6"/>
-      <path d="M12 -76Q30 -84 38 -112" stroke="${INK}" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M12 -76Q30 -84 38 -112" stroke="#3F7D46" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="39" cy="-114" r="5" fill="#F3CDB0" stroke="${INK}" stroke-width="1.2"/>
-      <circle cx="0" cy="-106" r="22" fill="${grad('b', '#F6D2B5', .2, -.15)}" stroke="${INK}" stroke-width="1.8"/>
-      <path d="M4 -110q4 -3 8 0" stroke="${INK}" stroke-width="1.4" fill="none"/><circle cx="8" cy="-107" r="2" fill="${INK}"/><path d="M18 -106q5 3 2 7q-3 1 -4 -1" fill="#F0BFA0" stroke="${INK}" stroke-width="1.1"/>
-      <path d="M2 -98q8 4 14 -2q-2 6 -8 6q-4 0 -6 -4" fill="#7E5432" stroke="${INK}" stroke-width="1"/><path d="M6 -96q4 3 8 0" stroke="${INK}" stroke-width="1.2" fill="none"/>
-      <circle cx="14" cy="-100" r="4" fill="#F5A3BC" opacity=".6"/>
-      <ellipse cx="0" cy="-122" rx="36" ry="8" fill="${grad('v', '#F4D98A', .2, -.2)}" stroke="${INK}" stroke-width="1.8"/>
-      <path d="M-18 -124Q-16 -148 0 -148Q16 -148 18 -124Z" fill="${grad('b', '#F2D27A', .3, -.2)}" stroke="${INK}" stroke-width="1.8"/>
-      <path d="M-17 -128H17" stroke="#2E6B3F" stroke-width="5"/>${Deco.daisy(14, -129, 5, '#FFFFFF', '#F0A830', 8)}
-    </g></g>`;
-  }
-
-  /* ---------- marche ---------- */
-  function zoneAt(x) { const z = geo.zones.find((zz) => x >= zz.x0 && x < zz.x1 + 40); return z ? z.id : geo.zones[0].id; }
-  function step() {
-    const d = target - walkerX;
-    const g = $('#walker', el); if (!g) return;
-    if (Math.abs(d) < 2) { walkerX = target; g.classList.remove('walking'); raf = null; place(); return; }
-    walkerX += Math.sign(d) * Math.min(Math.abs(d), Math.max(8, Math.abs(d) * .07));
-    const fc = Math.sign(d);
-    if (fc !== facing) { facing = fc; $('.walker-body', g).setAttribute('transform', `scale(${facing} 1)`); }
-    g.classList.add('walking');
-    place();
-    raf = requestAnimationFrame(step);
-  }
-  function place() {
-    const g = $('#walker', el); if (!g) return;
-    g.setAttribute('transform', `translate(${walkerX} ${FEET}) scale(1.1)`);
-    const sc = $('.garden-scroll', el);
-    const want = walkerX * k - sc.clientWidth / 2;
-    if (Math.abs(sc.scrollLeft - want) > sc.clientWidth * 0.22) sc.scrollLeft += (want - sc.scrollLeft) * 0.12;
-    const sel = $('#zone-jump', el); const z = zoneAt(walkerX); if (sel && sel.value !== z && document.activeElement !== sel) sel.value = z;
-  }
-  function parallax() { const sc = $('.garden-scroll', el), far = $('#far', el); if (sc && far) far.setAttribute('transform', `translate(${f(sc.scrollLeft / k * .4)} 0)`); }
-  function walkTo(x, then) {
-    target = clamp(x, 80, geo.W - 120); if (!raf) raf = requestAnimationFrame(step);
-    if (then) { const t0 = Date.now(); const wait = () => { if (Math.abs(walkerX - target) < 3 || Date.now() - t0 > 6000) then(); else setTimeout(wait, 60); }; wait(); }
-  }
-
-  /* ---------- cueillette ---------- */
-  function pick(id) {
-    const item = SHOP.find((p) => p.id === id);
-    const x = +$(`.shop-plant[data-id="${id}"]`, el).dataset.x;
-    walkTo(walkerX < x ? x - 150 : x + 150, () => chooseForm(item));
+    const co = $('.checkout', el);
+    if (co) { co.addEventListener('click', openBasket); co.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openBasket(); } }); }
   }
   function chooseForm(item) {
-    const opt = (key, title, emoji) => {
-      const fm = item.forms[key];
-      return fm ? `<div class="form-opt"><span class="fo-em" aria-hidden="true">${emoji}</span><div><b>${title}</b><span>${esc(fm.label)}</span><span class="fo-price">${euro(fm.price)}</span></div>
-          <button class="btn small" data-form="${key}" type="button">Mettre dans le chariot</button></div>`
-        : `<div class="form-opt off"><span class="fo-em" aria-hidden="true">${emoji}</span><div><b>${title}</b><span>Pas vendu sous cette forme en ligne</span></div></div>`;
+    const opt = (key, title) => {
+      const f = item.forms[key];
+      return f ? `<div class="form-opt"><div><b>${title}</b><span>${esc(f.label)}</span><span class="fo-price">${euro(f.price)}</span></div>
+          <button class="btn small" data-form="${key}" type="button">Ajouter au panier</button></div>`
+        : `<div class="form-opt off"><div><b>${title}</b><span>Pas vendu sous cette forme en ligne</span></div></div>`;
     };
-    const art = `<svg class="pick-art" viewBox="-130 -330 260 350" aria-hidden="true">${DRAW[item.kind](item.color, 3, item)}</svg>`;
-    const box = modal(`<div class="pick-head">${art}<div><h2>${esc(item.name)}</h2>
-      <p class="hand" style="font-size:19px;margin:0 0 4px">Tu la veux en plante ou en bulbe ?</p></div></div>
-      ${opt('plante', 'Plante en pot', '🪴')}${opt('bulbe', 'Bulbe à planter', '🧅')}
+    const box = modal(`<div class="pick-head"><div class="pick-art">${art(item)}</div><div><h2>${esc(item.name)}</h2>${item.latin ? `<p class="pick-latin">${esc(item.latin)}</p>` : ''}</div></div>
+      ${opt('plante', 'Plante en pot')}${opt('bulbe', 'Bulbe à planter')}
       <p class="small"><a href="${(item.forms.plante || item.forms.bulbe).url}" target="_blank" rel="noopener">Voir la fiche produit sur truffaut.com</a></p>`);
     $$('[data-form]', box).forEach((b) => b.addEventListener('click', () => { add(item, b.dataset.form); closeModal(); }));
   }
   function add(item, form) {
-    const b = basket();
-    const ex = b.find((x) => x.id === item.id && x.form === form);
+    const b = basket(); const ex = b.find((x) => x.id === item.id && x.form === form);
     if (ex) ex.qty++; else b.push({ id: item.id, form, qty: 1 });
     setBasket(b);
-    const g = $(`.shop-plant[data-id="${item.id}"]`, el);
-    const fx = $('#flyfx', el);
-    const x0 = +g.dataset.x, y0 = FLOOR - 140;
-    const x1 = walkerX + 110 * facing, y1 = FEET - 60;
-    fx.innerHTML = `<g class="fly" style="--dx:${x1 - x0}px;--dy:${y1 - y0}px"><g transform="translate(${x0} ${y0})">${miniPot(item.color, 1.6)}</g></g>`;
-    setTimeout(() => { fx.innerHTML = ''; fillBasket(); }, 900);
     const btn = $('#basket-btn'); btn.classList.remove('jiggle'); void btn.offsetWidth; btn.classList.add('jiggle');
-    toast('🛒', `${item.name} dans ton chariot`, form === 'bulbe' ? 'En bulbes, à planter.' : 'En plante, prête à planter.', 2600);
-  }
-  const miniPot = (c, s = 1) => `<g transform="scale(${s})"><path d="M-7 -12H7L5.5 0H-5.5Z" fill="${grad('c', '#C66B40', .3, -.35)}" stroke="#6E3618" stroke-width=".5"/><circle cx="-3" cy="-17" r="6" fill="${grad('b', '#4C8A3E', .3, -.3)}"/><circle cx="4" cy="-18" r="5.5" fill="${grad('b', '#5A9A48', .3, -.3)}"/><circle cx="1" cy="-21" r="4" fill="${grad('b', tint(c), .4, -.3)}" stroke="${sh(tint(c), -.4)}" stroke-width=".4"/></g>`;
-  function fillBasket() {
-    const load = $('#basket-load', el); if (!load) return;
-    const items = basket().flatMap((x) => Array(Math.min(x.qty, 3)).fill(x)).slice(-8);
-    load.innerHTML = items.map((x, i) => { const p = SHOP.find((s) => s.id === x.id); return at(-46 + (i % 6) * 18 + (i >= 6 ? 9 : 0), i >= 6 ? -12 : 0, miniPot(p ? p.color : '#5DB565', 1.3)); }).join('');
+    toast('🛒', `${item.name} dans ton panier`, form === 'bulbe' ? 'En bulbes, à planter.' : 'En plante, prête à planter.', 2600);
   }
 
   function openBasket() {
     const b = basket();
-    const rows = b.map((x, i) => { const p = SHOP.find((s) => s.id === x.id); const fm = p.forms[x.form];
-      return `<li><div><b>${esc(p.name)}</b><span>${x.form === 'bulbe' ? 'Bulbe' : 'Plante'} · ${esc(fm.label)} · ${euro(fm.price)}</span></div>
+    const rows = b.map((x, i) => { const p = SHOP.find((s) => s.id === x.id); if (!p) return ''; const f = p.forms[x.form];
+      return `<li><div><b>${esc(p.name)}</b><span>${x.form === 'bulbe' ? 'Bulbe' : 'Plante'} · ${esc(f.label)} · ${euro(f.price)}</span></div>
         <div class="qty"><button type="button" data-i="${i}" data-d="-1" aria-label="Retirer un">−</button><b>${x.qty}</b><button type="button" data-i="${i}" data-d="1" aria-label="Ajouter un">+</button></div></li>`; }).join('');
-    const total = b.reduce((s, x) => { const fm = SHOP.find((p) => p.id === x.id).forms[x.form]; return s + (fm.price || 0) * x.qty; }, 0);
-    const unknown = b.some((x) => SHOP.find((p) => p.id === x.id).forms[x.form].price == null);
+    const known = b.filter((x) => SHOP.find((p) => p.id === x.id));
+    const total = known.reduce((s, x) => { const f = SHOP.find((p) => p.id === x.id).forms[x.form]; return s + (f.price || 0) * x.qty; }, 0);
+    const unknown = known.some((x) => SHOP.find((p) => p.id === x.id).forms[x.form].price == null);
     const box = modal(`<h2>Mon panier</h2>
-      ${b.length ? `<ul class="basket-list">${rows}</ul>
+      ${known.length ? `<ul class="basket-list">${rows}</ul>
         <p class="basket-total">Total : <b>${euro(total)}</b>${unknown ? '<br><span class="small">+ articles dont le prix s’affiche sur la fiche produit</span>' : ''}</p>
         <div class="actions"><button class="btn sun" id="order" type="button">Commander</button><button class="btn white" id="empty" type="button">Vider le panier</button></div>`
-      : `<p class="hand" style="font-size:20px">Ton chariot est vide. Va te balader dans le jardin-boutique et clique sur les plantes pour les cueillir.</p>
-         <div class="actions"><a class="btn" href="#jardin" id="to-garden">Aller au jardin</a></div>`}`);
+      : `<p>Ton panier est vide. Promène-toi dans la grande serre et clique sur les plantes pour les ajouter.</p>
+         <div class="actions"><a class="btn" href="#jardin" id="to-garden">Aller dans la serre</a></div>`}`);
     $$('.qty button', box).forEach((btn) => btn.addEventListener('click', () => {
-      const bb = basket(); const it = bb[+btn.dataset.i]; it.qty += +btn.dataset.d; if (it.qty <= 0) bb.splice(+btn.dataset.i, 1); setBasket(bb); fillBasket(); openBasket();
+      const bb = basket(); const it = bb[+btn.dataset.i]; it.qty += +btn.dataset.d; if (it.qty <= 0) bb.splice(+btn.dataset.i, 1); setBasket(bb); openBasket();
     }));
     const tg = $('#to-garden', box); if (tg) tg.addEventListener('click', closeModal);
-    const em = $('#empty', box); if (em) em.addEventListener('click', () => { setBasket([]); fillBasket(); openBasket(); });
+    const em = $('#empty', box); if (em) em.addEventListener('click', () => { setBasket([]); openBasket(); });
     const or = $('#order', box); if (or) or.addEventListener('click', () => {
       modal(`<h2>Finaliser sur truffaut.com</h2>
         <p>Dans la version en ligne, ton panier serait transmis directement au panier Truffaut. Dans cette maquette, ouvre chaque fiche pour commander :</p>
-        <ul class="link-list">${basket().map((x) => { const p = SHOP.find((s) => s.id === x.id); const fm = p.forms[x.form]; return `<li><a href="${fm.url}" target="_blank" rel="noopener">${esc(p.name)} (${x.qty})</a></li>`; }).join('')}</ul>`);
+        <ul class="link-list">${basket().map((x) => { const p = SHOP.find((s) => s.id === x.id); if (!p) return ''; const f = p.forms[x.form]; return `<li><a href="${f.url}" target="_blank" rel="noopener">${esc(p.name)} (${x.qty})</a></li>`; }).join('')}</ul>`);
     });
   }
 
+  /* ---------- montage ---------- */
   function mount(view) {
-    el = view;
-    k = window.innerWidth < 700 ? 0.6 : window.innerHeight < 800 ? 0.78 : 0.9;
-    const { svg } = sceneSVG();
-    el.innerHTML = `<div class="page jardin">
-      ${Deco.head('Le jardin-boutique', 'Pousse la porte et promène-toi dans les allées : la pépinière, l’ombrière, puis la grande serre. Clique sur une plante pour la mettre dans ton chariot, en pot ou en bulbe, et passe en caisse au bout de l’allée.',
-        ['Je te suis, mais à mon rythme.', 'Le rosier ‘Edith Piaf’ ? Je ne regrette rien.', 'Les bulbes, c’est comme moi : ça prend son temps, mais ça finit par sortir.', 'Dans la serre, il fait bon. J’y passerais l’hiver.'], 1)}
-      <div class="walk-bar"><div class="walk-ctrl"><button class="btn white" id="go-l" type="button" aria-label="Marcher vers la gauche">◀</button>
-        <select id="zone-jump" aria-label="Aller directement à">${ZONES.map((z) => `<option value="${z.id}">${z.name}</option>`).join('')}</select>
-        <button class="btn white" id="go-r" type="button" aria-label="Marcher vers la droite">▶</button></div></div>
-      <div class="garden-scroll panel" tabindex="0" aria-label="Le jardin. Flèches gauche et droite pour marcher.">${svg}</div>
-      <p class="hand hint">Astuce : flèches du clavier pour te promener, ou clique sur l’allée pour y aller.</p>
+    el = view; layout();
+    camZ = slot * STEP;
+    const zl = ZONES.filter((z) => ZSTART[z.id] != null);
+    el.innerHTML = `<div class="serre">
+      <div class="serre-stage">
+        <svg class="serre-svg" viewBox="0 0 ${VW} ${VH}" preserveAspectRatio="xMidYMid slice" role="group" aria-label="L’allée de la grande serre. Flèches gauche et droite pour avancer ou reculer.">
+          <defs>
+            <linearGradient id="js-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8EC3E6"/><stop offset=".45" stop-color="#CFE6F2"/><stop offset="1" stop-color="#F6F4EC"/></linearGradient>
+            <linearGradient id="js-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EFE7D6"/><stop offset=".5" stop-color="#E4D9C3"/><stop offset="1" stop-color="#D6C8AE"/></linearGradient>
+            <linearGradient id="js-wall" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#DCEAEE"/><stop offset="1" stop-color="#EEF4F2"/></linearGradient>
+            <linearGradient id="js-top" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D8B27A"/><stop offset="1" stop-color="#C39558"/></linearGradient>
+            <linearGradient id="js-ray" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF4CF" stop-opacity=".55"/><stop offset="1" stop-color="#FFF4CF" stop-opacity="0"/></linearGradient>
+            <radialGradient id="js-sun"><stop offset="0" stop-color="#FFF6D6" stop-opacity=".75"/><stop offset="1" stop-color="#FFF6D6" stop-opacity="0"/></radialGradient>
+            <radialGradient id="js-glow" cx=".5" cy=".42" r=".5"><stop offset="0" stop-color="#FFF6D6"/><stop offset="1" stop-color="#FFF6D6" stop-opacity="0"/></radialGradient>
+            <linearGradient id="js-sign" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16614A"/><stop offset="1" stop-color="#0E4A36"/></linearGradient>
+            <radialGradient id="js-shad"><stop offset="0" stop-color="#000" stop-opacity=".28"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+            ${symbols()}
+          </defs>
+          <g id="js-world"></g>
+        </svg>
+        <div class="serre-crumb">La grande serre <span>›</span> <b id="serre-crumb"></b></div>
+        <div class="serre-mini"><h4>Plan de la serre <span>Vous êtes ici</span></h4><ol>${zl.map((z) => `<li data-z="${z.id}"><button type="button" data-z="${z.id}">${esc(ZNAMES[z.id][0])}<small>${SHOP.filter((p) => p.zone === z.id).length}</small></button></li>`).join('')}<li data-z="caisse"><button type="button" data-z="caisse">Caisses</button></li></ol></div>
+        <div class="serre-card" hidden></div>
+        <div class="serre-walk">
+          <button class="b" id="go-back" type="button">← Reculer</button>
+          <div class="serre-steps">${zl.map((z) => `<i data-z="${z.id}" title="${esc(ZNAMES[z.id][0])}"></i>`).join('')}</div>
+          <div class="lbl"><b id="serre-zone"></b><span id="serre-sub"></span></div>
+          <button class="b go" id="go-fwd" type="button">Avancer →</button>
+        </div>
+      </div>
+      <p class="serre-hint">Astuce : flèches ← → pour vous déplacer, survolez une table pour voir la fiche, cliquez pour ajouter au panier. Les caisses sont au bout de l’allée.</p>
     </div>`;
-    fillBasket();
-    const sc = $('.garden-scroll', el);
-    sc.scrollLeft = walkerX * k - sc.clientWidth / 2;
-    sc.addEventListener('scroll', parallax, { passive: true }); parallax();
-    $$('.shop-plant', el).forEach((g) => {
-      g.addEventListener('click', (e) => { e.stopPropagation(); pick(g.dataset.id); });
-      g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(g.dataset.id); } });
-    });
-    const co = $('.checkout', el);
-    const goPay = (e) => { e.stopPropagation(); walkTo(geo.checkout.x0 + 30, openBasket); };
-    co.addEventListener('click', goPay); co.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goPay(e); } });
-    $('.garden-svg', el).addEventListener('click', (e) => { const r = e.currentTarget.getBoundingClientRect(); walkTo((e.clientX - r.left) / k); });
-    const move = (dir) => walkTo(target + dir * 280);
-    $('#go-l', el).addEventListener('click', () => move(-1));
-    $('#go-r', el).addEventListener('click', () => move(1));
-    $('#zone-jump', el).addEventListener('change', (e) => { const z = geo.zones.find((zz) => zz.id === e.target.value); walkTo(z.signX + 80); });
-    keyHandler = (e) => { if (document.querySelector('#modal-back')) return; if (e.target.closest && e.target.closest('select')) return; if (e.key === 'ArrowRight') { e.preventDefault(); move(1); } if (e.key === 'ArrowLeft') { e.preventDefault(); move(-1); } };
+    frame(); draw(); updateHud();
+    $('#go-back', el).addEventListener('click', () => walkTo(slot - 1));
+    $('#go-fwd', el).addEventListener('click', () => walkTo(slot + 1));
+    $$('.serre-mini button', el).forEach((b) => b.addEventListener('click', () => walkTo(b.dataset.z === 'caisse' ? END - 1 : ZSTART[b.dataset.z])));
+    $('.serre-stage', el).addEventListener('mouseleave', hideCard);
+    keyHandler = (e) => { if (document.querySelector('#modal-back')) return; if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { e.preventDefault(); walkTo(slot + 1); } if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { e.preventDefault(); walkTo(slot - 1); } };
     window.addEventListener('keydown', keyHandler);
+    resizeHandler = () => { frame(); };
+    window.addEventListener('resize', resizeHandler);
   }
 
   return {
-    title: 'Le jardin-boutique', mount,
-    unmount() { if (raf) cancelAnimationFrame(raf); raf = null; window.removeEventListener('keydown', keyHandler); },
+    title: 'La grande serre', mount,
+    unmount() { if (anim) cancelAnimationFrame(anim); anim = null; window.removeEventListener('keydown', keyHandler); window.removeEventListener('resize', resizeHandler); },
     openBasket, updateCount, DRAW,
   };
 })();

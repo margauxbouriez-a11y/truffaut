@@ -1,0 +1,45 @@
+/* ---------- Accueil : plan du magasin ---------- */
+.view-hub { background: #fff; }
+.plan { display: grid; grid-template-columns: minmax(0, 1fr) 380px; min-height: calc(100vh - 92px); }
+.plan-map { position: relative; background: radial-gradient(ellipse at 45% 45%, #F6F2E4 0%, #ECE6D2 70%, #E3DCC6 100%); overflow: hidden; }
+.plan-title { position: absolute; left: 40px; top: 28px; z-index: 2; pointer-events: none; }
+.plan-title h1 { margin: 0; font: 600 clamp(26px, 2.6vw, 36px) var(--display); color: var(--sapin); letter-spacing: -.01em; }
+.plan-title p { margin: 4px 0 0; color: var(--gris); font-size: 14px; }
+.plan-svg { display: block; width: 100%; height: auto; margin-top: 30px; }
+.pz { cursor: pointer; outline: none; }
+.pz-hit { fill: transparent; }
+.pz-ring { fill: none; stroke: var(--c); stroke-width: 3; stroke-dasharray: 8 6; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.pz.on .pz-ring, .pz:focus-visible .pz-ring { opacity: .95; }
+.pz { transition: filter .2s; }
+.pz.on { filter: drop-shadow(0 6px 10px rgba(15, 77, 54, .18)); }
+.plan-svg .pin { pointer-events: none; }
+.plan-tip { position: absolute; z-index: 3; width: 260px; background: #fff; border-radius: 14px; box-shadow: 0 16px 40px rgba(15, 40, 30, .22); padding: 14px 16px; }
+.plan-tip .k { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; }
+.plan-tip h3 { margin: 4px 0; font: 600 20px var(--display); color: var(--encre, #1D2A24); }
+.plan-tip p { margin: 0 0 10px; font-size: 13px; color: var(--gris); line-height: 1.45; }
+.plan-tip .row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.plan-tip .row span { font-size: 11.5px; background: #F1F4F1; padding: 4px 9px; border-radius: 12px; }
+.plan-tip .go { display: flex; justify-content: center; align-items: center; height: 40px; border-radius: 8px; background: var(--menthe); color: #fff; font-weight: 600; font-size: 14px; text-decoration: none; }
+.plan-tip .go:hover { background: #27A887; }
+.plan-legend { position: absolute; left: 40px; bottom: 24px; display: flex; flex-wrap: wrap; gap: 18px; font-size: 12px; color: var(--gris); background: rgba(255, 255, 255, .82); padding: 8px 14px; border-radius: 10px; }
+.plan-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.plan-side { background: #fff; border-left: 1px solid var(--ligne); padding: 28px 26px; }
+.plan-side h2 { margin: 0; font: 600 24px var(--display); }
+.plan-side > p { margin: 6px 0 18px; color: var(--gris); font-size: 14px; }
+.plan-list a { display: grid; grid-template-columns: 34px 1fr auto; gap: 12px; align-items: center; padding: 11px 12px; border-radius: 12px; margin-bottom: 4px; text-decoration: none; color: inherit; }
+.plan-list a:hover, .plan-list a.on { background: var(--menthe-l); box-shadow: inset 0 0 0 1.5px var(--menthe); }
+.plan-list .n { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 14px; }
+.plan-list b { display: block; font-size: 15px; }
+.plan-list small { font-size: 12.5px; color: var(--gris); }
+.plan-list em { font-style: normal; font-size: 12px; color: var(--sapin-2); font-weight: 600; }
+.plan-list a.on em { background: var(--sapin); color: #fff; padding: 6px 12px; border-radius: 8px; }
+.plan-note { margin-top: 18px; padding: 12px 14px; border-radius: 12px; background: #FBF6EA; font-size: 13px; color: #5F5A4A; line-height: 1.45; }
+.plan-note b { display: inline-block; margin-right: 6px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #fff; background: #E86B4F; padding: 2px 8px; border-radius: 8px; }
+@media (max-width: 900px) {
+  .plan { grid-template-columns: 1fr; }
+  .plan-title { position: static; padding: 20px 16px 0; }
+  .plan-svg { margin-top: 0; }
+  .plan-tip { display: none; }
+  .plan-legend { position: static; margin: 0 16px 16px; }
+  .plan-side { border-left: 0; border-top: 1px solid var(--ligne); padding: 20px 16px 40px; }
+}
