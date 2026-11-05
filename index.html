@@ -7,7 +7,7 @@
 <meta name="description" content="Maquette de démonstration : un site ludique et interactif imaginé pour Truffaut — potager virtuel, jardin-boutique, atelier bouquet, village de Noël, galerie et clinique des plantes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=Caveat:wght@500;700&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..700,0..100,0..1;1,9..144,400..700,0..100,0..1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Brygada+1918:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Caveat:wght@500;700&family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&display=swap" rel="stylesheet">
 <style>:root {
   --sky: #E6EDDD;
   --paper: #FBFAF4;
@@ -28,8 +28,9 @@
   --r: 12px;
   --shadow: 3px 4px 0 rgba(31, 58, 46, .22);
   --hand: 'Caveat', 'Segoe Print', cursive;
-  --ui: 'Bricolage Grotesque', 'Segoe UI', sans-serif;
-  --display: 'Fraunces', Georgia, serif;
+  --ui: 'DM Sans', 'Segoe UI', sans-serif;
+  --display: 'Brygada 1918', Georgia, serif;
+  --sapin: #0F4D36; --sapin-2: #136A55; --menthe: #2EBB99; --menthe-l: #DDF3EC; --gris: #6B7670; --ligne: #E2E0D8;
 }
 
 * { box-sizing: border-box; }
@@ -62,17 +63,25 @@ svg [stroke-width="5"] { stroke-width: 3; }
 /* ---------- top bar ---------- */
 .topbar {
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40;
-  display: flex; align-items: center; gap: 14px;
-  padding: 10px 18px;
-  background: var(--paper);
-  border-bottom: 2px solid var(--line);
+  display: flex; align-items: center; gap: 26px;
+  height: 64px; padding: 0 28px;
+  background: #fff; border-bottom: 1px solid var(--ligne);
 }
-.topbar::after { content: ''; position: absolute; left: 0; right: 0; bottom: -14px; height: 14px; pointer-events: none;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='14'%3E%3Cg stroke='%231F3A2E' stroke-width='1' %3E%3Cpath d='M0 1 Q15 12 30 1 T60 1 T90 1 T120 1' fill='none' stroke='%233F6B3A' stroke-width='1.6'/%3E%3Ccircle cx='15' cy='7' r='3.2' fill='%23EE9AAE'/%3E%3Ccircle cx='45' cy='7' r='2.6' fill='%23FFFFFF'/%3E%3Ccircle cx='75' cy='7' r='3.2' fill='%23F0A830'/%3E%3Ccircle cx='105' cy='7' r='2.6' fill='%238E7CC3'/%3E%3C/g%3E%3C/svg%3E") repeat-x; }
-.brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; }
-.brand svg { width: 42px; height: 42px; }
-.brand b { font-family: var(--display); font-size: 23px; font-weight: 600; line-height: 1; font-variation-settings: "SOFT" 100, "WONK" 1; }
-.brand small { display: block; font-family: var(--hand); font-size: 19px; color: var(--ink-soft); line-height: 1.1; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--sapin); text-decoration: none; flex: 0 0 auto; }
+.brand i { width: 36px; height: 36px; border-radius: 50%; background: var(--sapin); display: grid; place-items: center; }
+.brand b { display: block; font-family: var(--display); font-size: 22px; font-weight: 700; line-height: 1; letter-spacing: -.01em; }
+.brand small { display: block; font: 500 10.5px var(--ui); letter-spacing: .16em; text-transform: uppercase; color: var(--gris); margin-top: 3px; }
+.mainnav { display: flex; gap: 20px; overflow-x: auto; scrollbar-width: none; }
+.mainnav::-webkit-scrollbar { display: none; }
+.mainnav a { white-space: nowrap; font-size: 14px; font-weight: 500; color: #3B4842; text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent; }
+.mainnav a:hover { color: var(--sapin); }
+.mainnav a.on { color: var(--sapin); font-weight: 600; border-bottom-color: var(--menthe); }
+.top-btn { position: relative; display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 12px; border-radius: 10px; border: 1px solid #D3D6CF; background: #fff; color: var(--sapin); font: 600 14px var(--ui); cursor: pointer; text-decoration: none; }
+.top-btn.cart { background: var(--sapin); color: #fff; border-color: var(--sapin); padding: 0 16px; }
+.top-btn:hover { filter: brightness(1.08); }
+.top-btn .count { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; display: grid; place-items: center; font-size: 12px; background: var(--menthe); color: #fff; }
+#bell-btn .count { position: absolute; top: -7px; right: -7px; background: #E86B4F; }
+.top-btn .count:empty { display: none; }
 .topbar .spacer { flex: 1; }
 .chip-btn {
   position: relative;
@@ -94,11 +103,7 @@ svg [stroke-width="5"] { stroke-width: 3; }
   background: var(--tomato); color: #fff; font-size: 13px;
 }
 .chip-btn .count:empty { display: none; }
-.ribbon {
-  padding: 5px 18px;
-  margin-top: 0; padding-top: 14px; background: #F6E4B8; border-bottom: 1px dashed var(--line);
-  font-size: 13px; text-align: center; color: var(--ink-soft);
-}
+.ribbon { padding: 6px 18px; background: #EFEBE1; font-size: 12px; text-align: center; color: #6B6A60; letter-spacing: .01em; }
 
 /* ---------- generic pieces ---------- */
 .view { min-height: calc(100vh - 110px); }
@@ -206,12 +211,12 @@ svg [stroke-width="5"] { stroke-width: 3; }
 }
 @media (max-width: 640px) {
   body { font-size: 16px; }
-  .topbar { padding: 8px 12px; gap: 8px; }
+  .topbar { flex-wrap: wrap; height: auto; padding: 10px 16px 0; gap: 10px 12px; }
   .brand small { display: none; }
-  .brand b { font-size: 18px; }
-  .chip-btn { padding: 6px 10px; font-size: 14px; }
-  .chip-btn .lbl { display: none; }
-  .ribbon { font-size: 14px; }
+  .brand b { font-size: 19px; }
+  .mainnav { order: 3; flex: 1 0 100%; gap: 18px; padding-bottom: 4px; }
+  .top-btn .lbl { display: none; }
+  .ribbon { font-size: 12px; }
 }
 
 /* ---------- en-têtes fleuris & Gaston ---------- */
@@ -273,6 +278,85 @@ svg [stroke-width="5"] { stroke-width: 3; }
 
 .hsign2 { font-family: var(--ui); font-weight: 700; font-size: 4.6px; letter-spacing: .08em; fill: #F6D04A; }
 .hbulb { animation: blink 1.6s steps(2) infinite; }
+
+/* ============================================================
+   NOUVEAU DESIGN « jardinerie en ligne » : surcharges communes
+   (vert sapin, vert menthe, fonds clairs, ombres douces)
+   ============================================================ */
+body { background: #FAFAF7; background-image: none; color: #1D2A24; font-size: 16px; }
+h1, h2, .modal h2 { font-family: var(--display); font-weight: 600; letter-spacing: -.01em; color: #1D2A24; }
+a { color: var(--sapin-2); }
+:focus-visible { outline: 2px solid var(--menthe); outline-offset: 3px; }
+.page-head p { color: var(--gris); }
+.panel { background: #fff; border: 1px solid var(--ligne); border-radius: 16px; box-shadow: 0 6px 24px rgba(15, 40, 30, .07); }
+.btn { padding: 10px 20px; border: 0; border-radius: 8px; background: var(--sapin); color: #fff; font-weight: 600; font-size: 15px; box-shadow: none; transition: background .2s, transform .12s; }
+.btn:hover { transform: none; box-shadow: none; background: #136A55; }
+.btn:active { transform: translateY(1px); box-shadow: none; }
+.btn.sun { background: var(--menthe); color: #fff; }
+.btn.sun:hover { background: #27A887; }
+.btn.white { background: #fff; color: var(--sapin); box-shadow: inset 0 0 0 1.5px var(--sapin); }
+.btn.white:hover { background: var(--menthe-l); }
+.btn.red { background: #E86B4F; }
+.btn.small { padding: 7px 14px; font-size: 13.5px; }
+.tag { border: 1px solid #D3D6CF; background: #fff; font-weight: 600; }
+.field input, .field select, .field textarea { border: 1px solid #D3D6CF; border-radius: 10px; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--menthe); outline: none; box-shadow: 0 0 0 3px var(--menthe-l); }
+.toast { background: #fff; border: 1px solid var(--ligne); border-radius: 14px; box-shadow: 0 12px 34px rgba(15, 40, 30, .16); animation: pop .3s ease-out; }
+.toast span { color: var(--gris); font-size: 14px; }
+.modal-back { background: rgba(15, 40, 30, .45); backdrop-filter: blur(2px); }
+.modal { background: #fff; border: 0; border-radius: 18px; box-shadow: 0 24px 70px rgba(15, 40, 30, .3); animation: pop .25s ease-out; }
+.modal h2 { font-size: 26px; }
+.modal .close { width: 34px; height: 34px; border: 1px solid #D3D6CF; font-size: 18px; color: #3B4842; }
+.modal .close:hover { background: var(--menthe-l); }
+.chip-btn { border: 1px solid #D3D6CF; border-radius: 18px; box-shadow: none; font-size: 14px; padding: 6px 14px; }
+.chip-btn:hover { transform: none; box-shadow: none; background: var(--menthe-l); }
+.chip-btn.on { background: var(--sapin); color: #fff; border-color: var(--sapin); }
+
+/* ---------- Accueil : plan du magasin ---------- */
+.view-hub { background: #fff; }
+.plan { display: grid; grid-template-columns: minmax(0, 1fr) 380px; min-height: calc(100vh - 92px); }
+.plan-map { position: relative; background: radial-gradient(ellipse at 45% 45%, #F6F2E4 0%, #ECE6D2 70%, #E3DCC6 100%); overflow: hidden; }
+.plan-title { position: absolute; left: 40px; top: 28px; z-index: 2; pointer-events: none; }
+.plan-title h1 { margin: 0; font: 600 clamp(26px, 2.6vw, 36px) var(--display); color: var(--sapin); letter-spacing: -.01em; }
+.plan-title p { margin: 4px 0 0; color: var(--gris); font-size: 14px; }
+.plan-svg { display: block; width: 100%; height: auto; margin-top: 30px; }
+.pz { cursor: pointer; outline: none; }
+.pz-hit { fill: transparent; }
+.pz-ring { fill: none; stroke: var(--c); stroke-width: 3; stroke-dasharray: 8 6; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.pz.on .pz-ring, .pz:focus-visible .pz-ring { opacity: .95; }
+.pz { transition: filter .2s; }
+.pz.on { filter: drop-shadow(0 6px 10px rgba(15, 77, 54, .18)); }
+.plan-svg .pin { pointer-events: none; }
+.plan-tip { position: absolute; z-index: 3; width: 260px; background: #fff; border-radius: 14px; box-shadow: 0 16px 40px rgba(15, 40, 30, .22); padding: 14px 16px; }
+.plan-tip .k { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; }
+.plan-tip h3 { margin: 4px 0; font: 600 20px var(--display); color: var(--encre, #1D2A24); }
+.plan-tip p { margin: 0 0 10px; font-size: 13px; color: var(--gris); line-height: 1.45; }
+.plan-tip .row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.plan-tip .row span { font-size: 11.5px; background: #F1F4F1; padding: 4px 9px; border-radius: 12px; }
+.plan-tip .go { display: flex; justify-content: center; align-items: center; height: 40px; border-radius: 8px; background: var(--menthe); color: #fff; font-weight: 600; font-size: 14px; text-decoration: none; }
+.plan-tip .go:hover { background: #27A887; }
+.plan-legend { position: absolute; left: 40px; bottom: 24px; display: flex; flex-wrap: wrap; gap: 18px; font-size: 12px; color: var(--gris); background: rgba(255, 255, 255, .82); padding: 8px 14px; border-radius: 10px; }
+.plan-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.plan-side { background: #fff; border-left: 1px solid var(--ligne); padding: 28px 26px; }
+.plan-side h2 { margin: 0; font: 600 24px var(--display); }
+.plan-side > p { margin: 6px 0 18px; color: var(--gris); font-size: 14px; }
+.plan-list a { display: grid; grid-template-columns: 34px 1fr auto; gap: 12px; align-items: center; padding: 11px 12px; border-radius: 12px; margin-bottom: 4px; text-decoration: none; color: inherit; }
+.plan-list a:hover, .plan-list a.on { background: var(--menthe-l); box-shadow: inset 0 0 0 1.5px var(--menthe); }
+.plan-list .n { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 14px; }
+.plan-list b { display: block; font-size: 15px; }
+.plan-list small { font-size: 12.5px; color: var(--gris); }
+.plan-list em { font-style: normal; font-size: 12px; color: var(--sapin-2); font-weight: 600; }
+.plan-list a.on em { background: var(--sapin); color: #fff; padding: 6px 12px; border-radius: 8px; }
+.plan-note { margin-top: 18px; padding: 12px 14px; border-radius: 12px; background: #FBF6EA; font-size: 13px; color: #5F5A4A; line-height: 1.45; }
+.plan-note b { display: inline-block; margin-right: 6px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #fff; background: #E86B4F; padding: 2px 8px; border-radius: 8px; }
+@media (max-width: 900px) {
+  .plan { grid-template-columns: 1fr; }
+  .plan-title { position: static; padding: 20px 16px 0; }
+  .plan-svg { margin-top: 0; }
+  .plan-tip { display: none; }
+  .plan-legend { position: static; margin: 0 16px 16px; }
+  .plan-side { border-left: 0; border-top: 1px solid var(--ligne); padding: 20px 16px 40px; }
+}
 
 /* ---------- Silence ça truffe ---------- */
 .logo-title { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 0 .25em; }
@@ -415,75 +499,90 @@ svg [stroke-width="5"] { stroke-width: 3; }
   .seed-list { grid-template-columns: repeat(4, 1fr); }
 }
 
-/* ---------- Jardin-boutique ---------- */
-.walk-ctrl { display: flex; gap: 8px; align-items: center; }
-.walk-ctrl .btn { padding: 8px 16px; }
-.walk-ctrl select { padding: 9px 12px; border: 2px solid var(--line); border-radius: 999px; background: #fff; font-weight: 700; }
-.garden-scroll { overflow-x: auto; overflow-y: hidden; border-radius: 30px; padding: 0; scrollbar-color: var(--leaf) transparent; }
-.garden-svg { display: block; }
-.garden-scroll { background: #DDEEF0; box-shadow: inset 0 0 0 1px rgba(31,58,46,.08); cursor: pointer; }
-.garden-svg text { pointer-events: none; }
-.zone-sign { font-family: var(--display); font-size: 21px; font-weight: 600; fill: #F7F3E6; letter-spacing: .01em; }
-.store-sign { font-family: var(--display); font-size: 23px; font-weight: 600; fill: #F7F3E6; }
-.store-sub { font-family: var(--ui); font-size: 9px; font-weight: 700; letter-spacing: .06em; fill: #CFE3C9; }
-.door-label { font-family: var(--hand); font-size: 20px; fill: #F7F3E6; opacity: .9; }
-.rack-head { font-family: var(--ui); font-size: 10px; font-weight: 800; letter-spacing: .22em; fill: #F7F3E6; }
-.till { font-family: var(--ui); font-size: 11px; font-weight: 700; fill: #1F3A2E; }
-.till-note { font-family: var(--hand); font-size: 11px; fill: #1F3A2E; }
-.ptag-name { font-family: var(--ui); font-size: 12px; font-weight: 700; fill: #1F3A2E; }
-.ptag-price { font-family: var(--ui); font-size: 15px; font-weight: 800; fill: #2E6B3F; }
-.ptag-note { font-family: var(--ui); font-size: 10.5px; fill: #6B776F; }
-.shop-plant { cursor: pointer; }
-.shop-plant:focus { outline: none; }
-.shop-plant .glow { fill: #FFF6C8; opacity: 0; transition: opacity .25s; }
-.shop-plant:hover .glow, .shop-plant:focus-visible .glow { opacity: .75; }
-.shop-plant .ptag { transition: transform .2s; }
-.shop-plant:hover .ptag, .shop-plant:focus-visible .ptag { transform: translateY(-4px); }
-.shop-plant:hover .ptag rect:first-child, .shop-plant:focus-visible .ptag rect:first-child { stroke: #2E6B3F; stroke-width: 2.5; }
-.shop-plant:hover .sway, .shop-plant:focus-visible .sway { animation: shake .6s ease-in-out; }
-.sway { transform-box: fill-box; transform-origin: 50% 100%; }
-@keyframes shake { 25% { transform: rotate(-2.5deg); } 75% { transform: rotate(2.5deg); } }
-.hang { animation: hang 5s ease-in-out infinite alternate; }
-@keyframes hang { from { transform: rotate(-1.6deg); } to { transform: rotate(1.6deg); } }
-.checkout { cursor: pointer; }
-.checkout:focus { outline: none; }
-.checkout:hover rect:first-of-type, .checkout:focus-visible rect:first-of-type { stroke: #F0A830; stroke-width: 3; }
-.walking .hopper { animation: hop .36s ease-in-out infinite; }
-.walking .l1 { animation: legA .36s ease-in-out infinite; }
-.walking .l2 { animation: legA .36s ease-in-out infinite reverse; }
-.walking .wheel { animation: roll .5s linear infinite; }
-.wheel { transform-box: fill-box; transform-origin: center; }
-@keyframes roll { to { transform: rotate(360deg); } }
-@keyframes hop { 50% { transform: translateY(-3px); } }
-@keyframes legA { 50% { transform: translateY(-4px); } }
-.fly { animation: flyleaf .9s cubic-bezier(.4, -0.3, .6, 1) forwards; }
-@keyframes flyleaf { to { transform: translate(var(--dx), var(--dy)) scale(.6); opacity: .7; } }
-.pick-head { display: flex; gap: 14px; align-items: center; margin-bottom: 8px; }
-.pick-head h2 { margin: 0 0 4px; }
-.pick-art { width: 110px; height: 148px; flex: 0 0 auto; background: radial-gradient(circle at 50% 60%, #F1F5EA, #fff 70%); border-radius: 16px; }
-@media (prefers-reduced-motion: reduce) { .hang, .walking .hopper, .walking .wheel, .walking .l1, .walking .l2 { animation: none; } }
-.hint { color: var(--ink-soft); font-size: 18px; margin: 10px 4px 0; }
-.form-opt { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 12px; margin: 8px 0; border: 2px solid var(--line); border-radius: 18px; background: #fff; }
-.form-opt.off { opacity: .55; border-style: dashed; grid-template-columns: auto 1fr; }
-.fo-em { font-size: 32px; }
-.form-opt b { display: block; font-size: 18px; }
-.form-opt span { display: block; font-size: 14px; color: var(--ink-soft); line-height: 1.3; }
-.form-opt .fo-price { color: var(--ink); font-weight: 700; font-size: 16px; }
+/* ---------- La grande serre : allée en perspective ---------- */
+.view-jardin { background: #fff; }
+.serre-stage { position: relative; height: min(calc(100vh - 92px), 860px); min-height: 520px; overflow: hidden; background: #E9EEF0; user-select: none; }
+.serre-svg { display: block; width: 100%; height: 100%; }
+.serre-svg text { pointer-events: none; }
+.bay { cursor: pointer; outline: none; }
+.bay .hit { fill: transparent; }
+.bay:hover use, .bay:focus-visible use { filter: brightness(1.08) saturate(1.1); }
+.bay:hover .tag rect:first-child, .bay:focus-visible .tag rect:first-child { stroke: #2EBB99; stroke-width: 2.5; }
+.checkout { cursor: pointer; outline: none; }
+.checkout:hover .zsign rect:first-of-type { filter: brightness(1.2); }
+
+.serre-crumb { position: absolute; left: 24px; top: 18px; display: flex; gap: 8px; align-items: center; background: rgba(255, 255, 255, .92); padding: 8px 14px; border-radius: 20px; font-size: 13px; color: var(--gris); box-shadow: 0 2px 10px rgba(0, 0, 0, .08); }
+.serre-crumb b { color: var(--sapin); }
+.serre-mini { position: absolute; right: 22px; top: 18px; width: 228px; background: rgba(255, 255, 255, .95); border-radius: 14px; padding: 12px 12px 10px; box-shadow: 0 6px 24px rgba(0, 0, 0, .12); }
+.serre-mini h4 { margin: 0 0 6px; font: 600 13px var(--ui); color: var(--sapin); display: flex; justify-content: space-between; }
+.serre-mini h4 span { color: var(--gris); font-weight: 500; }
+.serre-mini ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; }
+.serre-mini button { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 10px; border: 0; border-radius: 8px; background: #F1F4F0; font: 500 12.5px var(--ui); color: #3B4842; cursor: pointer; text-align: left; }
+.serre-mini button small { font-size: 11px; color: var(--gris); }
+.serre-mini button:hover { background: var(--menthe-l); }
+.serre-mini li.on button { background: var(--menthe); color: #fff; font-weight: 600; }
+.serre-mini li.on small { color: #E4FFF6; }
+
+.serre-walk { position: absolute; left: 50%; transform: translateX(-50%); bottom: 20px; display: flex; align-items: center; gap: 6px; background: rgba(255, 255, 255, .96); border-radius: 40px; padding: 6px; box-shadow: 0 8px 30px rgba(0, 0, 0, .18); max-width: calc(100% - 24px); }
+.serre-walk .b { height: 44px; padding: 0 20px; border-radius: 22px; border: 0; background: transparent; font: 600 14px var(--ui); color: var(--sapin); cursor: pointer; white-space: nowrap; }
+.serre-walk .b.go { background: var(--sapin); color: #fff; }
+.serre-walk .b:disabled { opacity: .35; cursor: default; }
+.serre-steps { display: flex; gap: 5px; padding: 0 10px; }
+.serre-steps i { width: 22px; height: 5px; border-radius: 3px; background: #D5DBD7; }
+.serre-steps i.on { background: var(--menthe); }
+.serre-walk .lbl { font-size: 12.5px; color: var(--gris); padding: 0 8px; min-width: 160px; text-align: center; }
+.serre-walk .lbl b { display: block; color: #1D2A24; font-size: 14px; }
+
+.serre-card { position: absolute; z-index: 4; width: 280px; background: #fff; border-radius: 16px; box-shadow: 0 18px 50px rgba(15, 40, 30, .28); overflow: hidden; }
+.serre-card .sc-ph { height: 140px; background: radial-gradient(circle at 50% 60%, #F1F5EE, #E4ECE5); display: grid; place-items: center; }
+.serre-card .sc-ph img, .serre-card .sc-ph svg { height: 128px; width: auto; }
+.serre-card .bd { padding: 12px 16px 16px; }
+.serre-card .rayon { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--sapin-2); font-weight: 600; }
+.serre-card h3 { margin: 3px 0 0; font: 600 19px var(--display); }
+.serre-card i { color: var(--gris); font-size: 13px; }
+.serre-card .row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: 10px; }
+.serre-card .row b { font: 700 21px var(--ui); color: var(--sapin); white-space: nowrap; }
+.serre-card .row small { font-size: 12px; color: var(--gris); text-align: right; }
+.serre-card .opts { display: flex; gap: 6px; margin-top: 10px; }
+.serre-card .opts span { font-size: 12px; padding: 5px 10px; border-radius: 14px; background: var(--menthe-l); color: var(--sapin); font-weight: 600; }
+.serre-card .opts span.off { background: #F0F0EC; color: #9AA09C; text-decoration: line-through; }
+.serre-card .btn { width: 100%; justify-content: center; margin-top: 12px; }
+.serre-hint { margin: 10px 24px 24px; font-size: 13px; color: var(--gris); }
+
+/* fenêtre « choisir la forme » et panier */
+.pick-head { display: flex; gap: 14px; align-items: center; margin-bottom: 10px; }
+.pick-head h2 { margin: 0; }
+.pick-latin { margin: 2px 0 0; font-style: italic; color: var(--gris); }
+.pick-art { width: 104px; height: 120px; flex: 0 0 auto; border-radius: 14px; background: radial-gradient(circle at 50% 60%, #F1F5EE, #E4ECE5); display: grid; place-items: center; overflow: hidden; }
+.pick-art img, .pick-art svg { height: 112px; width: auto; }
+.form-opt { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; margin: 8px 0; border: 1px solid var(--ligne); border-radius: 14px; background: #fff; }
+.form-opt.off { opacity: .55; border-style: dashed; grid-template-columns: 1fr; }
+.form-opt b { display: block; font-size: 16px; }
+.form-opt span { display: block; font-size: 13.5px; color: var(--gris); line-height: 1.3; }
+.form-opt .fo-price { color: var(--sapin); font-weight: 700; font-size: 16px; }
 .basket-list { list-style: none; padding: 0; margin: 12px 0; display: grid; gap: 8px; }
-.basket-list li { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 10px 12px; border: 2px solid var(--line); border-radius: 14px; background: #fff; }
-.basket-list li span { display: block; font-size: 13px; color: var(--ink-soft); }
+.basket-list li { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 10px 12px; border: 1px solid var(--ligne); border-radius: 14px; background: #fff; }
+.basket-list li span { display: block; font-size: 13px; color: var(--gris); }
 .qty { display: flex; align-items: center; gap: 8px; }
-.qty button { width: 30px; height: 30px; border: 2px solid var(--line); border-radius: 50%; background: var(--sun); font-weight: 700; cursor: pointer; }
+.qty button { width: 30px; height: 30px; border: 1px solid #D3D6CF; border-radius: 50%; background: var(--menthe-l); color: var(--sapin); font-weight: 700; cursor: pointer; }
 .basket-total { font-size: 20px; text-align: right; margin: 6px 0 0; }
 .link-list { padding-left: 20px; }
 .link-list li { margin: 6px 0; }
 .jiggle { animation: jig .5s; }
-@keyframes jig { 25% { transform: rotate(-10deg) scale(1.1); } 75% { transform: rotate(8deg) scale(1.1); } }
-@media (max-width: 640px) {
-  .walk-ctrl { width: 100%; }
-  .walk-ctrl select { flex: 1; min-width: 0; }
-  .form-opt { grid-template-columns: auto 1fr; }
-  .form-opt .btn { grid-column: 1 / -1; }
+@keyframes jig { 25% { transform: rotate(-6deg) scale(1.08); } 75% { transform: rotate(5deg) scale(1.08); } }
+
+@media (max-width: 760px) {
+  .serre-stage { height: calc(100vh - 150px); min-height: 480px; }
+  .serre-mini { display: none; }
+  .serre-crumb { left: 12px; top: 12px; font-size: 12px; }
+  .serre-steps { display: none; }
+  .serre-walk { bottom: 12px; }
+  .serre-walk .b { padding: 0 14px; }
+  .serre-walk .lbl { min-width: 0; }
+  .serre-walk .lbl span { display: none; }
+  .serre-walk .lbl b { white-space: nowrap; font-size: 13px; }
+  .serre-card { display: none; }
+  .form-opt { grid-template-columns: 1fr; }
 }
 
 /* ---------- Mon bouquet ---------- */
@@ -813,16 +912,18 @@ svg [stroke-width="5"] { stroke-width: 3; }
 <body>
 <div id="deco-defs"></div>
 <header class="topbar">
-  <a class="brand" href="#" aria-label="Le Grand Jardin, retour à la carte">
-    <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="#7CC46A" stroke="#2E3A2A" stroke-width="3"/><path d="M15 33 C15 20 24 13 34 13 C34 25 27 33 15 33 Z" fill="#FFFCF2" stroke="#2E3A2A" stroke-width="3" stroke-linejoin="round"/><path d="M15 33 L27 21" stroke="#2E3A2A" stroke-width="3" stroke-linecap="round"/></svg>
-    <span><b>Le Grand Jardin</b><small>une idée pour Truffaut</small></span>
+  <a class="brand" href="#" aria-label="Le Grand Jardin, plan du magasin">
+    <i aria-hidden="true"><svg viewBox="0 0 24 24" width="19" height="19"><path d="M5 19c0-8 6-13 14-14-1 8-6 14-14 14zm0 0 8-8" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></i>
+    <span><b>Le Grand Jardin</b><small>Jardinerie en ligne</small></span>
   </a>
+  <nav class="mainnav" aria-label="Les espaces">
+    <a href="#" data-r="">Plan du magasin</a><a href="#jardin" data-r="jardin">La grande serre</a><a href="#bouquet" data-r="bouquet">Atelier bouquet</a><a href="#potager" data-r="potager">Potager</a><a href="#noel" data-r="noel">Village de Noël</a><a href="#galerie" data-r="galerie">Galerie</a><a href="#clinique" data-r="clinique">Clinique</a>
+  </nav>
   <span class="spacer"></span>
-  <a class="chip-btn" id="home-btn" href="#" hidden><span aria-hidden="true">🗺️</span><span class="lbl">La carte</span></a>
-  <a class="chip-btn" id="bell-btn" href="#potager" aria-label="Alertes du potager"><span aria-hidden="true">🔔</span><span class="lbl">Potager</span><span class="count" id="bell-count"></span></a>
-  <button class="chip-btn" id="basket-btn" type="button" aria-label="Mon panier"><span aria-hidden="true">🧺</span><span class="lbl">Panier</span><span class="count" id="basket-count"></span></button>
+  <a class="top-btn" id="bell-btn" href="#potager" aria-label="Alertes du potager"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span class="count" id="bell-count"></span></a>
+  <button class="top-btn cart" id="basket-btn" type="button" aria-label="Mon panier"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M3 4h2.5l2.2 10.5h10.6L20.5 7H7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/><circle cx="9.5" cy="19" r="1.5" fill="currentColor"/><circle cx="17" cy="19" r="1.5" fill="currentColor"/></svg><span class="lbl">Panier</span><span class="count" id="basket-count"></span></button>
 </header>
-<div class="ribbon">Maquette de démonstration, non affiliée à Truffaut. Les produits, prix et liens viennent de truffaut.com (relevés le 17/10/2026).</div>
+<div class="ribbon">Maquette de démonstration, non affiliée à Truffaut. Les produits, prix et liens viennent de truffaut.com (relevés en octobre et novembre 2026).</div>
 <main id="view" class="view"></main>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 <script>/* ============================================================
@@ -887,11 +988,11 @@ const SHOP = [
     forms: { plante: { label: 'Pot de 5 L', price: 29.99, url: T + 'rosier-annapurna-pot-5l-830735.html' } } },
   { id: 'rosier-nd', zone: 'roseraie', name: "Rosier grimpant 'New Dawn'", kind: 'climber', color: '#F8D2D8',
     forms: { plante: { label: 'Pot de 5 L', price: 44.99, url: T + 'rosier-grimpant-new-dawn-pot-5-litres-830746.html' } } },
-  { id: 'olivier', zone: 'mediterranee', name: 'Olivier sur tige', kind: 'olive', color: '#8FA86A',
+  { id: 'olivier', zone: 'mediterranee', name: 'Olivier sur tige', kind: 'olive', color: '#8FA86A', img: 'olivier', h: 1.25,
     forms: { plante: { label: 'H 80-100 cm, pot 19 cm', price: 43.99, url: T + 'olea-europaea-olivier-sur-tige-plantes-de-jardin-80-100-cm-de-haut-pot-19-cm.html' } } },
-  { id: 'citron', zone: 'mediterranee', name: "Citronnier 'Eureka' 4 saisons", kind: 'lemon', color: '#FFD94A',
+  { id: 'citron', zone: 'mediterranee', name: "Citronnier 'Eureka' 4 saisons", kind: 'lemon', color: '#FFD94A', img: 'citronnier', h: 1.35,
     forms: { plante: { label: 'Pot de 10 L, 140-160 cm', price: 122.74, url: T + 'citrus-limon-var-eureka-citron-toute-l-annee-4-saisons-couleur-floraison-blanc-taille-pot-de-10-litres-140-160-cm.html' } } },
-  { id: 'lavande', zone: 'mediterranee', name: 'Lavande officinale', kind: 'lavender', color: '#9C7FD6',
+  { id: 'lavande', zone: 'mediterranee', name: 'Lavande officinale', kind: 'lavender', color: '#9C7FD6', img: 'lavande', h: .5,
     forms: { plante: { label: 'Pot de 1 L', price: 5.99, url: T + 'lavande-officinale-ctr-1-litre-26562.html' } } },
   { id: 'mimosa', zone: 'mediterranee', name: 'Mimosa chenille', kind: 'mimosa', color: '#FFE04D',
     forms: { plante: { label: '80-90 cm, pot 19 cm', price: 104.95, url: T + 'mimosa-chenille-acacia-longifolia-plante-fleurie-80-90-cm-19-cm-plante-d-exterieur.html' } } },
@@ -903,6 +1004,23 @@ const SHOP = [
     forms: { plante: { label: 'Pot de 5 L', price: 39.99, url: T + 'fargesia-scabrida-asian-wonder-c5l-814658.html' } } },
   { id: 'cyclamen', zone: 'ombre', name: "Cyclamen Indiaka® en jardinière", kind: 'cyclamen', color: '#E14C8B',
     forms: { plante: { label: 'Jardinière 40 cm', price: 24.99, url: T + 'cyclamen-indiaka-jardiniere-l40cm-804087.html' } } },
+  // Serre chaude : plantes d'intérieur (prix relevés sur truffaut.com le 03/11/2026)
+  { id: 'monstera', zone: 'interieur', name: 'Monstera avec tuteur mousse', kind: 'img', img: 'monstera', h: .8, color: '#3E8E5A', latin: 'Monstera deliciosa',
+    forms: { plante: { label: 'Avec tuteur mousse', price: 19.99, url: T + 'plantes/plantes-d-interieur.html' } } },
+  { id: 'ficus-lyrata', zone: 'interieur', name: 'Figuier lyre', kind: 'img', img: 'ficus-lyrata', h: .85, color: '#4E8A3E', latin: 'Ficus lyrata',
+    forms: { plante: { label: 'H 60 cm, pot Ø17 cm', price: 44.90, url: T + 'plante-d-interieur-ficus-lyrata-60cm-plante-d-interieur-60cm.html' } } },
+  { id: 'sansevieria', zone: 'interieur', name: 'Langue de belle-mère', kind: 'img', img: 'sansevieria', h: .55, color: '#5E8C3E', latin: 'Sansevieria futura',
+    forms: { plante: { label: 'Pot Ø12 cm', price: 10.99, url: T + 'sansevieria-futura-pot-d12-cm-691900.html' } } },
+  { id: 'pothos', zone: 'interieur', name: 'Pothos', kind: 'img', img: 'pothos', h: .55, hang: true, color: '#5DB565', latin: 'Epipremnum aureum',
+    forms: { plante: { label: 'Pot Ø13 cm', price: 6.49, url: T + 'pothos-plante-13cm-pot-333965.html' } } },
+  { id: 'orchidee', zone: 'interieur', name: 'Orchidée papillon', kind: 'img', img: 'orchidee', h: .52, color: '#F2B6D2', latin: 'Phalaenopsis 1 tige',
+    forms: { plante: { label: 'Pot Ø12 cm', price: 7.99, url: T + 'phalaenopsis-rose-1-tige-pot-588834.html' } } },
+  { id: 'anthurium', zone: 'interieur', name: 'Anthurium', kind: 'img', img: 'anthurium', h: .5, color: '#D9283A', latin: 'Anthurium andreanum',
+    forms: { plante: { label: 'Pot Ø12 cm, coloris variables', price: 14.99, url: T + 'anthurium-plante-12cm-pot-coloris-variables-196997.html' } } },
+  { id: 'cactus', zone: 'interieur', name: 'Cierge du Pérou', kind: 'img', img: 'cactus', h: .5, color: '#4E8A3E', latin: 'Cereus peruvianus',
+    forms: { plante: { label: 'Pot Ø8,5 cm', price: 7.49, url: T + 'cereus-peruvianus-monstr-cactus-de-roche-en-pot-de-8-5cm.html' } } },
+  { id: 'bonsai', zone: 'interieur', name: 'Bonsaï Ficus', kind: 'img', img: 'bonsai', h: .45, color: '#5DA14E', latin: 'Ficus microcarpa',
+    forms: { plante: { label: 'H 30 cm, pot Ø17 cm', price: 18.99, url: T + 'catalogsearch/result/?q=bonsai+ficus+microcarpa' } } },
   { id: 'pensee', zone: 'massif', name: 'Pensées', kind: 'pansy', color: '#7A5BD0',
     forms: { plante: { label: 'Barquette de 10 plants', price: 8.49, url: T + 'pensee-barquette-10-plants-coloris-variables-25130.html' } } },
   { id: 'dahlia', zone: 'massif', name: "Dahlia décoratif 'Byzance'", kind: 'dahlia', color: '#E8563F',
@@ -936,6 +1054,7 @@ const ZONES = [
   { id: 'roseraie', name: 'La roseraie' },
   { id: 'mediterranee', name: 'Le coin méditerranéen' },
   { id: 'ombre', name: 'Le sous-bois' },
+  { id: 'interieur', name: 'La serre chaude' },
   { id: 'massif', name: 'Les massifs à bulbes' },
   { id: 'potager', name: 'Le potager' },
 ];
@@ -1290,7 +1409,7 @@ function render() {
   view.className = 'view view-' + (path || 'hub');
   current = mod;
   document.title = (mod.title ? mod.title + ' — ' : '') + 'Le Grand Jardin';
-  $('#home-btn').hidden = !path;
+  $$('.mainnav a').forEach((a) => { const on = a.dataset.r === (ROUTES[path] ? path : ''); a.classList.toggle('on', on); if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   mod.mount(view);
   window.scrollTo(0, 0);
   const h = view.querySelector('h1');
@@ -2451,317 +2570,194 @@ const Fleurs = (() => {
 })();
 
 /* ============================================================
-   PAGE D'ACCUEIL — carte illustrée détaillée et colorée
+   PAGE D'ACCUEIL — plan du magasin en vue isométrique
+   Survoler un espace l'entoure et ouvre sa fiche ; cliquer y entre.
    ============================================================ */
 const HubMap = (() => {
-  const K = '#22303A'; // encre de la carte
-  const sw = (w = 1.2) => `stroke="${K}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
-  const shadow = (x, y, rx, ry) => `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="#1E3B2A" opacity=".22"/>`;
+  const VW = 1048, VH = 836;
+  const OX = 445, OY = 262, U = 13.2;
+  const COS = Math.cos(Math.PI / 6), SIN = .5;
+  const P = (x, y, z = 0) => [OX + (x - y) * COS * U, OY + (x + y) * SIN * U - z * U];
+  const pts = (a) => a.map((p) => P(...p).map((v) => v.toFixed(1)).join(',')).join(' ');
+  const sh = (c, k) => Deco.shade(c, k);
+  const poly = (a, fill, extra = '') => `<polygon points="${pts(a)}" fill="${fill}" ${extra}/>`;
+  const G = .62; // hauteur du sol (socle)
 
-  /* ---- motifs ---- */
-  const defs = `<defs>
-    <linearGradient id="hSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3FB6C4"/><stop offset="1" stop-color="#1F8FA8"/></linearGradient>
-    <radialGradient id="hIsle" cx=".5" cy=".45" r=".6"><stop offset="0" stop-color="#9ED36A"/><stop offset=".7" stop-color="#72B84E"/><stop offset="1" stop-color="#4E9A3E"/></radialGradient>
-    <linearGradient id="hPond" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6FD0D8"/><stop offset="1" stop-color="#2E9DB5"/></linearGradient>
-    <linearGradient id="hGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DDF4F6" stop-opacity=".95"/><stop offset=".5" stop-color="#A7DCE3" stop-opacity=".8"/><stop offset="1" stop-color="#7CC3CF" stop-opacity=".85"/></linearGradient>
-    <linearGradient id="hWood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B9773E"/><stop offset="1" stop-color="#8A5428"/></linearGradient>
-    <linearGradient id="hRoofR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E5583E"/><stop offset="1" stop-color="#B83A2A"/></linearGradient>
-    <linearGradient id="hSnow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#DCE9F2"/></linearGradient>
-    <linearGradient id="hPath" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F1DDB0"/><stop offset="1" stop-color="#DDBF86"/></linearGradient>
-    <pattern id="hCobble" width="14" height="10" patternUnits="userSpaceOnUse"><rect width="14" height="10" fill="url(#hPath)"/><path d="M0 5 h14 M7 0 v5 M0 5 v5 M14 5 v5" stroke="#B9965C" stroke-width=".8"/></pattern>
-    <pattern id="hWaves" width="60" height="22" patternUnits="userSpaceOnUse"><path d="M4 14 q8 -7 16 0 t16 0" fill="none" stroke="#fff" stroke-width="1.6" opacity=".45"/></pattern>
-    <pattern id="hGrass" width="18" height="16" patternUnits="userSpaceOnUse"><path d="M3 12 l2 -5 l2 5 M11 6 l1.5 -4 l1.5 4" stroke="#4E9A3E" stroke-width="1" fill="none" opacity=".55"/></pattern>
-    <filter id="hSoft"><feGaussianBlur stdDeviation="1.2"/></filter>
-  </defs>`;
+  /* Les 7 espaces : route, numéro, couleur, nom, sous-titre, texte de la fiche, mots-clés, emprise au sol, point d'ancrage */
+  const ZONES7 = [
+    { r: 'jardin', n: 1, c: '#0F4D36', name: 'La grande serre', sub: 'Plantes en pot et bulbes', cta: 'Entrer dans la serre',
+      txt: () => `Pépinière, ombrière et serre chaude : ${SHOP.length} plantes à cueillir en pot ou en bulbe, avec leurs vrais prix.`, tags: ['Roseraie', 'Méditerranée', 'Plantes d’intérieur', 'Bulbes'],
+      foot: [[17, -.6], [42.2, -.6], [42.2, 11.6], [17, 11.6]], at: [25.5, 5.5, 6.6] },
+    { r: 'potager', n: 2, c: '#C4513B', name: 'Le potager', sub: 'Il pousse avec ta météo', cta: 'Voir mon potager',
+      txt: () => 'Recrée ton potager : il pousse avec la vraie météo de ta ville, et Gaston te prévient quand il a soif.', tags: ['Météo', 'Arrosage', 'Récolte'],
+      foot: [[-.4, -.4], [13.4, -.4], [13.4, 12.6], [-.4, 12.6]], at: [6.5, 4.5, .9] },
+    { r: 'bouquet', n: 3, c: '#D2527F', name: 'L’atelier bouquet', sub: 'Compose ton bouquet', cta: 'Composer un bouquet',
+      txt: () => `${typeof STEMS !== 'undefined' ? STEMS.length : 82} fleurs et feuillages à poser sur la table du fleuriste, et 12 plantes en pot à offrir avec.`, tags: ['Roses', 'Feuillages', 'Exotiques'],
+      foot: [[.4, 13.4], [8.6, 13.4], [8.6, 21.2], [.4, 21.2]], at: [4.5, 16.5, 3] },
+    { r: 'noel', n: 4, c: '#2F4A8A', name: 'Le village de Noël', sub: '27 pièces Lemax', cta: 'Visiter le village',
+      txt: () => 'Une balade en cinq scènes enneigées : chaque point lumineux ouvre une pièce du village vendue chez Truffaut.', tags: ['5 scènes', 'Lemax'],
+      foot: [[29.6, 24.6], [42.4, 24.6], [42.4, 32.4], [29.6, 32.4]], at: [36, 28.5, 2.6] },
+    { r: 'galerie', n: 5, c: '#C9962E', name: 'La galerie', sub: 'Ton jardin en photo', cta: 'Voir la galerie',
+      txt: () => 'Publie une photo de ton jardin ou de ton potager sur le mur des jardiniers, et reçois un bon de réduction.', tags: ['Photos', 'Bon offert'],
+      foot: [[18.6, 13.6], [27.4, 13.6], [27.4, 19.4], [18.6, 19.4]], at: [23, 16.5, 3] },
+    { r: 'clinique', n: 6, c: '#1F7F8C', name: 'La clinique des plantes', sub: 'Une tache ? Trouve l’intrus', cta: 'Soigner ma plante',
+      txt: () => '14 ravageurs et maladies en images : trouve le coupable, puis le remède doux, le remède fort et les plantes résistantes.', tags: ['Ravageurs', 'Remèdes'],
+      foot: [[28.6, 13.6], [34.4, 13.6], [34.4, 18.4], [28.6, 18.4]], at: [31.5, 16, 3.4] },
+    { r: 'coulisses', n: 7, c: '#6B7670', name: 'Les coulisses', sub: 'Ce qui fait tourner le magasin', cta: 'Voir les coulisses',
+      txt: () => 'Les automatisations derrière le site : météo, alertes, catalogue synchronisé, bons envoyés automatiquement.', tags: ['n8n', 'Automatisations'],
+      foot: [[35.6, 13.6], [41.4, 13.6], [41.4, 19.4], [35.6, 19.4]], at: [38.5, 16.5, 3] },
+  ];
 
-  /* ---- éléments ---- */
-  const tree = (x, y, s = 1, c = '#3E8F48', fruit = null) => `<g transform="translate(${x} ${y}) scale(${s})">${shadow(4, 4, 30, 9)}
-    <path d="M-4 0 Q-5 -18 -2 -30 L3 -30 Q5 -18 4 0Z" fill="#7A4A26" ${sw(1.2)}/>
-    <path d="${blob(0, -48, 30, 26, 10, .14, Math.round(x))}" fill="${c}" ${sw(1.4)}/><path d="${blob(8, -42, 20, 16, 8, .16, Math.round(y))}" fill="${Deco.shade(c, -0.2)}" opacity=".55"/>
-    <path d="${blob(-9, -56, 12, 9, 7, .2, 3)}" fill="${Deco.shade(c, 0.25)}" opacity=".8"/>
-    ${[[-14, -52], [-4, -64], [12, -54], [2, -40], [-18, -40]].map(([a, b]) => `<path d="M${a - 4} ${b} q4 -4 8 0" fill="none" stroke="${K}" stroke-width=".7" opacity=".5"/>`).join('')}
-    ${fruit ? [[-12, -46], [10, -58], [14, -40], [-4, -36], [-2, -60]].map(([a, b]) => `<circle cx="${a}" cy="${b}" r="3.2" fill="${fruit}" ${sw(.7)}/><circle cx="${a - 1}" cy="${b - 1}" r=".9" fill="#fff" opacity=".7"/>`).join('') : ''}</g>`;
-  const cypress = (x, y, s = 1) => `<g transform="translate(${x} ${y}) scale(${s})">${shadow(3, 3, 12, 4)}<path d="M0 -70 C14 -50 14 -14 0 0 C-14 -14 -14 -50 0 -70Z" fill="#2E6B3A" ${sw(1.2)}/><path d="M0 -70 C8 -50 8 -14 0 0Z" fill="#22552E" opacity=".6"/></g>`;
-  const bush = (x, y, s = 1, c = '#4FA04A', fl = null) => `<g transform="translate(${x} ${y}) scale(${s})"><path d="${blob(0, -10, 18, 12, 8, .2, Math.round(x + y))}" fill="${c}" ${sw(1.1)}/><path d="${blob(5, -7, 11, 7, 7, .2, 2)}" fill="${Deco.shade(c, -0.22)}" opacity=".5"/>${fl ? [[-8, -14], [4, -18], [10, -9], [-2, -8]].map(([a, b]) => `<circle cx="${a}" cy="${b}" r="2.4" fill="${fl}" ${sw(.5)}/>`).join('') : ''}</g>`;
-  const fence = (x1, y1, x2, y2, n) => { let g = `<path d="M${x1} ${y1 - 8} L${x2} ${y2 - 8} M${x1} ${y1 - 3} L${x2} ${y2 - 3}" stroke="#F4EBD9" stroke-width="2.6"/><path d="M${x1} ${y1 - 8} L${x2} ${y2 - 8} M${x1} ${y1 - 3} L${x2} ${y2 - 3}" stroke="${K}" stroke-width=".5" opacity=".6"/>`;
-    for (let i = 0; i <= n; i++) { const t = i / n, x = x1 + (x2 - x1) * t, y = y1 + (y2 - y1) * t; g += `<path d="M${x - 1.6} ${y} v-12 l1.6 -2.4 l1.6 2.4 v12z" fill="#FBF5E8" ${sw(.6)}/>`; } return g; };
-  const tulipRow = (x, y, len, c, ang = 0) => `<g transform="translate(${x} ${y}) rotate(${ang})"><rect x="0" y="-5" width="${len}" height="10" rx="5" fill="#5DA548"/>${Array.from({ length: Math.floor(len / 9) }, (_, i) => `<path d="M${5 + i * 9} -1 q-3 -5 0 -7 q3 2 0 7 q3 -5 6 -1 q-3 4 -6 1z" fill="${c}" stroke="${Deco.shade(c, -0.35)}" stroke-width=".5"/>`).join('')}</g>`;
-  const bannerSign = (x, y, label, c) => { const w = label.length * 11 + 34; return `<g class="hsign" transform="translate(${x} ${y})">
-    <path d="M${-w / 2 - 14} 2 l14 -12 v24z M${w / 2 + 14} 2 l-14 -12 v24z" fill="${Deco.shade(c, -0.3)}" ${sw(1.1)}/>
-    <rect x="${-w / 2}" y="-14" width="${w}" height="30" rx="3" fill="${c}" ${sw(1.3)}/><path d="M${-w / 2 + 4} -10 h${w - 8}" stroke="#fff" stroke-width="1" opacity=".5"/>
-    <text x="0" y="7" text-anchor="middle">${label}</text></g>`; };
+  /* ---------- briques de dessin ---------- */
+  function box(x, y, w, d, h, c, { z = 0, top = null } = {}) {
+    return poly([[x, y + d, z], [x + w, y + d, z], [x + w, y + d, z + h], [x, y + d, z + h]], sh(c, -.18))
+      + poly([[x + w, y, z], [x + w, y + d, z], [x + w, y + d, z + h], [x + w, y, z + h]], sh(c, -.32))
+      + poly([[x, y, z + h], [x + w, y, z + h], [x + w, y + d, z + h], [x, y + d, z + h]], top || c);
+  }
+  const shadow = (x, y, w, d, k = 1.2) => poly([[x + k, y + k, G], [x + w + k * 1.6, y + k, G], [x + w + k * 1.6, y + d + k * 1.6, G], [x + k, y + d + k * 1.6, G]], '#3B4A3F', 'opacity=".12"');
+  function tree(x, y, r = 1, c = '#5E9A5A') {
+    const [a, b] = P(x, y, G);
+    return `<ellipse cx="${a}" cy="${b}" rx="${r * U * 1.1}" ry="${r * U * .55}" fill="#000" opacity=".1"/><rect x="${a - 1.5}" y="${b - r * U * 1.3}" width="3" height="${r * U * 1.3}" fill="#7A5B3E"/><circle cx="${a}" cy="${b - r * U * 1.7}" r="${r * U * .95}" fill="${c}"/><circle cx="${a - r * U * .3}" cy="${b - r * U * 2}" r="${r * U * .5}" fill="${sh(c, .22)}"/>`;
+  }
+  const dot = (x, y, z, r, c) => { const [a, b] = P(x, y, z); return `<circle cx="${a.toFixed(1)}" cy="${b.toFixed(1)}" r="${r}" fill="${c}"/>`; };
 
-  /* ---- les six lieux ---- */
-  const potager = () => {
-    // planche de culture allongée, vue de trois-quarts
-    const bed = (x, y, w, crop, seed) => {
-      let g = `${shadow(x + w / 2, y + 26, w / 2 + 8, 6)}<path d="M${x + 8} ${y} H${x + w + 8} L${x + w} ${y + 24} H${x} Z" fill="#6B4022" ${sw(1.1)}/>
-        <path d="M${x} ${y + 24} H${x + w} V${y + 30} H${x} Z" fill="#8A5428" ${sw(1)}/><path d="M${x + w} ${y + 24} L${x + w + 8} ${y} V${y + 6} L${x + w} ${y + 30} Z" fill="#6B3A1E" ${sw(1)}/>
-        ${[0.33, 0.66].map((t) => `<path d="M${x + 8 - 8 * t} ${y + 24 * t} H${x + w + 8 - 8 * t}" stroke="#4E2E16" stroke-width=".8" opacity=".6"/>`).join('')}`;
-      const n = Math.floor(w / 22);
-      for (let i = 0; i < n; i++) {
-        const cx = x + 16 + i * (w - 20) / n, cy = y + 14;
-        if (crop === 'tomato' && i % 2 === 0) g += `<path d="M${cx - 8} ${cy + 6} L${cx} ${cy - 34} L${cx + 8} ${cy + 6} M${cx} ${cy - 34} l-2 -4 M${cx} ${cy - 34} l2 -4" stroke="#C9A06A" stroke-width="1.4" fill="none"/>
-          ${[[-6, -8], [5, -14], [-3, -22], [4, -26], [0, -2]].map(([dx, dy], k) => `<path d="M${cx + dx} ${cy + dy} q${dx > 0 ? 7 : -7} -3 ${dx > 0 ? 10 : -10} 2 q-4 4 -10 -2z" fill="${k % 2 ? '#3E8F48' : '#4FA04A'}" ${sw(.4)}/>`).join('')}
-          ${[[-4, -12], [5, -5], [-1, -20], [6, -18]].map(([dx, dy]) => `<circle cx="${cx + dx}" cy="${cy + dy}" r="3" fill="#E33B26" ${sw(.4)}/><circle cx="${cx + dx - 1}" cy="${cy + dy - 1}" r=".8" fill="#fff" opacity=".8"/>`).join('')}`;
-        if (crop === 'tomato' && i % 2 === 1) g += `<path d="${blob(cx, cy, 7, 5, 7, .3, i)}" fill="#7DC27A" ${sw(.5)}/>${[[-3, -1], [3, 1]].map(([dx, dy]) => `<circle cx="${cx + dx}" cy="${cy + dy}" r="1.6" fill="#E8432E"/>`).join('')}`;
-        if (crop === 'salad') { const red = (i + seed) % 3 === 0; g += Array.from({ length: 7 }, (_, k) => `<path d="M${cx} ${cy + 3} q${Math.cos(k * .9) * 10} ${-6 + Math.sin(k * .9) * 4} ${Math.cos(k * .9) * 8} ${-10 + Math.sin(k * .9) * 3} q-4 2 ${(-Math.cos(k * .9) * 8).toFixed(2)} ${(10 - Math.sin(k * .9) * 3).toFixed(2)}z" fill="${red ? (k % 2 ? '#B8344A' : '#D45468') : (k % 2 ? '#8CCB5E' : '#B2DD7A')}" ${sw(.35)}/>`).join('') + `<circle cx="${cx}" cy="${cy - 3}" r="3.4" fill="${red ? '#E07A8A' : '#D4EE9E'}" ${sw(.35)}/>`; }
-        if (crop === 'carrot') g += `<path d="M${cx} ${cy + 4} q-6 -10 -9 -18 M${cx} ${cy + 4} q0 -12 -1 -20 M${cx} ${cy + 4} q6 -10 9 -17" stroke="#4E9A3E" stroke-width="1" fill="none"/>${[-8, -1, 8].map((dx) => Array.from({ length: 4 }, (_, k) => `<circle cx="${cx + dx * (0.4 + k * .18)}" cy="${cy - 2 - k * 4}" r="1.7" fill="#5DA548"/>`).join('')).join('')}<path d="M${cx - 2.4} ${cy + 3} q2.4 -2 4.8 0 l-2.4 6z" fill="#F28C28" ${sw(.4)}/>`;
-        if (crop === 'pumpkin') g += `<path d="M${cx - 10} ${cy + 4} q8 -10 20 -4 q6 4 14 -2" stroke="#4E9A3E" stroke-width="1.2" fill="none"/>${i % 2 ? `<path d="M${cx} ${cy} c-8 -10 6 -14 8 -6 c6 -8 14 0 6 6z" fill="#4FA04A" ${sw(.5)}/>` : `<ellipse cx="${cx}" cy="${cy + 1}" rx="9" ry="6.5" fill="#F29A2E" ${sw(.6)}/>${[-5, 0, 5].map((dx) => `<path d="M${cx + dx} ${cy - 5} q${dx * .3} 6 0 12" stroke="#C26A1A" stroke-width=".7" fill="none"/>`).join('')}<path d="M${cx} ${cy - 5} l1 -4" stroke="#5E3B1E" stroke-width="1.6"/>`}`;
-      }
-      return `<g>${g}</g>`;
-    };
-    const sunflower = (x, y, h) => `<g transform="translate(${x} ${y})"><path d="M0 0 Q2 ${-h / 2} 0 ${-h}" stroke="#4E8A3E" stroke-width="2"/>${[-.35, -.65].map((t, k) => `<path d="M0 ${h * t} q${k ? 10 : -10} -4 ${k ? 12 : -12} 2 q-6 4 -12 -2z" fill="#4FA04A" ${sw(.4)}/>`).join('')}
-      ${Array.from({ length: 12 }, (_, k) => `<ellipse cx="0" cy="${-h - 7}" rx="2.2" ry="5" fill="#F6C43A" ${sw(.35)} transform="rotate(${k * 30} 0 ${-h})"/>`).join('')}<circle cy="${-h}" r="4.6" fill="#6B3A1E" ${sw(.5)}/><circle cy="${-h}" r="4.6" fill="url(#dots)"/></g>`;
-    const beans = (x, y) => `<g transform="translate(${x} ${y})">${shadow(0, 2, 18, 4)}<path d="M-14 0 L0 -54 L14 0 M-4 0 L0 -54 L4 0" stroke="#C9A06A" stroke-width="1.6" fill="none"/>${Array.from({ length: 14 }, (_, k) => { const t = k / 14, side = k % 2 ? 1 : -1; return `<path d="M${side * 14 * (1 - t)} ${-54 * t} q${side * 6} -3 ${side * 7} 3 q-4 3 ${-side * 7} -3z" fill="${k % 3 ? '#4FA04A' : '#6DB35A'}" ${sw(.35)}/>`; }).join('')}
-      ${[[-6, -16], [5, -26], [-3, -36]].map(([a, b2]) => `<path d="M${a} ${b2} q1 6 0 9" stroke="#2F7A3A" stroke-width="1.6"/>`).join('')}</g>`;
-    return `<g class="bob">
-      
-      ${fence(178, 192, 562, 192, 30)}
-      ${[200, 232, 268, 300, 332, 370, 404].map((x, i) => sunflower(x, 196, 34 + (i % 3) * 8)).join('')}
-      ${[0, 1, 2, 3].map((k) => `<path d="M${196 - k * 4} ${248 + k * 50} H${548 + k * 4}" stroke="#E9D59A" stroke-width="10" opacity=".9"/><path d="M${196 - k * 4} ${248 + k * 50} H${548 + k * 4}" stroke="#D9BE84" stroke-width="10" stroke-dasharray="3 6" opacity=".6"/>`).join('')}
-      ${bed(206, 214, 300, 'tomato', 1)}${bed(200, 264, 312, 'salad', 2)}${bed(194, 314, 324, 'carrot', 3)}${bed(188, 364, 336, 'pumpkin', 4)}
-      ${beans(540, 250)}${beans(548, 300)}
-      ${shadow(560, 420, 16, 5)}<g transform="translate(590 330)"><path d="M0 0 V-58 M-20 -42 H20" stroke="#7A4A26" stroke-width="2.6"/><path d="M-8 -42 L-10 -12 L10 -12 L8 -42Z" fill="#3E6FB3" ${sw(.8)}/><path d="M-8 -42 L8 -42 L4 -30 L-4 -30Z" fill="#E8432E" ${sw(.6)}/>
-        <path d="M-20 -42 q-6 4 -4 10 M20 -42 q6 4 4 10" stroke="#E2C27A" stroke-width="2"/><circle cy="-52" r="8" fill="#F0DDB0" ${sw(.8)}/><path d="M-12 -56 h24 l-5 -8 h-14z" fill="#C99A3E" ${sw(.8)}/><path d="M-4 -53 l2 2 M2 -53 l2 2 M-3 -48 q3 2 6 0" stroke="${K}" stroke-width=".7"/>
-        <g transform="translate(16 -46)"><path d="M0 0 c7 -7 16 -3 13 4 l-5 1 l-3 4z" fill="#1F2A30" ${sw(.5)}/><circle cx="8" cy="0" r="1" fill="#fff"/></g></g>
-      <g transform="translate(150 290)">${shadow(28, 4, 40, 7)}<rect x="0" y="-56" width="56" height="56" fill="#6E8B6A" ${sw(1.1)}/>${Array.from({ length: 7 }, (_, k) => `<path d="M${k * 8} -56 v56" stroke="${K}" stroke-width=".5" opacity=".5"/>`).join('')}
-        <path d="M-6 -54 L28 -78 L62 -54Z" fill="#8A5428" ${sw(1.1)}/><rect x="18" y="-36" width="20" height="36" fill="#4E6A4A" ${sw(.7)}/><circle cx="34" cy="-18" r="1.4" fill="#E8B23A"/><rect x="4" y="-46" width="12" height="10" fill="#BFE6EE" ${sw(.5)}/>
-        <path d="M58 -40 l14 30 M62 -40 l4 30" stroke="#7A4A26" stroke-width="1.6"/><path d="M68 -14 h8 l-2 6 h-6z" fill="#9AA6AE" ${sw(.5)}/></g>
-      <g transform="translate(560 452)">${shadow(10, 8, 24, 5)}<path d="M-14 -6 h36 l-6 14 h-24z" fill="#9AA6AE" ${sw(.9)}/><circle cx="-10" cy="10" r="5" fill="#2A2A2A"/><path d="M22 -6 l18 -8" stroke="#7A4A26" stroke-width="2.4"/>${[[-4, -10, '#F29A2E'], [6, -12, '#7DC27A'], [14, -9, '#E8432E']].map(([a2, b2, cc]) => `<circle cx="${a2}" cy="${b2}" r="5" fill="${cc}" ${sw(.5)}/>`).join('')}</g>
-      <g transform="translate(176 420) rotate(-8)"><path d="M0 0 h26 l-4 14 h-18z" fill="#3E9FCF" ${sw(.9)}/><path d="M26 4 l14 -10 l2 3 l-14 12" fill="#3E9FCF" ${sw(.9)}/><path d="M4 0 q9 -14 18 0" fill="none" ${sw(.9)}/></g>
-      <g transform="translate(520 470)"><rect x="-22" y="-26" width="44" height="26" fill="#8A5428" ${sw(.9)}/>${[0, 1, 2].map((k) => `<path d="M-22 ${-26 + k * 9} h44" stroke="#6B3A1E" stroke-width="1"/>`).join('')}<path d="${blob(0, -28, 18, 6, 8, .4, 4)}" fill="#6B4022" ${sw(.5)}/></g></g>`;
+  /* ---------- décor (non cliquable) ---------- */
+  function ground() {
+    let o = box(-4, -4, 48, 38, G, '#D9C9A6', { top: '#BFD69C' });
+    for (let i = 0; i < 260; i++) o += dot(-2 + ((i * 37) % 440) / 10, -2 + ((i * 53) % 340) / 10, G, 1, '#93B86C');
+    for (let i = 0; i < 44; i += 1.2) o += box(-3.4 + i, -3.4, 1.1, .8, .9, '#5E9A4E', { z: G, top: '#78B45F' });
+    for (let i = 0; i < 34; i += 1.2) o += box(42.6, -3.4 + i, .8, 1.1, .9, '#5E9A4E', { z: G, top: '#78B45F' });
+    // parking et allées
+    o += poly([[-2, 22, G], [14, 22, G], [14, 32, G], [-2, 32, G]], '#C4C2BA');
+    for (let i = 0; i < 7; i++) o += poly([[-1 + i * 2.1, 23, G], [-.85 + i * 2.1, 23, G], [-.85 + i * 2.1, 26.5, G], [-1 + i * 2.1, 26.5, G]], '#F2F2EE');
+    [[0, 23.6, '#C04A3A'], [4.2, 23.6, '#3D5A8C'], [8.4, 23.6, '#E2E2DE'], [2.1, 28.6, '#2F3A36'], [10.5, 28.6, '#7FA7C9']].forEach(([x, y, c]) => { o += box(x, y, 1.5, 2.6, .7, c, { z: G }) + box(x + .2, y + .7, 1.1, 1.3, .45, sh(c, .2), { z: G + .7 }); });
+    o += poly([[14, 22, G], [42, 22, G], [42, 24.5, G], [14, 24.5, G]], '#EFE3C8') + poly([[14, -2, G], [16.5, -2, G], [16.5, 32, G], [14, 32, G]], '#EFE3C8');
+    // bassin
+    let d = ''; for (let k = 0; k < 14; k++) { const a = k / 14 * Math.PI * 2; const [x, y] = P(26 + Math.cos(a) * 2.6, 20.2 + Math.sin(a) * 1.4, G); d += (k ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1); }
+    o += `<path d="${d}Z" fill="#8EC6D6" stroke="#6FAFC2" stroke-width="2"/>`;
+    // massifs fleuris le long de l'allée
+    [[17, 21.2, 9], [30, 21.2, 10]].forEach(([x, y, w]) => { o += box(x, y, w, .7, .25, '#8A5A36', { z: G, top: '#6B4A30' }); for (let k = 0; k < w * 3; k++) o += dot(x + .2 + k * .33, y + .35, G + .32, 2.6, ['#E85B7A', '#F2C44E', '#9C7FD6', '#F6F1F4', '#E86B4F'][k % 5]); });
+    return o;
+  }
+  function people() {
+    return [[15.2, 9], [15.4, 17], [20, 22.8], [26, 23.3], [32, 23], [10, 22.4]].map(([x, y], i) => { const [a, b] = P(x, y, G); return `<circle cx="${a}" cy="${b - 12}" r="2.4" fill="#2F3A36"/><rect x="${a - 2}" y="${b - 10}" width="4" height="10" rx="2" fill="${['#2EBB99', '#C4513B', '#2F4A8A', '#E7B84A', '#D2527F', '#1F7F8C'][i]}"/>`; }).join('');
+  }
+  const trees = () => [[-1, 12], [-1, 15], [14.8, 1], [14.8, 6], [14.8, 11], [14.8, 15], [14.8, 19], [17, 20.3], [28, 20.3], [12, 12], [10, 21], [24, 12], [28.5, 12.2]]
+    .map(([x, y], i) => tree(x, y, .8 + (i % 3) * .15, ['#5E9A5A', '#4E8A4C', '#6FA764'][i % 3])).join('');
+
+  /* ---------- les espaces ---------- */
+  const DRAWZ = {
+    jardin() {
+      let o = shadow(17.5, 0, 16, 11) + box(17.5, 0, 16, 11, .5, '#F1F3F0', { z: G });
+      const gx = 17.5, gy = 0, gw = 16, gd = 11, gh = 4.8, z0 = G + .5;
+      o += poly([[gx, gy + gd, z0], [gx + gw, gy + gd, z0], [gx + gw, gy + gd, gh], [gx, gy + gd, gh]], '#CFE6EC', 'opacity=".9"');
+      o += poly([[gx + gw, gy, z0], [gx + gw, gy + gd, z0], [gx + gw, gy + gd, gh], [gx + gw, gy, gh]], '#B7D3DC', 'opacity=".9"');
+      for (let r = 0; r < 4; r++) for (let k = 0; k < 6; k++) { const x = gx + 1 + k * 2.5, y = gy + 1.2 + r * 2.5; o += box(x, y, 2, 1.4, .5, '#C9A06A', { z: z0, top: '#D8B27A' }); for (let q = 0; q < 4; q++) o += dot(x + .4 + (q % 2) * 1.1, y + .35 + Math.floor(q / 2) * .65, z0 + .6, U * .35, ['#4F9A4C', '#E06A8E', '#63A94F', '#F2C44E'][(r + k + q) % 4]); }
+      for (let i = 0; i <= 8; i++) { const x = gx + i * 2; o += poly([[x, gy + gd, z0], [x + .08, gy + gd, z0], [x + .08, gy + gd, gh], [x, gy + gd, gh]], '#FFFFFF'); }
+      for (let i = 0; i <= 5; i++) { const y = gy + i * 2.2; o += poly([[gx + gw, y, z0], [gx + gw, y + .08, z0], [gx + gw, y + .08, gh], [gx + gw, y, gh]], '#FFFFFF'); }
+      for (let i = 0; i < 4; i++) { const x = gx + i * 4; o += poly([[x, gy, gh], [x + 2, gy, gh + 1.6], [x + 2, gy + gd, gh + 1.6], [x, gy + gd, gh]], '#DDEEF2', 'opacity=".75" stroke="#FFFFFF" stroke-width="1.2"') + poly([[x + 2, gy, gh + 1.6], [x + 4, gy, gh], [x + 4, gy + gd, gh], [x + 2, gy + gd, gh + 1.6]], '#C2DDE6', 'opacity=".85" stroke="#FFFFFF" stroke-width="1.2"'); }
+      const [a, b] = P(gx + 4, gy + gd, gh - .1), [c2, d2] = P(gx + 12, gy + gd, gh - .1), ang = Math.atan2(d2 - b, c2 - a) * 180 / Math.PI;
+      o += `<polygon points="${a},${b} ${c2},${d2} ${c2},${d2 + 17} ${a},${b + 17}" fill="#0F4D36"/><text transform="translate(${(a + c2) / 2} ${(b + d2) / 2 + 12.5}) skewY(${ang.toFixed(1)})" text-anchor="middle" font-family="Brygada 1918, serif" font-weight="600" font-size="11.5" fill="#fff">La grande serre</text>`;
+      // ombrière (pépinière extérieure)
+      o += shadow(34.5, 0, 7, 11, .6);
+      for (let r = 0; r < 4; r++) for (let k = 0; k < 2; k++) { const x = 35 + k * 3.2, y = .8 + r * 2.6; for (let q = 0; q < 6; q++) o += dot(x + (q % 3) * .9, y + Math.floor(q / 3) * .9, G + .4, U * .4, ['#3F7D3A', '#F3A6B8', '#5E9A5A', '#C8243C', '#8FA47E', '#9C7FD6'][(q + r + k) % 6]); }
+      [[34.6, .2], [41.4, .2], [34.6, 10.8], [41.4, 10.8]].forEach(([x, y]) => { o += poly([[x, y, G], [x + .15, y, G], [x + .15, y, G + 3], [x, y, G + 3]], '#5E6662'); });
+      return o + poly([[34.5, 0, G + 3], [41.5, 0, G + 3], [41.5, 11, G + 3], [34.5, 11, G + 3]], '#1E3B2C', 'opacity=".55"');
+    },
+    potager() {
+      let o = poly([[0, 0, G], [13, 0, G], [13, 9, G], [0, 9, G]], '#D9C59C');
+      for (let r = 0; r < 4; r++) { o += box(.8, .8 + r * 2.1, 11.4, 1.3, .4, '#8A5A36', { z: G, top: '#6B4A30' }); for (let k = 0; k < 10; k++) o += dot(1.3 + k * 1.1, 1.45 + r * 2.1, G + .5, U * .28, ['#5DA14E', '#E2483A', '#7FBF5A', '#F09A3A'][r]); }
+      return o + box(.5, 10, 3, 2.2, 2, '#B78E5E', { z: G, top: '#8F3D2E' });
+    },
+    bouquet() {
+      let o = shadow(1, 14, 7, 5) + box(1, 14, 7, 5, 2.6, '#F4EDE3', { z: G });
+      for (let i = 0; i < 6; i++) o += poly([[1 + i * 7 / 6, 19, G + 2.6], [1 + (i + 1) * 7 / 6, 19, G + 2.6], [1 + (i + 1) * 7 / 6, 20, G + 2], [1 + i * 7 / 6, 20, G + 2]], i % 2 ? '#FFFFFF' : '#D2527F');
+      for (let k = 0; k < 6; k++) { const [a, b] = P(1.6 + k * 1.1, 20.4, G + .3); o += `<rect x="${a - 5}" y="${b - 9}" width="10" height="9" fill="#AEB8BC"/><circle cx="${a - 2}" cy="${b - 12}" r="4" fill="${['#E85B7A', '#F2C44E', '#F6F1F4', '#C8243C', '#F3A6B8', '#9C7FD6'][k]}"/><circle cx="${a + 3}" cy="${b - 13}" r="3.5" fill="${['#F3A6B8', '#E85B7A', '#F2C44E', '#9C7FD6', '#F6F1F4', '#C8243C'][k]}"/>`; }
+      return o;
+    },
+    noel() {
+      let o = poly([[30, 25, G], [42, 25, G], [42, 32, G], [30, 32, G]], '#F6F8F9');
+      [[31, 26, '#B4483C'], [34.2, 26, '#2F4A8A'], [37.4, 26, '#3E7D5A'], [31, 29.2, '#C9962E'], [37.4, 29.2, '#B4483C']].forEach(([x, y, c]) => {
+        o += box(x, y, 2.4, 2, 1.4, '#E9D6B8', { z: G }) + poly([[x, y, G + 1.4], [x + 2.4, y, G + 1.4], [x + 2.4, y + 1, G + 2.3], [x, y + 1, G + 2.3]], '#FFFFFF') + poly([[x, y + 1, G + 2.3], [x + 2.4, y + 1, G + 2.3], [x + 2.4, y + 2, G + 1.4], [x, y + 2, G + 1.4]], '#F1F4F6');
+        const [a, b] = P(x + 1.2, y + 2, G + .5); o += `<rect x="${a - 3}" y="${b - 9}" width="6" height="8" fill="${c}"/>`;
+      });
+      const [a, b] = P(35.4, 30.2, G);
+      return o + `<polygon points="${a},${b - 46} ${a - 14},${b} ${a + 14},${b}" fill="#2F6B45"/><polygon points="${a},${b - 46} ${a - 9},${b - 22} ${a + 9},${b - 22}" fill="#3E7D5A"/><circle cx="${a}" cy="${b - 48}" r="3.5" fill="#E7B84A"/>`;
+    },
+    galerie() {
+      let o = poly([[19, 14, G], [27, 14, G], [27, 19, G], [19, 19, G]], '#EADBBB');
+      for (let i = 0; i < 4; i++) for (let j = 0; j < 2; j++) o += box(19.2 + i * 2.5, 14.2 + j * 4.4, .3, .3, 2.6, '#9A7650', { z: G });
+      for (let i = 0; i < 9; i++) o += box(19 + i, 14, .2, 5, .2, '#B48C60', { z: G + 2.6 });
+      for (let i = 0; i < 3; i++) { const [a, b] = P(20.4 + i * 2.5, 19, G + 1.8); o += `<rect x="${a - 9}" y="${b - 10}" width="18" height="14" fill="#fff" stroke="#9A7650"/><rect x="${a - 7}" y="${b - 8}" width="14" height="10" fill="${['#8FC5A0', '#F0B9C8', '#A8C9E6'][i]}"/>`; }
+      return o;
+    },
+    clinique() {
+      let o = shadow(29, 14, 5, 4) + box(29, 14, 5, 4, 2.2, '#FFFFFF', { z: G });
+      o += poly([[29, 14, G + 2.2], [34, 14, G + 2.2], [34, 16, G + 3.2], [29, 16, G + 3.2]], '#1F7F8C') + poly([[29, 16, G + 3.2], [34, 16, G + 3.2], [34, 18, G + 2.2], [29, 18, G + 2.2]], '#2A97A6');
+      const [a, b] = P(31.5, 18, G + 1.4);
+      return o + `<rect x="${a - 8}" y="${b - 8}" width="16" height="16" rx="3" fill="#1F7F8C"/><path d="M${a} ${b - 5}v10M${a - 5} ${b}h10" stroke="#fff" stroke-width="2.6"/>`;
+    },
+    coulisses() { return box(36, 14, 5, 5, 2.6, '#C9CCC4', { z: G }) + box(37.2, 15, 1.4, 1.2, .8, '#9AA39E', { z: G + 2.6 }); },
   };
+  function pin(z) {
+    const [a, b] = P(...z.at);
+    return `<g class="pin"><line x1="${a}" y1="${b}" x2="${a}" y2="${b - 26}" stroke="${z.c}" stroke-width="2"/><circle cx="${a}" cy="${b - 38}" r="14" fill="${z.c}" stroke="#fff" stroke-width="3"/><text x="${a}" y="${b - 33}" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="14" fill="#fff">${z.n}</text></g>`;
+  }
 
-  const serre = () => {
-    const x = 1060, y = 330;
-    let ribs = '';
-    for (let i = 0; i <= 12; i++) ribs += `<path d="M${x + i * 26} ${y} V${y - 88}" stroke="#F4F7F7" stroke-width="2.2"/><path d="M${x + i * 26} ${y} V${y - 88}" stroke="${K}" stroke-width=".5"/>`;
-    for (let j = 1; j < 4; j++) ribs += `<path d="M${x} ${y - j * 22} H${x + 312}" stroke="#F4F7F7" stroke-width="1.6"/>`;
-    let dome = '';
-    for (let i = -5; i <= 5; i++) dome += `<path d="M${x + 156} ${y - 190} Q${x + 156 + i * 16} ${y - 150} ${x + 156 + i * 14} ${y - 88}" stroke="#F4F7F7" stroke-width="1.8" fill="none"/>`;
-    const plants = [[x + 30, '#2F8A4A'], [x + 70, '#3FA05A'], [x + 120, '#2E7A44'], [x + 200, '#3FA05A'], [x + 250, '#2F8A4A'], [x + 290, '#45A85C']].map(([px, c], i) => `<path d="M${px} ${y - 4} q-14 -30 -4 -${50 + (i % 3) * 14} M${px} ${y - 4} q12 -26 18 -${40 + (i % 2) * 18} M${px} ${y - 4} q-2 -30 2 -${60 + (i % 2) * 10}" stroke="${c}" stroke-width="5" fill="none" opacity=".75" stroke-linecap="round"/>`).join('')
-      + `<path d="M${x + 156} ${y - 4} C${x + 150} ${y - 80} ${x + 160} ${y - 130} ${x + 156} ${y - 160}" stroke="#7A4A26" stroke-width="4"/>${[0, 40, 80, 120, 160, 200, 240, 280, 320].map((a) => `<path d="M${x + 156} ${y - 160} q${Math.cos(a / 57) * 30} ${-10 + Math.sin(a / 57) * 16} ${Math.cos(a / 57) * 46} ${Math.sin(a / 57) * 24}" stroke="#2F8A4A" stroke-width="5" fill="none" opacity=".8" stroke-linecap="round"/>`).join('')}`;
-    return `<g class="bob">${shadow(x + 156, y + 6, 180, 14)}
-      ${plants}
-      <path d="M${x} ${y} V${y - 88} H${x + 312} V${y}Z" fill="url(#hGlass)" ${sw(1.6)}/>
-      <path d="M${x + 96} ${y - 88} Q${x + 96} ${y - 170} ${x + 156} ${y - 196} Q${x + 216} ${y - 170} ${x + 216} ${y - 88}Z" fill="url(#hGlass)" ${sw(1.6)}/>
-      ${ribs}${dome}
-      <path d="M${x + 20} ${y - 80} l30 30 M${x + 40} ${y - 80} l18 18 M${x + 230} ${y - 80} l30 30 M${x + 118} ${y - 150} l30 30" stroke="#fff" stroke-width="3" opacity=".7"/>
-      ${[0, 1].map((r) => `<path d="M${x + 14} ${y - 16 - r * 26} H${x + 128} M${x + 186} ${y - 16 - r * 26} H${x + 298}" stroke="#8A5428" stroke-width="3"/>` + Array.from({ length: 9 }, (_, k) => `<path d="M${x + 18 + k * 12 + (k > 8 ? 60 : 0)} ${y - 18 - r * 26} l2 -7 h6 l2 7z" fill="#C8693E" opacity=".85"/><circle cx="${x + 23 + k * 12}" cy="${y - 28 - r * 26}" r="3.4" fill="${['#E8432E', '#F6D04A', '#F2A0C0', '#7DC27A'][(k + r) % 4]}" opacity=".85"/>` + `<path d="M${x + 190 + k * 12} ${y - 18 - r * 26} l2 -7 h6 l2 7z" fill="#C8693E" opacity=".85"/><circle cx="${x + 195 + k * 12}" cy="${y - 28 - r * 26}" r="3.4" fill="${['#B279D6', '#FFFFFF', '#F28C28', '#7DC27A'][(k + r) % 4]}" opacity=".85"/>`).join('')).join('')}
-      <path d="M${x - 6} ${y - 88} H${x + 318}" stroke="#2F6B5A" stroke-width="4"/>${Array.from({ length: 24 }, (_, k) => `<circle cx="${x + k * 13}" cy="${y - 93}" r="3" fill="none" stroke="#2F6B5A" stroke-width="1.4"/>`).join('')}
-      ${[x - 6, x + 318].map((px) => `<path d="M${px} ${y - 90} v-10" stroke="#2F6B5A" stroke-width="2"/><circle cx="${px}" cy="${y - 102}" r="3.2" fill="#E8B23A" ${sw(.6)}/>`).join('')}
-      ${[x + 60, x + 252].map((px) => `<path d="M${px} ${y - 86} v14" stroke="${K}" stroke-width=".8"/><path d="M${px - 9} ${y - 72} q9 10 18 0z" fill="#8A5428" ${sw(.6)}/>${[-6, 0, 6].map((dx, k) => `<path d="M${px + dx} ${y - 70} q${dx * .6} 10 ${dx} 16" stroke="#3E8F48" stroke-width="1.4" fill="none"/><circle cx="${px + dx * 1.3}" cy="${y - 54}" r="2.6" fill="${['#F2A0C0', '#E8432E', '#B279D6'][k]}"/>`).join('')}`).join('')}<path d="M${x + 150} ${y - 196} v-14" ${sw(2)}/><circle cx="${x + 156}" cy="${y - 212}" r="5" fill="#E8B23A" ${sw(1)}/>
-      <path d="M${x + 136} ${y} v-46 a20 20 0 0 1 40 0 v46" fill="#2F6B5A" ${sw(1.4)}/><path d="M${x + 156} ${y} v-66" stroke="#F4F7F7" stroke-width="1.6"/>
-      ${[x - 18, x + 330].map((px, i) => `<g transform="translate(${px} ${y + 4})"><path d="M-10 0 h20 l-3 -16 h-14z" fill="#C8693E" ${sw(1)}/>${bush(0, -14, .9, '#3E8F48', i ? '#F2A0C0' : '#F6D04A')}</g>`).join('')}
-      ${[0, 1, 2, 3, 4].map((k) => `<g transform="translate(${x + 30 + k * 64} ${y + 14})"><path d="M-8 0 h16 l-2 -10 h-12z" fill="#C8693E" ${sw(.8)}/><circle cx="-3" cy="-13" r="4" fill="${['#E8432E', '#F6D04A', '#B279D6', '#F2A0C0', '#FFFFFF'][k]}" ${sw(.6)}/><circle cx="4" cy="-14" r="3.6" fill="${['#F2A0C0', '#E8432E', '#FFFFFF', '#F6D04A', '#B279D6'][k]}" ${sw(.6)}/></g>`).join('')}</g>`;
-  };
-
-  const atelier = () => {
-    const x = 230, y = 820;
-    return `<g class="bob">${shadow(x + 110, y + 4, 150, 12)}
-      <rect x="${x}" y="${y - 120}" width="220" height="120" fill="#F7E4D0" ${sw(1.5)}/>
-      ${Array.from({ length: 8 }, (_, r) => `<path d="M${x} ${y - 120 + r * 15} h220" stroke="#E2C6A8" stroke-width="1"/>`).join('')}
-      <path d="M${x - 16} ${y - 118} L${x + 110} ${y - 196} L${x + 236} ${y - 118}Z" fill="url(#hRoofR)" ${sw(1.5)}/>
-      ${Array.from({ length: 5 }, (_, k) => { const yy = y - 128 - k * 14, half = 120 - k * 22; return `<path d="M${x + 110 - half} ${yy} h${half * 2}" stroke="#8E2A1E" stroke-width="1" opacity=".6"/>`; }).join('')}
-      <rect x="${x + 150}" y="${y - 200}" width="22" height="40" fill="#C99A7A" ${sw(1.2)}/><path d="M${x + 160} ${y - 206} q-10 -12 0 -22 q10 -10 0 -20" stroke="#fff" stroke-width="4" fill="none" opacity=".75"/>
-      <path d="M${x + 20} ${y - 70} h180 l14 22 h-208z" fill="#fff" ${sw(1.2)}/>${Array.from({ length: 9 }, (_, k) => `<path d="M${x + 20 + k * 20} ${y - 70} h10 l2 22 h-10z" fill="#E86A8A"/>`).join('')}
-      ${Array.from({ length: 11 }, (_, k) => `<path d="M${x + 6 + k * 19} ${y - 48} a9.5 9.5 0 0 0 19 0" fill="${k % 2 ? '#fff' : '#E86A8A'}" ${sw(.8)}/>`).join('')}
-      <rect x="${x + 86}" y="${y - 44}" width="48" height="44" fill="#3E6F5A" ${sw(1.3)}/><rect x="${x + 92}" y="${y - 38}" width="36" height="22" fill="#FFE3A0" ${sw(.8)}/><path d="M${x + 110} ${y - 38} v22" stroke="${K}" stroke-width=".8"/>
-      ${[x + 22, x + 160].map((wx) => `<rect x="${wx}" y="${y - 108}" width="38" height="30" fill="#BFE6EE" ${sw(1.1)}/><path d="M${wx + 19} ${y - 108} v30 M${wx} ${y - 93} h38" stroke="${K}" stroke-width=".8"/><path d="M${wx + 4} ${y - 104} l10 10" stroke="#fff" stroke-width="2" opacity=".7"/>
-        <rect x="${wx - 4}" y="${y - 78}" width="46" height="9" fill="#8A5428" ${sw(.8)}/>${[0, 1, 2, 3, 4].map((k) => `<circle cx="${wx + 2 + k * 9}" cy="${y - 80}" r="4" fill="${['#E8432E', '#F6D04A', '#F2A0C0', '#B279D6', '#FFFFFF'][k]}" ${sw(.5)}/>`).join('')}`).join('')}
-      ${[[x + 4, y - 120], [x + 4, y - 100], [x + 10, y - 80], [x + 4, y - 60], [x + 214, y - 110], [x + 216, y - 86], [x + 212, y - 64]].map(([a, b], k) => Deco.leaf(a, b, 12, k * 70, '#3E8F48') + `<circle cx="${a}" cy="${b}" r="4" fill="${k % 2 ? '#E8432E' : '#F2A0C0'}" ${sw(.6)}/>`).join('')}
-      <g transform="translate(${x + 252} ${y - 2})">${shadow(0, 2, 26, 4)}<circle cx="-16" cy="-10" r="10" fill="none" ${sw(1.4)}/><circle cx="16" cy="-10" r="10" fill="none" ${sw(1.4)}/><path d="M-16 -10 L-4 -26 L10 -26 L16 -10 M-4 -26 L0 -10 L10 -26 M-8 -30 h8 M10 -26 l-2 -6 h6" fill="none" stroke="#3E6FB3" stroke-width="2"/>
-        <path d="M6 -40 h18 l-3 10 h-12z" fill="#C99A5A" ${sw(.8)}/>${[0, 1, 2, 3].map((k) => `<circle cx="${9 + k * 4}" cy="${-42 - (k % 2) * 3}" r="3.2" fill="${['#E8432E', '#F6D04A', '#F2A0C0', '#FFFFFF'][k]}" ${sw(.4)}/>`).join('')}</g>
-      <g transform="translate(${x - 34} ${y - 2})"><path d="M-12 0 l6 -40 h12 l6 40 M-6 -20 h12" stroke="#8A5428" stroke-width="2" fill="none"/><rect x="-14" y="-40" width="28" height="22" fill="#22303A" ${sw(1)}/><text x="0" y="-31" text-anchor="middle" class="hchalk">Bouquet</text><text x="0" y="-23" text-anchor="middle" class="hchalk">du jour</text></g>
-      ${[x + 30, x + 190].map((lx) => `<path d="M${lx} ${y - 70} v8" stroke="${K}" stroke-width=".8"/><rect x="${lx - 4}" y="${y - 62}" width="8" height="10" rx="2" fill="#FFE59A" ${sw(.6)}/>`).join('')}
-      <rect x="${x + 70}" y="${y - 160}" width="80" height="18" rx="2" fill="#2F6B5A" ${sw(1)}/><text x="${x + 110}" y="${y - 147}" text-anchor="middle" class="hsmall">FLEURS</text>
-      ${[0, 1, 2, 3, 4, 5].map((k) => { const bx = x - 70 + k * 24 + (k > 2 ? 290 : 0), by = y + 8; const cols = [['#E8432E', '#F6D04A'], ['#F2A0C0', '#FFFFFF'], ['#B279D6', '#F2A0C0'], ['#F6D04A', '#E8432E'], ['#FFFFFF', '#B279D6'], ['#F28C28', '#F6D04A']][k];
-        return `<g>${shadow(bx, by, 11, 3)}<path d="M${bx - 9} ${by} l2 -18 h14 l2 18z" fill="#A7B4BA" ${sw(.9)}/>${[-5, 0, 5].map((dx, j) => `<path d="M${bx + dx} ${by - 18} v-12" stroke="#3E8F48" stroke-width="1.2"/><circle cx="${bx + dx}" cy="${by - 32 + (j % 2) * 3}" r="4.6" fill="${cols[j % 2]}" ${sw(.6)}/>`).join('')}</g>`; }).join('')}</g>`;
-  };
-
-  const noel = () => {
-    const snowRoof = (x1, y1, px, py, x2) => `<path d="M${x1 - 4} ${y1 + 1} L${px} ${py - 5} L${x2 + 4} ${y1 + 1} q-4 6 -8 2 q-4 6 -8 1 q-${(x2 - x1) * .2} -${(y1 - py) * .3} -${(x2 - px) - 6} -${(y1 - py) * .55} q-${(px - x1) * .4} ${(y1 - py) * .25} -${px - x1 - 4} ${(y1 - py) * .55} q-4 5 -8 0z" fill="url(#hSnow)" ${sw(.8)}/>
-      ${Array.from({ length: Math.floor((x2 - x1) / 7) }, (_, k) => `<path d="M${x1 + 3 + k * 7} ${y1 + 2} l1 ${3 + (k % 3)} l1 ${-(3 + (k % 3))}" fill="#E8F4FA" ${sw(.3)}/>`).join('')}`;
-    const win = (x, y, w, h) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#FFC94A" ${sw(.6)}/><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#FFE9A8" opacity=".6"/><path d="M${x + w / 2} ${y} v${h} M${x} ${y + h / 2} h${w}" stroke="#6B3A22" stroke-width=".6"/><path d="M${x - 1} ${y + h + 1} h${w + 2}" stroke="#fff" stroke-width="1.6"/>`;
-    const garland = (x1, y1, x2, y2, n) => { const mx = (x1 + x2) / 2, my = Math.max(y1, y2) + 8; let g = `<path d="M${x1} ${y1} Q${mx} ${my} ${x2} ${y2}" stroke="#2F5A3A" stroke-width=".8" fill="none"/>`; for (let i = 1; i < n; i++) { const t = i / n, x = (1 - t) * (1 - t) * x1 + 2 * (1 - t) * t * mx + t * t * x2, y = (1 - t) * (1 - t) * y1 + 2 * (1 - t) * t * my + t * t * y2; g += `<circle cx="${x.toFixed(1)}" cy="${(y + 1.6).toFixed(1)}" r="1.5" fill="${['#E8432E', '#F6D04A', '#3FB6C4', '#7DC27A'][i % 4]}" class="hbulb" style="animation-delay:${(i % 4) * .3}s"/>`; } return g; };
-    const tudor = (x, y, w, h, wall, roof, sign) => { const py = y - h - w * .55;
-      return `<g>${shadow(x + w / 2, y + 2, w * .66, 4)}<rect x="${x}" y="${y - h}" width="${w}" height="${h}" fill="${wall}" ${sw(1)}/>
-      <rect x="${x}" y="${y - h * .38}" width="${w}" height="${h * .38}" fill="#B9A58A" ${sw(.8)}/>${Array.from({ length: 3 }, (_, r) => `<path d="M${x} ${y - h * .38 + r * h * .13} h${w}" stroke="${K}" stroke-width=".35" opacity=".5"/>`).join('')}
-      <path d="M${x} ${y - h * .38} h${w} M${x + w * .25} ${y - h} v${h * .62} M${x + w * .5} ${y - h} v${h * .62} M${x + w * .75} ${y - h} v${h * .62} M${x} ${y - h * .38} l${w * .25} ${-h * .3} l${w * .25} ${h * .3} l${w * .25} ${-h * .3} l${w * .25} ${h * .3}" stroke="#4A2E1A" stroke-width="1.3" fill="none"/>
-      <rect x="${x + w * .66}" y="${y - h}" width="${w * .34}" height="${h}" fill="url(#hatch)" opacity=".45"/>
-      <rect x="${x + w * .68}" y="${py + 4}" width="${w * .12}" height="${h * .55}" fill="#9A6A4A" ${sw(.7)}/><path class="smoke" d="M${x + w * .74} ${py} q-5 -7 0 -13 q5 -6 0 -12" stroke="#fff" stroke-width="2.6" fill="none" opacity=".8" stroke-linecap="round"/>
-      <path d="M${x - 3} ${y - h + 1} L${x + w / 2} ${py} L${x + w + 3} ${y - h + 1}Z" fill="${roof}" ${sw(1)}/>${Array.from({ length: 3 }, (_, k) => { const yy = y - h - (y - h - py) * ((k + 1) / 4), half = (w / 2 + 3) * (1 - (k + 1) / 4); return `<path d="M${x + w / 2 - half} ${yy} h${half * 2}" stroke="${K}" stroke-width=".4" opacity=".45"/>`; }).join('')}
-      ${snowRoof(x, y - h, x + w / 2, py, x + w)}
-      ${win(x + w * .12, y - h * .88, w * .2, h * .28)}${win(x + w * .58, y - h * .88, w * .2, h * .28)}
-      <path d="M${x + w * .4} ${y} v${-h * .3} a${w * .1} ${w * .1} 0 0 1 ${w * .2} 0 v${h * .3}z" fill="#5E3B22" ${sw(.7)}/><circle cx="${x + w * .5}" cy="${y - h * .26}" r="${w * .045}" fill="none" stroke="#2F7A44" stroke-width="1.4"/>
-      ${Array.from({ length: 6 }, (_, k) => `<circle cx="${x + 2 + k * (w - 4) / 5}" cy="${y - h + 3}" r="1.3" fill="${['#E8432E', '#F6D04A', '#3FB6C4'][k % 3]}" class="hbulb" style="animation-delay:${k * .2}s"/>`).join('')}
-      ${sign ? `<rect x="${x + w * .12}" y="${y - h * .5}" width="${w * .76}" height="7" fill="#2F5A3A" ${sw(.5)}/><text x="${x + w / 2}" y="${y - h * .5 + 5.6}" text-anchor="middle" class="hsign2">${sign}</text>` : ''}</g>`; };
-    const fir = (x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})">${shadow(2, 2, 14, 4)}<rect x="-2.4" y="-4" width="4.8" height="6" fill="#6B4528"/>
-      ${[[0, 22, 26], [-16, 17, 22], [-30, 12, 20]].map(([yy, w, h]) => `<path d="M${-w} ${yy} L0 ${yy - h} L${w} ${yy}Z" fill="#245F38" ${sw(.8)}/><path d="M0 ${yy - h} L${w} ${yy} L${w * .2} ${yy}Z" fill="#1B4A2C" opacity=".7"/><path d="M${-w * .9} ${yy - 1} q${w * .45} -5 ${w * .9} -1 q${w * .45} -5 ${w * .9} 1 l0 2 q-${w * .9} 3 -${w * 1.8} 0z" fill="#fff" ${sw(.4)}/>`).join('')}</g>`;
-    const tree = (x, y) => `<g transform="translate(${x} ${y})">${shadow(0, 2, 24, 6)}<rect x="-3" y="-6" width="6" height="8" fill="#6B4528"/>
-      ${[[0, 30, 34], [-22, 24, 28], [-42, 18, 24], [-60, 12, 20]].map(([yy, w, h]) => `<path d="M${-w} ${yy} L0 ${yy - h} L${w} ${yy}Z" fill="#2B6A3C" ${sw(.8)}/><path d="M${-w * .9} ${yy - 1} q${w * .45} -5 ${w * .9} -1 q${w * .45} -5 ${w * .9} 1 l0 2 q-${w * .9} 3 -${w * 1.8} 0z" fill="#fff" ${sw(.4)}/>`).join('')}
-      ${garland(-24, -6, 22, -14, 8)}${garland(-16, -30, 15, -36, 6)}${garland(-10, -50, 9, -54, 5)}
-      ${[[-12, -18, '#E8432E'], [10, -24, '#F6D04A'], [-4, -40, '#3FB6C4'], [6, -58, '#E8432E'], [-18, -4, '#F6D04A'], [16, -6, '#3FB6C4']].map(([a2, b2, c]) => `<circle cx="${a2}" cy="${b2}" r="2.6" fill="${c}" ${sw(.4)}/><circle cx="${a2 - .8}" cy="${b2 - .8}" r=".7" fill="#fff"/>`).join('')}
-      <path d="M0 -82 l2.6 5 h5.4 l-4.4 3.4 l1.8 5.4 l-5.4 -3.4 l-5.4 3.4 l1.8 -5.4 l-4.4 -3.4 h5.4z" fill="#F6D04A" ${sw(.5)}/><circle cy="-76" r="10" fill="#FFE59A" opacity=".35"/>
-      ${[[-20, 4, '#C8243C'], [-6, 6, '#3E6FB3'], [12, 5, '#7DC27A']].map(([a2, b2, c]) => `<rect x="${a2}" y="${b2 - 8}" width="10" height="8" fill="${c}" ${sw(.5)}/><path d="M${a2 + 5} ${b2 - 8} v8 M${a2} ${b2 - 4} h10" stroke="#F6D04A" stroke-width="1"/>`).join('')}</g>`;
-    const stall = (x, y, c) => `<g transform="translate(${x} ${y})">${shadow(0, 2, 18, 4)}<rect x="-15" y="-16" width="30" height="16" fill="#B9773E" ${sw(.7)}/><rect x="-13" y="-14" width="26" height="6" fill="#FFE3A0"/><path d="M-18 -16 l4 -9 h28 l4 9z" fill="${c}" ${sw(.7)}/>${[-12, -4, 4, 12].map((dx) => `<path d="M${dx - 4} -16 a4 4 0 0 0 8 0" fill="#fff" ${sw(.4)}/>`).join('')}<path d="M-18 -26 q18 -6 36 0 l-2 2 q-16 -4 -32 0z" fill="#fff" ${sw(.4)}/></g>`;
-    const kid = (x, y, c, h) => `<g transform="translate(${x} ${y})"><path d="M-1.6 0 v-4 M1.6 0 v-4" stroke="#2A2A2A" stroke-width="1.3"/><path d="M-3.4 -4 q0 -8 3.4 -9 q3.4 1 3.4 9z" fill="${c}" ${sw(.4)}/><circle cy="-15.5" r="2.6" fill="#F0C9A8" ${sw(.4)}/><path d="M-3 -16 q3 -4 6 0z" fill="${h}"/><circle cy="-19" r="1.2" fill="#fff"/></g>`;
-    return `<g class="bob"><path d="${blob(1232, 770, 228, 132, 13, .1, 9)}" fill="url(#hSnow)" ${sw(1.4)}/><path d="${blob(1232, 770, 228, 132, 13, .1, 9)}" fill="url(#dots)" opacity=".25"/>
-      ${Array.from({ length: 40 }, (_, i) => `<circle cx="${1010 + (i * 53) % 480}" cy="${650 + (i * 31) % 240}" r="1.1" fill="#BFD6EA"/>`).join('')}
-      <path d="M1100 690 q60 -40 130 -20 q60 -40 140 -10 q40 10 70 40" fill="#EEF5FA" ${sw(.8)}/>
-      ${fir(1060, 720, .7)}${fir(1090, 700, .55)}${fir(1420, 724, .7)}${fir(1398, 700, .55)}
-      <g>${shadow(1150, 716, 30, 5)}<rect x="1126" y="664" width="48" height="52" fill="#EDE3D2" ${sw(1)}/><path d="M1120 666 L1150 636 L1180 666Z" fill="#5A6470" ${sw(1)}/>${snowRoof(1126, 664, 1150, 636, 1174)}
-        <rect x="1140" y="610" width="20" height="56" fill="#EDE3D2" ${sw(1)}/><path d="M1136 612 L1150 570 L1164 612Z" fill="#5A6470" ${sw(1)}/><path d="M1150 570 v-10 M1146 564 h8" stroke="${K}" stroke-width="1.2"/>${snowRoof(1140, 610, 1150, 572, 1160)}
-        <path d="M1144 630 a6 6 0 0 1 12 0 v10 h-12z" fill="#FFC94A" ${sw(.6)}/><path d="M1150 624 v16" stroke="#6B3A22" stroke-width=".6"/>${[1132, 1162].map((wx) => `<path d="M${wx} 690 a4 4 0 0 1 8 0 v12 h-8z" fill="#FFC94A" ${sw(.5)}/>`).join('')}<path d="M1144 716 v-14 a6 6 0 0 1 12 0 v14z" fill="#7A3A2A" ${sw(.6)}/></g>
-      ${tudor(1190, 712, 44, 40, '#F3E3C8', '#B83A2A', 'BOULANGERIE')}
-      <g>${shadow(1340, 712, 20, 4)}<rect x="1326" y="610" width="28" height="102" fill="#F3E3C8" ${sw(1)}/><path d="M1326 650 h28 M1340 610 v40 M1326 650 l14 -16 l14 16" stroke="#4A2E1A" stroke-width="1.3" fill="none"/>
-        <rect x="1326" y="672" width="28" height="40" fill="#B9A58A" ${sw(.8)}/><path d="M1333 712 v-16 a7 7 0 0 1 14 0 v16z" fill="#C8243C" ${sw(.7)}/><circle cx="1340" cy="626" r="9" fill="#FBF6E6" ${sw(.8)}/><path d="M1340 626 v-6 M1340 626 l4 2" stroke="${K}" stroke-width=".9"/>
-        ${Array.from({ length: 12 }, (_, k) => `<path d="M1340 618 v1.4" stroke="${K}" stroke-width=".6" transform="rotate(${k * 30} 1340 626)"/>`).join('')}
-        <path d="M1320 612 L1340 566 L1360 612Z" fill="#3E3E46" ${sw(1)}/>${snowRoof(1326, 610, 1340, 568, 1354)}<path d="M1340 566 v-10" stroke="${K}" stroke-width="1"/><path d="M1340 556 l7 2 l-7 2" fill="#C8243C"/>
-        <path d="M1310 660 a30 7 0 0 0 60 0" fill="none" stroke="#C99A6A" stroke-width="1.4"/>${[0, 1, 2].map((k) => `<g><g transform="scale(.5)"><path d="M-10 0 c0 -7 4 -10 11 -8 l4 -7 l3 2 l-3 6 c3 1 3 6 0 7 l-1 4 h-2 v-4 h-8 l-1 4 h-2z" fill="#C9874F" stroke="${K}" stroke-width=".8"/></g><animateMotion dur="8s" begin="${-k * 2.6}s" repeatCount="indefinite" path="M1312 660 a28 6 0 1 0 56 0 a28 6 0 1 0 -56 0"/></g>`).join('')}</g>
-      ${tudor(1372, 718, 46, 42, '#E8C7C7', '#2F5A4A', 'JOUETS')}${tudor(1250, 704, 40, 36, '#F6E7C1', '#7A3A3A')}
-      ${garland(1174, 672, 1250, 668, 10)}${garland(1290, 668, 1326, 664, 6)}
-      ${tree(1255, 800)}
-      ${stall(1190, 790, '#C8243C')}${stall(1320, 792, '#2F7A44')}${stall(1200, 838, '#3E6FB3')}
-      ${tudor(1060, 860, 50, 46, '#F3E3C8', '#5E3B22')}${tudor(1370, 854, 50, 42, '#F6E7C1', '#B83A2A')}
-      <ellipse cx="1110" cy="790" rx="44" ry="15" fill="#BFE3F2" ${sw(.9)}/><path d="M1084 788 q24 -5 48 0 M1092 796 q18 -3 34 0" stroke="#fff" stroke-width="1.2" fill="none"/>
-      ${['#C8243C', '#2E4A8A', '#F6D04A'].map((c, k) => `<g>${kid(0, 0, c, '#fff')}<animateMotion dur="10s" begin="${-k * 3.3}s" repeatCount="indefinite" path="M1074 790 a36 9 0 1 0 72 0 a36 9 0 1 0 -72 0"/></g>`).join('')}
-      <g transform="translate(1310 846)"><circle cy="-8" r="9" fill="#fff" ${sw(.7)}/><circle cy="-21" r="6.4" fill="#fff" ${sw(.7)}/><path d="M0 -21 l6 1 l-6 1z" fill="#F28C28"/><circle cx="-2" cy="-23" r=".8" fill="${K}"/><circle cx="2" cy="-23" r=".8" fill="${K}"/><rect x="-4.4" y="-34" width="8.8" height="7" fill="#2A2A2A"/><path d="M-7 -27 h14" stroke="#2A2A2A" stroke-width="1.6"/><path d="M-6 -15 q6 3 12 0 l1 6 h-3 l-1 -4" fill="#C8243C"/><path d="M-9 -10 l-9 -6 M9 -10 l8 -7" stroke="#6B4528" stroke-width="1.2"/></g>
-      ${[[1160, 800], [1350, 800], [1240, 850], [1420, 790]].map(([a2, b2]) => lamppost(a2, b2)).join('')}
-      ${kid(1222, 812, '#2E4A8A', '#C8243C')}${kid(1230, 814, '#F2A0C0', '#fff')}${kid(1290, 818, '#2F7A44', '#F6D04A')}${kid(1176, 850, '#7A3A3A', '#2E4A8A')}
-      <path d="M1040 880 Q1230 920 1430 872" stroke="#8C5A31" stroke-width="5" fill="none"/><path d="M1040 880 Q1230 920 1430 872" stroke="#CFC6B8" stroke-width="2" fill="none" stroke-dasharray="2 5"/><path id="hTrain" d="M1040 880 Q1230 920 1430 872" fill="none"/>
-      ${[[0, 'loco'], [-.5, '#3FB6C4'], [-1, '#F6D04A'], [-1.5, '#7DC27A']].map(([d, c]) => `<g>${c === 'loco' ? `<g transform="translate(0 -6)"><rect x="-12" y="-8" width="16" height="10" rx="4" fill="#C8243C" ${sw(.6)}/><rect x="2" y="-14" width="10" height="16" fill="#2F6B3A" ${sw(.6)}/><rect x="-10" y="-14" width="4" height="6" fill="#2A2A2A"/><circle cx="-8" cy="3" r="2.6" fill="${K}"/><circle cx="7" cy="3" r="2.6" fill="${K}"/><circle cx="-13" cy="-3" r="1.6" fill="#FFE59A"/></g>` : `<g transform="translate(0 -6)"><rect x="-9" y="-8" width="18" height="10" fill="${c}" ${sw(.6)}/><rect x="-6" y="-14" width="7" height="6" fill="#C8243C" ${sw(.4)}/><circle cx="-5" cy="3" r="2.4" fill="${K}"/><circle cx="5" cy="3" r="2.4" fill="${K}"/></g>`}<animateMotion dur="16s" begin="${d}s" repeatCount="indefinite" rotate="auto" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#hTrain"/></animateMotion></g>`).join('')}
-      <g><g transform="translate(0 0)"><path d="M-30 0 l6 -9 l4 2 l2 -6 l4 4 l-4 9z M-16 2 l6 -9 l4 2 l2 -6 l4 4 l-4 9z" fill="#A9774C" ${sw(.5)}/><path d="M0 4 h22 q5 0 5 -5 v-6 h-7 v4 h-18z" fill="#C8243C" ${sw(.6)}/><circle cx="12" cy="-6" r="3" fill="#F0C9A8"/><path d="M9 -8 l3 -6 l3 6z" fill="#C8243C"/></g><animateMotion dur="20s" repeatCount="indefinite" path="M980 600 C1100 540 1260 560 1500 520"/></g>
-    </g>`;
-  };
-
-  const galerie = () => {
-    const x = 640, y = 600;
-    return `<g class="bob">${shadow(x, y + 4, 90, 10)}
-      <path d="M${x - 80} ${y} v-80 M${x + 80} ${y} v-80 M${x - 26} ${y} v-80 M${x + 26} ${y} v-80" stroke="#F4EBD9" stroke-width="7"/><path d="M${x - 80} ${y} v-80 M${x + 80} ${y} v-80 M${x - 26} ${y} v-80 M${x + 26} ${y} v-80" stroke="${K}" stroke-width=".8"/>
-      <path d="M${x - 96} ${y - 80} H${x + 96} L${x + 70} ${y - 120} H${x - 70}Z" fill="#F4EBD9" ${sw(1.4)}/>${Array.from({ length: 9 }, (_, k) => `<path d="M${x - 80 + k * 20} ${y - 80} L${x - 62 + k * 15.5} ${y - 120}" stroke="${K}" stroke-width=".7"/>`).join('')}
-      ${[[-80, -100], [-50, -116], [-10, -122], [30, -118], [70, -104], [86, -82], [-90, -84]].map(([a, b], k) => Deco.leaf(x + a, y + b, 14, k * 50, '#3E8F48') + `<circle cx="${x + a}" cy="${y + b}" r="4.4" fill="${['#B279D6', '#9C7FE6', '#C9A6F0'][k % 3]}" ${sw(.5)}/>`).join('')}
-      ${[[-54, '#F6D04A', 'tilt-l'], [0, '#7DC27A', ''], [54, '#F2A0C0', 'tilt-r']].map(([dx, c, cl]) => `<g transform="translate(${x + dx} ${y - 30}) rotate(${dx / 10})"><path d="M-12 30 l12 -36 l12 36 M0 -6 v36" stroke="#8A5428" stroke-width="2.2"/>
-        <rect x="-20" y="-40" width="40" height="32" fill="#8A5428" ${sw(1)}/><rect x="-16" y="-36" width="32" height="24" fill="${c}" ${sw(.6)}/><path d="M-16 -16 l10 -10 l6 6 l8 -8 l8 8 v8 h-32z" fill="${Deco.shade(c, -0.3)}" opacity=".7"/><circle cx="8" cy="-30" r="3" fill="#fff" opacity=".85"/></g>`).join('')}</g>`;
-  };
-
-  const clinique = () => {
-    const x = 950, y = 610;
-    return `<g class="bob">${shadow(x, y + 4, 86, 10)}
-      <rect x="${x - 70}" y="${y - 86}" width="140" height="86" fill="#FFFFFF" ${sw(1.5)}/><rect x="${x + 30}" y="${y - 86}" width="40" height="86" fill="url(#hatch)" opacity=".35"/>
-      <path d="M${x - 84} ${y - 84} L${x} ${y - 138} L${x + 84} ${y - 84}Z" fill="#2F8A6A" ${sw(1.5)}/>${Array.from({ length: 4 }, (_, k) => `<path d="M${x - 70 + k * 18} ${y - 92 - k * 11} h${140 - k * 36}" stroke="#1F6A4E" stroke-width="1"/>`).join('')}
-      <circle cx="${x}" cy="${y - 104}" r="13" fill="#fff" ${sw(1.2)}/><path d="M${x} ${y - 112} v16 M${x - 8} ${y - 104} h16" stroke="#2F8A6A" stroke-width="4"/>
-      <rect x="${x - 58}" y="${y - 70}" width="42" height="40" fill="url(#hGlass)" ${sw(1.1)}/><path d="M${x - 37} ${y - 70} v40 M${x - 58} ${y - 50} h42" stroke="${K}" stroke-width=".8"/>
-      ${[[-50, '#3E8F48'], [-34, '#7DC27A'], [-24, '#4FA04A']].map(([dx, c]) => `<path d="M${x + dx} ${y - 32} q-3 -10 2 -16 q4 6 -2 16" fill="${c}"/>`).join('')}
-      <rect x="${x + 10}" y="${y - 56}" width="30" height="56" fill="#2F8A6A" ${sw(1.2)}/><circle cx="${x + 34}" cy="${y - 28}" r="2" fill="#F6D04A"/>
-      <rect x="${x - 70}" y="${y - 22}" width="40" height="22" fill="#8A5428" ${sw(1)}/>${[0, 1, 2].map((k) => `<g transform="translate(${x - 62 + k * 13} ${y - 22})"><rect x="-4" y="-14" width="8" height="14" rx="2" fill="${['#C8E7F0', '#F6D9A0', '#D8C8F0'][k]}" ${sw(.6)}/><rect x="-2" y="-18" width="4" height="4" fill="#8A5428"/></g>`).join('')}
-      <g transform="translate(${x + 92} ${y - 60}) rotate(-20)"><circle r="20" fill="url(#hGlass)" stroke="#C99A3E" stroke-width="5"/><circle r="20" fill="none" ${sw(1)}/><path d="M-8 -8 a10 10 0 0 1 10 -4" stroke="#fff" stroke-width="3" fill="none"/><path d="M14 14 l18 18" stroke="#6B3A22" stroke-width="7" stroke-linecap="round"/>
-        <g transform="translate(-2 2)"><ellipse rx="5" ry="6" fill="#9ED36A" ${sw(.6)}/><path d="M-5 -2 l-4 -2 M5 -2 l4 -2 M-5 2 l-4 1 M5 2 l4 1" stroke="${K}" stroke-width=".6"/></g></g></g>`;
-  };
-
-  const pond = () => `<g><path d="${blob(800, 470, 128, 68, 11, .14, 5)}" fill="#9AA3A8" ${sw(1.2)}/>${Array.from({ length: 22 }, (_, i) => { const a = i / 22 * Math.PI * 2; return `<ellipse cx="${(800 + Math.cos(a) * 124).toFixed(0)}" cy="${(470 + Math.sin(a) * 64).toFixed(0)}" rx="8" ry="5" fill="${i % 2 ? '#B9B2A6' : '#A39C90'}" ${sw(.5)}/>`; }).join('')}<path d="${blob(800, 470, 120, 62, 11, .14, 5)}" fill="url(#hPond)" ${sw(1.5)}/><path d="${blob(800, 470, 120, 62, 11, .14, 5)}" fill="url(#hWaves)"/>
-    ${[[740, 450], [770, 492], [850, 452], [870, 488], [812, 500]].map(([a, b], i) => `<path d="M${a} ${b} m-11 0 a11 7 0 1 0 22 0 a11 7 0 1 0 -22 0 M${a} ${b} l11 -2" fill="#5DA548" ${sw(.8)}/>${i % 2 ? `<circle cx="${a + 3}" cy="${b - 3}" r="4" fill="#F7A8C4" ${sw(.6)}/><circle cx="${a + 3}" cy="${b - 3}" r="1.6" fill="#F6D04A"/>` : ''}`).join('')}
-    <g transform="translate(830 430)"><path d="M0 0 c6 -6 14 -4 12 2 l-4 6 c-4 2 -10 0 -8 -8z" fill="#fff" ${sw(.8)}/><path d="M10 -2 l5 -6 l2 4" fill="#F28C28"/></g>
-    <path d="M680 470 q24 -26 48 0" fill="none" stroke="#8A5428" stroke-width="12"/><path d="M680 470 q24 -26 48 0" fill="none" stroke="#C99A6A" stroke-width="8"/>${[0, 1, 2, 3, 4].map((k) => `<path d="M${684 + k * 10} ${466 - (k === 2 ? 12 : k % 4 ? 9 : 2)} v-8" stroke="#8A5428" stroke-width="2"/>`).join('')}</g>`;
-
-  const paths = `<path d="M390 440 C470 470 560 470 640 520 M960 520 C1040 470 1120 420 1200 360 M640 600 C560 660 470 700 400 720 M960 610 C1040 660 1150 700 1220 720 M860 480 C900 490 930 500 950 520" fill="none" stroke="#B9965C" stroke-width="30" stroke-linecap="round"/>
-    <path d="M390 440 C470 470 560 470 640 520 M960 520 C1040 470 1120 420 1200 360 M640 600 C560 660 470 700 400 720 M960 610 C1040 660 1150 700 1220 720 M860 480 C900 490 930 500 950 520" fill="none" stroke="url(#hCobble)" stroke-width="26" stroke-linecap="round"/>`;
-
-  const fields = [[560, 700, '#E8432E'], [575, 714, '#F6D04A'], [590, 728, '#F2A0C0'], [605, 742, '#B279D6'], [620, 756, '#E8432E'], [635, 770, '#F28C28']].map(([x, y, c]) => tulipRow(x, y, 190, c, -12)).join('')
-    + [[700, 300, '#B279D6'], [700, 316, '#9C7FE6'], [700, 332, '#B279D6'], [700, 348, '#C9A6F0']].map(([x, y, c]) => tulipRow(x, y, 170, c, 0)).join('')
-    + [[1250, 520, '#F6D04A'], [1250, 536, '#F28C28'], [1250, 552, '#F6D04A']].map(([x, y, c]) => tulipRow(x, y, 150, c, 8)).join('');
-
-  const greenery = [[150, 330, 1.1, '#3E8F48', '#E8432E'], [130, 470, 1, '#4FA04A', null], [600, 160, .9, '#3E8F48', '#F6D04A'], [900, 190, 1, '#2F7A44', null], [1450, 380, 1, '#4FA04A', '#E8432E'], [1470, 520, .9, '#3E8F48', null], [520, 560, .8, '#5DA548', null], [1080, 520, .8, '#3E8F48', '#F28C28'], [800, 880, 1, '#3E8F48', null], [700, 860, .8, '#4FA04A', '#F2A0C0']]
-    .map(([x, y, s, c, f]) => tree(x, y, s, c, f)).join('')
-    + [[980, 190], [1010, 200], [600, 420], [1000, 430]].map(([x, y]) => cypress(x, y, .9)).join('')
-    + [[520, 420, '#F2A0C0'], [760, 560, '#F6D04A'], [880, 560, '#E8432E'], [1180, 450, '#B279D6'], [450, 600, '#FFFFFF'], [1040, 760, '#F2A0C0'], [560, 860, '#F6D04A'], [330, 470, null]].map(([x, y, f]) => bush(x, y, 1.1, '#4FA04A', f)).join('');
-
-  const boats = `<g class="wave"><g transform="translate(1480 860)"><path d="M-24 0 h48 l-8 10 h-32z" fill="#E8432E" ${sw(1)}/><path d="M0 0 v-34 l18 28z" fill="#fff" ${sw(1)}/></g></g>
-    <g class="wave" style="animation-delay:-2s"><g transform="translate(120 140)"><path d="M-18 0 h36 l-6 8 h-24z" fill="#F6D04A" ${sw(1)}/><path d="M0 0 v-26 l14 22z" fill="#fff" ${sw(1)}/></g></g>`;
-  const birds = `<g class="cloud" style="animation-duration:70s"><path d="M200 90 q8 -8 16 0 q8 -8 16 0 M240 110 q6 -6 12 0 q6 -6 12 0" fill="none" stroke="${K}" stroke-width="1.6"/></g>`;
-
-
-  /* ---- détails supplémentaires ---- */
-  const person = (x, y, c = '#3E6FB3', hat = '#E8B23A', act = '') => `<g transform="translate(${x} ${y})">${shadow(1, 1, 6, 2)}
-    <path d="M-2.4 0 v-6 M2.4 0 v-6" stroke="#3A3A3A" stroke-width="2" stroke-linecap="round"/><path d="M-5 -6 Q-5.5 -17 0 -18 Q5.5 -17 5 -6Z" fill="${c}" ${sw(.7)}/>
-    <circle cy="-21.5" r="3.6" fill="#F0C9A8" ${sw(.6)}/><path d="M-5.5 -22.5 h11 M-3.4 -22.5 q3.4 -5 6.8 0" fill="${hat}" stroke="${hat}" stroke-width="1.6"/>${act}</g>`;
-  const windmill = (x, y) => `<g transform="translate(${x} ${y})">${shadow(0, 2, 30, 7)}
-    <path d="M-20 0 L-13 -70 L13 -70 L20 0Z" fill="#F3E9D2" ${sw(1.2)}/><path d="M5 -70 L13 -70 L20 0 L8 0Z" fill="url(#hatch)" opacity=".5"/>
-    ${[-56, -40, -24].map((yy) => `<rect x="-5" y="${yy}" width="10" height="9" rx="4" fill="#8FC7D6" ${sw(.6)}/>`).join('')}<path d="M-6 0 v-14 a6 6 0 0 1 12 0 v14z" fill="#8A5428" ${sw(.7)}/>
-    <path d="M-17 -70 L0 -92 L17 -70Z" fill="#B83A2A" ${sw(1.2)}/>
-    <g><animateTransform attributeName="transform" type="rotate" from="0 0 -78" to="360 0 -78" dur="14s" repeatCount="indefinite"/>
-      ${[0, 90, 180, 270].map((a) => `<g transform="rotate(${a} 0 -78)"><path d="M0 -78 V-136" stroke="#7A4A26" stroke-width="2.4"/><path d="M1 -84 h12 v-50 h-12" fill="#FBF5E8" ${sw(.7)}/>${[0, 1, 2, 3, 4].map((k) => `<path d="M1 ${-92 - k * 9} h12" stroke="${K}" stroke-width=".4"/>`).join('')}</g>`).join('')}
-      <circle cx="0" cy="-78" r="3.5" fill="#3A3A3A"/></g></g>`;
-  const beehive = (x, y) => `<g transform="translate(${x} ${y})">${shadow(0, 1, 10, 3)}<path d="M-8 0 v-6 M8 0 v-6" stroke="#7A4A26" stroke-width="1.6"/>${[0, 1, 2].map((k) => `<rect x="${-9 + k}" y="${-12 - k * 7}" width="${18 - k * 2}" height="7" fill="${k % 2 ? '#F6D04A' : '#E8B23A'}" ${sw(.6)}/>`).join('')}<path d="M-8 -26 L0 -32 L8 -26Z" fill="#B83A2A" ${sw(.6)}/>
-    ${[[12, -20], [16, -12], [-14, -16]].map(([a, b]) => `<g transform="translate(${a} ${b})"><ellipse rx="2.2" ry="1.6" fill="#F6D04A" ${sw(.4)}/><path d="M-1 -1.5 q-1 -2 0.5 -2.5 M1 -1.5 q1 -2 -0.5 -2.5" stroke="#fff" stroke-width=".8"/></g>`).join('')}</g>`;
-  const butterfly = (x, y, c, d) => `<g><g><path d="M0 0 c-6 -8 -12 -2 -6 3 c-6 3 -2 8 6 -1 c8 9 12 4 6 1 c6 -5 0 -11 -6 -3z" fill="${c}" ${sw(.5)}><animateTransform attributeName="transform" type="scale" values="1 1;.3 1;1 1" dur=".4s" repeatCount="indefinite"/></path></g>
-    <animateMotion dur="${d}s" repeatCount="indefinite" path="M${x} ${y} c40 -30 80 30 120 0 s60 -40 20 -60 s-100 10 -140 60z"/></g>`;
-  const reeds = (x, y) => Array.from({ length: 7 }, (_, i) => { const dx = (i - 3) * 5, h = 26 + (i % 3) * 8; return `<path d="M${x + dx} ${y} q${dx * .3} ${-h * .5} ${dx * .6} ${-h}" stroke="#4E8A3E" stroke-width="1.6" fill="none"/>${i % 2 ? `<rect x="${x + dx * 1.6 - 2}" y="${y - h - 2}" width="4" height="10" rx="2" fill="#7A4A26"/>` : ''}`; }).join('');
-  const koi = (x, y, c, d) => `<g><path d="M0 0 c6 -4 14 -3 18 0 c-4 3 -12 4 -18 0z M0 0 l-6 -4 v8z" fill="${c}" ${sw(.4)} opacity=".9"/><animateMotion dur="${d}s" repeatCount="indefinite" rotate="auto" path="M${x} ${y} a50 22 0 1 0 100 0 a50 22 0 1 0 -100 0"/></g>`;
-  const lamppost = (x, y) => `<g transform="translate(${x} ${y})"><path d="M0 0 v-30" stroke="#2A2A2A" stroke-width="2"/><path d="M-4 -30 h8 l-1.6 -7 h-4.8z" fill="#FFE59A" ${sw(.6)}/><circle cy="-34" r="9" fill="#FFE59A" opacity=".35"/></g>`;
-  const shore = () => {
-    const isle = blob(800, 520, 730, 450, 16, .08, 21);
-    let rocks = '';
-    [[140, 360], [110, 560], [300, 860], [1010, 965], [1440, 760], [1500, 420], [1200, 110], [520, 120]].forEach(([x, y], i) => {
-      rocks += `<g transform="translate(${x} ${y})">${[[-10, 0, 12], [6, 4, 9], [14, -4, 7]].map(([a, b, r]) => `<path d="${blob(a, b, r, r * .7, 7, .3, i + a)}" fill="#9AA3A8" ${sw(1)}/><path d="${blob(a + 2, b + 2, r * .6, r * .35, 6, .3, i)}" fill="#7C858A" opacity=".7"/>`).join('')}<path d="M-24 6 q10 -4 20 0 t20 0 t20 0" stroke="#fff" stroke-width="2" fill="none" opacity=".8"/></g>`;
-    });
-    return `<path d="${blob(800, 520, 752, 470, 16, .08, 21)}" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="14 8" opacity=".55"/>
-      <path d="${blob(800, 520, 741, 460, 16, .08, 21)}" fill="none" stroke="#BFEAF0" stroke-width="8" opacity=".55"/>${rocks}
-      ${Array.from({ length: 40 }, (_, i) => { const a = i / 40 * Math.PI * 2; const x = 800 + Math.cos(a) * 705, y = 515 + Math.sin(a) * 430; return `<path d="M${(x - 8).toFixed(0)} ${y.toFixed(0)} q8 -3 16 0" stroke="#D9BE84" stroke-width="1.2" fill="none"/>`; }).join('')}`;
-  };
-  const patches = Array.from({ length: 26 }, (_, i) => { const a = i * 2.4, r = 120 + (i * 37) % 500; const x = 800 + Math.cos(a) * r, y = 510 + Math.sin(a) * r * .55; return `<path d="${blob(x, y, 40 + (i % 4) * 14, 18 + (i % 3) * 6, 9, .3, i)}" fill="${i % 2 ? '#8FCB5E' : '#5EA845'}" opacity=".45"/>`; }).join('');
-  const extras = () => `
-    ${windmill(560, 770)}
-    ${[[840, 770], [868, 778], [896, 770]].map(([x, y]) => beehive(x, y)).join('')}
-    ${reeds(690, 500)}${reeds(905, 470)}${reeds(760, 525)}
-    ${koi(770, 470, '#F28C28', 11)}${koi(790, 462, '#FFFFFF', 15)}
-    ${[[718, 520], [705, 545], [694, 572]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="9" ry="5" fill="#B9B2A6" ${sw(.7)}/>`).join('')}
-    <g transform="translate(860 520)"><path d="M0 0 l10 -1 M3 -1 l3 -6 M5 -1 l5 -5 M3 1 l3 6 M5 1 l5 5" stroke="#3FB6C4" stroke-width="1.4"/><animateMotion dur="7s" repeatCount="indefinite" path="M0 0 c20 -20 40 10 60 -10 s-20 -30 -60 10z"/></g>
-    ${butterfly(420, 520, '#F6D04A', 18)}${butterfly(1150, 520, '#F2A0C0', 22)}${butterfly(620, 260, '#B279D6', 20)}${butterfly(980, 760, '#FFFFFF', 24)}
-    ${person(470, 470, '#3E6FB3', '#E8B23A', `<path d="M5 -10 l10 4 l-2 6 h-10z" fill="#9AA6AE" stroke="${K}" stroke-width=".5"/><circle cx="3" cy="-1" r="2.4" fill="#2A2A2A"/>`)}
-    ${person(1090, 455, '#D9487A', '#F6E7C1', `<path d="M5 -12 l8 -2 v6 l-6 2z" fill="#3E9FCF" stroke="${K}" stroke-width=".5"/>`)}
-    ${person(500, 690, '#2F8A6A', '#B83A2A', `<circle cx="-7" cy="-12" r="3" fill="#F2A0C0" stroke="${K}" stroke-width=".5"/><circle cx="-9" cy="-15" r="2.6" fill="#F6D04A" stroke="${K}" stroke-width=".5"/>`)}
-    ${person(1160, 690, '#2E4A8A', '#C8243C')}${person(1172, 694, '#F6D04A', '#fff')}
-    ${person(760, 600, '#E8A62E', '#3E6FB3')}${person(980, 690, '#1F8FA8', '#F6E7C1')}
-    <g transform="translate(560 440)"><rect x="-16" y="-8" width="32" height="4" fill="#8A5428" ${sw(.6)}/><rect x="-16" y="-15" width="32" height="3" fill="#8A5428" ${sw(.6)}/><path d="M-14 -4 v6 M14 -4 v6 M-14 -15 v-2 M14 -15 v-2" stroke="#2A2A2A" stroke-width="1.4"/></g>
-    ${[[600, 600], [690, 610], [930, 610], [1010, 470]].map(([x, y]) => lamppost(x, y)).join('')}`;
-
-  const place = (path, label, inner, sign) => `<a class="place" href="#${path}" aria-label="${label}">${inner}${sign}</a>`;
   function svg() {
-    return `<svg viewBox="0 0 1600 1000" role="img" aria-label="Carte de l’île du Grand Jardin">${defs}
-      <rect width="1600" height="1000" fill="url(#hSea)"/><rect width="1600" height="1000" fill="url(#hWaves)"/>
-      <path d="${blob(800, 520, 730, 450, 16, .08, 21)}" fill="#F1DDB0" ${sw(2)}/><path d="${blob(800, 520, 730, 450, 16, .08, 21)}" fill="url(#dots)" opacity=".5"/>
-      ${shore()}<path d="${blob(800, 510, 690, 412, 16, .08, 21)}" fill="url(#hIsle)" ${sw(1.6)}/>${patches}<path d="${blob(800, 510, 690, 412, 16, .08, 21)}" fill="url(#hGrass)"/>
-      ${Array.from({ length: 220 }, (_, i) => { const a = i * 2.39996, r = 60 + Math.sqrt(i / 220) * 600; const x = 800 + Math.cos(a) * r * 1.02, y = 510 + Math.sin(a) * r * .58; return `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${i % 4 ? 2 : 2.8}" fill="${['#FFFFFF', '#F6D04A', '#F2A0C0', '#E8432E', '#B279D6'][i % 5]}" opacity=".9"/>`; }).join('')}
-      ${paths}${fields}${pond()}${greenery}${boats}${extras()}
-      ${place('potager', 'Silence ça truffe, le potager', potager(), bannerSign(370, 136, 'Le potager', '#E8432E'))}
-      ${place('jardin', 'La grande serre, le jardin-boutique', serre(), bannerSign(1216, 380, 'La grande serre', '#2F8A6A'))}
-      ${place('bouquet', 'L’atelier bouquet', atelier(), bannerSign(340, 890, 'L’atelier bouquet', '#D9487A'))}
-      ${place('noel', 'Le village de Noël', noel(), bannerSign(1236, 916, 'Le village de Noël', '#2E4A8A'))}
-      ${place('galerie', 'La galerie', galerie(), bannerSign(640, 640, 'La galerie', '#E8A62E'))}
-      ${place('clinique', 'La clinique des plantes', clinique(), bannerSign(950, 650, 'La clinique', '#1F8FA8'))}
-      ${birds}
+    const zones = ZONES7.map((z) => `<g class="pz" data-r="${z.r}" tabindex="0" role="link" aria-label="${esc(z.name)} : ${esc(z.sub)}">
+        ${DRAWZ[z.r]()}
+        <polygon class="pz-hit" points="${pts(z.foot.map(([x, y]) => [x, y, G]))}"/>
+        <polygon class="pz-ring" points="${pts(z.foot.map(([x, y]) => [x, y, G]))}" style="--c:${z.c}"/>
+      </g>`).join('');
+    const [ex, ey] = P(16.5, 22.6, G);
+    return `<svg class="plan-svg" viewBox="0 0 ${VW} ${VH}" role="group" aria-label="Plan du magasin : 7 espaces">
+      ${ground()}${trees()}${zones}${people()}${ZONES7.map(pin).join('')}
+      <g transform="translate(${ex} ${ey})"><rect x="-38" y="-14" width="76" height="24" rx="12" fill="#0F4D36"/><text y="3" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="11" fill="#fff" letter-spacing=".08em">ENTRÉE</text></g>
     </svg>`;
   }
 
-  const TILES = [
-    ['potager', 'Le potager', 'Il pousse avec ta météo.', '#E8432E'],
-    ['jardin', 'La grande serre', 'Cueille. En pot ou en bulbe.', '#2F8A6A'],
-    ['bouquet', 'L’atelier bouquet', 'Compose. Rassemble. Offre.', '#D9487A'],
-    ['noel', 'Le village de Noël', '27 pièces Lemax, toutes cliquables.', '#2E4A8A'],
-    ['galerie', 'La galerie', 'Ton jardin en photo. Un bon offert.', '#E8A62E'],
-    ['clinique', 'La clinique', 'Une tache ? Trouve l’intrus.', '#1F8FA8'],
-  ];
-  function mount(el) {
-    el.innerHTML = `<div class="hub2">
-      <header class="hub2-head"><h1>Le Grand Jardin</h1><p>Six lieux. Un seul jardin.<br>Clique pour entrer.</p></header>
-      <div class="map2">${svg()}</div>
-      <nav class="tiles" aria-label="Tous les espaces">${TILES.map(([p, n, t, c]) => `<a class="tile" href="#${p}" style="--c:${c}"><b>${n}</b><span>${t}</span></a>`).join('')}
-        <a class="tile tile-ghost" href="#coulisses" style="--c:#22303A"><b>Les coulisses</b><span>Ce qui fait tourner l’île.</span></a></nav>
-    </div>`;
+  let el, cur = null;
+  function show(r) {
+    const z = ZONES7.find((x) => x.r === r); if (!z || !el) return;
+    cur = r;
+    $$('.pz', el).forEach((g) => g.classList.toggle('on', g.dataset.r === r));
+    $$('.plan-list a', el).forEach((a) => a.classList.toggle('on', a.dataset.r === r));
+    const tip = $('.plan-tip', el), [a, b] = P(...z.at);
+    tip.innerHTML = `<div class="k" style="color:${z.c}">Espace ${z.n}</div><h3>${esc(z.name)}</h3><p>${esc(z.txt())}</p>
+      <div class="row">${z.tags.map((t) => `<span>${esc(t)}</span>`).join('')}</div><a class="go" href="#${z.r}">${esc(z.cta)} →</a>`;
+    // fiche à droite du repère, ou à gauche s'il est trop près du bord
+    const left = a / VW * 100, top = (b - 46) / VH * 100;
+    tip.style.top = `max(12px, calc(${top}% - 150px))`;
+    if (left > 62) { tip.style.left = ''; tip.style.right = `calc(${100 - left}% + 26px)`; } else { tip.style.right = ''; tip.style.left = `calc(${left}% + 26px)`; }
+    tip.hidden = false;
   }
-  return { mount };
+
+  function mount(view) {
+    el = view;
+    el.innerHTML = `<div class="plan">
+      <section class="plan-map">
+        <div class="plan-title"><h1>Bienvenue au Grand Jardin</h1><p>Survolez un espace du plan, cliquez pour y entrer.</p></div>
+        ${svg()}
+        <div class="plan-tip" hidden></div>
+        <div class="plan-legend"><span><i style="background:#2EBB99"></i>Espaces de vente</span><span><i style="background:#E7B84A"></i>Ateliers & services</span><span><i style="background:#9AA39E"></i>Allées & parking</span></div>
+      </section>
+      <aside class="plan-side">
+        <h2>Plan du magasin</h2><p>7 espaces à explorer, comme en vrai.</p>
+        <nav class="plan-list" aria-label="Les espaces">${ZONES7.map((z) => `<a href="#${z.r}" data-r="${z.r}"><span class="n" style="background:${z.c}">${z.n}</span><span><b>${esc(z.name)}</b><small>${esc(z.sub)}</small></span><em>${z.r === 'jardin' ? 'Entrer' : 'Voir'}</em></a>`).join('')}</nav>
+        <div class="plan-note"><b>Nouveau</b> La serre chaude et ses plantes d’intérieur : orchidées, monstera, bonsaïs…</div>
+      </aside>
+    </div>`;
+    $$('.pz', el).forEach((g) => {
+      g.addEventListener('mouseenter', () => show(g.dataset.r));
+      g.addEventListener('focus', () => show(g.dataset.r));
+      g.addEventListener('click', () => go(g.dataset.r));
+      g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(g.dataset.r); } });
+    });
+    $$('.plan-list a', el).forEach((a) => { a.addEventListener('mouseenter', () => show(a.dataset.r)); a.addEventListener('focus', () => show(a.dataset.r)); });
+    show('jardin');
+  }
+  return { mount, ZONES7 };
 })();
 route('', { title: '', mount: (el) => HubMap.mount(el) });
 
@@ -3696,438 +3692,335 @@ const JArt = (() => {
 })();
 
 /* ============================================================
-   LE JARDIN-BOUTIQUE — balade dans une jardinerie dessinée
-   Entrée → pépinière (roseraie, coin méditerranéen) → ombrière (sous-bois)
-   → serre vitrée (massifs à bulbes, potager) → caisses.
-   Les dessins des plantes sont dans jardin-art.js (JArt).
+   LA GRANDE SERRE — allée en perspective, à hauteur d'œil
+   On avance de table en table ; chaque groupe de plantes est cliquable.
+   Dessins : JArt.DRAW (jardin-art.js) ou illustrations img/serre/*.svg.
    ============================================================ */
 const Jardin = (() => {
-  let el, walkerX = 210, target = 210, raf = null, facing = 1, keyHandler = null, k = 1, geo = null;
-  const H = 640, BACK = 470, FLOOR = 548, TOP = 458, FEET = 624;
-  const { grad, shadow, crown, nursery, priceTag, tint, rng, f, at, sh } = JArt;
+  const VW = 1440, VH = 836, VX = 720, VY = 300, F = 720, CAM = 1.72;
+  const STEP = 3.2;            // distance entre deux tables (m)
+  const START = 3.0;           // première table devant la caméra
+  const TABLE_Y = .78;
+  const U = .005;              // 1 unité de dessin JArt = 5 mm
   const DRAW = JArt.DRAW;
+
+  let el, camZ = 0, slot = 0, anim = null, keyHandler = null, resizeHandler = null, vbW = VW;
   const basket = () => store.get('basket', []);
   const setBasket = (b) => { store.set('basket', b); updateCount(); };
   function updateCount() { const n = basket().reduce((s, x) => s + x.qty, 0); const c = $('#basket-count'); if (c) c.textContent = n || ''; }
 
-  const STYLE = { roseraie: 'outdoor', mediterranee: 'outdoor', ombre: 'shade', massif: 'serre', potager: 'serre' };
-  const TABLE = ['lavender', 'cyclamen', 'pansy', 'strawberry', 'lettuce', 'tomato', 'herb', 'chive'];
-  const WIDTH = { rose: 200, climber: 230, olive: 250, lemon: 240, mimosa: 270, hydrangea: 240, camellia: 205, bamboo: 210, dahlia: 200, lily: 196, gladiolus: 196, freesia: 196, garlic: 196, lavender: 230, cyclamen: 200, pansy: 200, strawberry: 200, lettuce: 210, tomato: 220, herb: 210, chive: 210 };
-  const SCALE = { pansy: 1.25, strawberry: 1.25, lettuce: 1.2, cyclamen: 1.15 };
-  const shortName = (n) => n.replace(/^Rosier( grimpant)? /, 'Rosier ').replace(/ (non traçant|décoratif|sur tige|officinale)/, '').replace(/ ?—.*$/, '').replace(/'([^']+)'.*$/, '‘$1’').replace(/ en (jardinière|mélange)$/, '').slice(0, 22);
-  const shortForm = (l) => l.split(',')[0].replace('Barquette de', 'Barq.').replace('Conteneur de', 'Cont.').replace('Bulbes, spécial pot', 'Spécial pot').replace('Bulbes en mélange', 'En mélange').slice(0, 15);
-
-  /* ---------- plan de la jardinerie ---------- */
+  /* ---------- rangement des produits dans l'allée ---------- */
+  const FLOOR = ['climber', 'olive', 'lemon', 'mimosa', 'hydrangea', 'camellia', 'bamboo', 'dahlia', 'lily', 'gladiolus', 'freesia', 'garlic'];
+  const ZNAMES = { roseraie: ['La roseraie', 'ROSIERS · GRIMPANTS'], mediterranee: ['Méditerranée', 'OLIVIERS · AGRUMES · LAVANDES'], ombre: ['Le sous-bois', 'OMBRE · MI-OMBRE'], interieur: ['Plantes d’intérieur', 'VERTES · FLEURIES · CACTÉES'], massif: ['Massifs à bulbes', 'BULBES · PLANTES À MASSIF'], potager: ['Le potager', 'PLANTS · AROMATIQUES'] };
+  const FLAGS = { 'rosier-ep': ['COUP DE CŒUR', '#E86B4F'], orchidee: ['FLEURI', '#D2527F'], sansevieria: ['FACILE', '#2EBB99'], fraisier: ['DE SAISON', '#E7A23A'], lavande: ['PARFUMÉ', '#8E72C8'] };
+  let BAYS = [], ZSTART = {}, END = 0;
   function layout() {
-    let x = 330; const items = [], zones = [];
+    BAYS = []; ZSTART = {};
+    let s = 0;
     ZONES.forEach((z) => {
-      const zone = { ...z, style: STYLE[z.id] || 'outdoor', x0: x - 40, signX: x + 70 };
-      x += 190;
-      SHOP.filter((p) => p.zone === z.id).forEach((p, i) => {
-        const w = WIDTH[p.kind] || 210;
-        items.push({ p, x: x + w / 2, w, table: TABLE.includes(p.kind), depth: TABLE.includes(p.kind) ? 0 : i % 2, zone: z.id });
-        x += w;
-      });
-      x += 80; zone.x1 = x; zones.push(zone);
+      const list = SHOP.filter((p) => p.zone === z.id);
+      if (!list.length) return;
+      ZSTART[z.id] = s;
+      list.forEach((p, i) => { BAYS.push({ p, side: i % 2 ? 1 : -1, slot: s + Math.floor(i / 2), zone: z.id, floor: FLOOR.includes(p.kind) && !p.img || ['olive', 'lemon'].includes(p.kind) }); });
+      s += Math.ceil(list.length / 2);
     });
-    // les tables de présentation regroupent les articles voisins de petite taille
-    const tables = [];
-    items.forEach((it, i) => {
-      if (!it.table) return;
-      const prev = items[i - 1];
-      if (prev && prev.table && prev.zone === it.zone) tables[tables.length - 1].x1 = it.x + it.w / 2 - 6;
-      else tables.push({ x0: it.x - it.w / 2 + 6, x1: it.x + it.w / 2 - 6 });
+    END = s;
+  }
+  const zOf = (sl) => START + sl * STEP;
+
+  /* ---------- symboles (un dessin par produit, réutilisé) ---------- */
+  function symbols() {
+    return SHOP.map((p) => p.img
+      ? `<symbol id="sp-${p.id}" viewBox="-150 -325 300 340" overflow="visible"><image href="img/serre/${p.img}.svg" x="-150" y="-325" width="300" height="340"/></symbol>`
+      : `<symbol id="sp-${p.id}" viewBox="-150 -345 300 350" overflow="visible">${DRAW[p.kind](p.color, 3, p)}</symbol>`).join('');
+  }
+  // taille réelle (m) d'un symbole : largeur, hauteur de la boîte
+  const symSize = (p) => (p.img ? [300 * p.h / 325, 340 * p.h / 325] : [300 * U, 350 * U]);
+  const symFoot = (p) => (p.img ? 325 / 340 : 345 / 350); // position du pied dans la boîte
+
+  /* ---------- projection ---------- */
+  const P = (X, Y, Z) => [VX + F * X / Z, VY + F * (CAM - Y) / Z];
+  const pts = (a) => a.map(([X, Y, Z]) => P(X, Y, Z).map((v) => v.toFixed(1)).join(',')).join(' ');
+  const q = (n) => n.toFixed(1);
+
+  /* ---------- la serre (structure) ---------- */
+  function shell(cz) {
+    const ZB = 46; let g = '';
+    const zw = (w) => w - cz; // monde -> caméra
+    g += `<rect x="-400" y="-50" width="2240" height="${VH + 100}" fill="url(#js-sky)"/>`;
+    [[260, 90, 90], [520, 60, 70], [980, 80, 110], [1240, 120, 80], [760, 150, 60], [60, 140, 70]].forEach(([x, y, r]) => { g += `<g opacity=".9"><ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r * .32}" fill="#fff"/><ellipse cx="${x + r * .35}" cy="${y - r * .18}" rx="${r * .55}" ry="${r * .3}" fill="#fff"/></g>`; });
+    g += `<polygon points="${pts([[-4.4, 0, ZB], [4.4, 0, ZB], [4.4, 3.1, ZB], [0, 4.9, ZB], [-4.4, 3.1, ZB]])}" fill="#F3F1E4"/><ellipse cx="${VX}" cy="${VY - 30}" rx="420" ry="260" fill="url(#js-glow)"/>`;
+    g += `<polygon points="${pts([[-4.4, 0, 1.2], [4.4, 0, 1.2], [4.4, 0, ZB], [-4.4, 0, ZB]])}" fill="url(#js-floor)"/>`;
+    // tapis central en carreaux et bordures vertes
+    const t0 = Math.floor((cz + 1.2) / .9) * .9;
+    for (let w = t0; w < cz + ZB; w += .9) { const z = zw(w); if (z < 1.2) continue; const k = Math.round(w / .9) % 2; g += `<polygon points="${pts([[-.55, 0, z], [.55, 0, z], [.55, 0, z + .82], [-.55, 0, z + .82]])}" fill="${k ? '#D9C3A3' : '#E3CFB0'}"/>`; }
+    [-1.25, 1.25].forEach((x) => { g += `<polygon points="${pts([[x - .05, 0, 1.2], [x + .05, 0, 1.2], [x + .05, 0, ZB], [x - .05, 0, ZB]])}" fill="#2EBB99" opacity=".7"/>`; });
+    // taches de soleil (fixes dans le monde)
+    for (let k = 0; k < 40; k++) { const w = 4 + k * 4.3, z = zw(w); if (z < 1.6 || z > ZB) continue; const x = [-1.6, 1.2, -.4, 1.6, -1.2][k % 5], r = [1.3, 1.1, 1, .9, .8][k % 5]; const [a, b] = P(x, 0, z); g += `<ellipse cx="${q(a)}" cy="${q(b)}" rx="${q(F / z * r)}" ry="${q(F / z * r * .22)}" fill="url(#js-sun)"/>`; }
+    // parois vitrées et soubassement
+    [-4.4, 4.4].forEach((x) => { g += `<polygon points="${pts([[x, 0, 1.2], [x, 0, ZB], [x, 3.1, ZB], [x, 3.1, 1.2]])}" fill="url(#js-wall)" opacity=".75"/><polygon points="${pts([[x, 0, 1.2], [x, 0, ZB], [x, .6, ZB], [x, .6, 1.2]])}" fill="#F3F4F1"/>`; });
+    for (let k = 0; k < 60; k++) { const w = k * 1.6, z = zw(w); if (z < 2 || z > ZB) continue; [-1, 1].forEach((s) => { const [x, y] = P(s * 5.2, 1.6, z), r = F / z * .9; g += `<ellipse cx="${q(x)}" cy="${q(y)}" rx="${q(r * .7)}" ry="${q(r)}" fill="#8DBF85" opacity=".45"/>`; }); }
+    // toiture
+    g += `<polygon points="${pts([[-4.4, 3.1, 1.2], [0, 4.9, 1.2], [0, 4.9, ZB], [-4.4, 3.1, ZB]])}" fill="#D8E9F0" opacity=".5"/><polygon points="${pts([[4.4, 3.1, 1.2], [0, 4.9, 1.2], [0, 4.9, ZB], [4.4, 3.1, ZB]])}" fill="#CFE3EC" opacity=".5"/>`;
+    for (let i = 0; i <= 8; i++) { const t = i / 8; [[-4.4 + 4.4 * t, 3.1 + 1.8 * t], [4.4 - 4.4 * t, 3.1 + 1.8 * t]].forEach(([x, y]) => { g += `<polyline points="${pts([[x, y, 1.2], [x, y, ZB]])}" stroke="#fff" stroke-width="1.2" fill="none" opacity=".85"/>`; }); }
+    [.6, 1.6, 2.4, 3.1].forEach((y) => [-4.4, 4.4].forEach((x) => { g += `<polyline points="${pts([[x, y, 1.2], [x, y, ZB]])}" stroke="#fff" stroke-width="2" fill="none"/>`; }));
+    // rayons de soleil
+    for (let k = 0; k < 14; k++) { const w = 2 + k * 5.5, z = zw(w); if (z < 1.5 || z > 30) continue; const x = [-3.6, -1.2, 1.8][k % 3], wd = [1.6, 1.2, 1.4][k % 3]; g += `<polygon points="${pts([[x - 1.2, 4.6, Math.max(1.2, z - 2)], [x - 1.2 + wd, 4.6, Math.max(1.2, z - 2)], [x + wd + 1.4, 0, z + 3], [x + 1.4, 0, z + 3]])}" fill="url(#js-ray)" opacity=".5"/>`; }
+    // portiques blancs tous les 3 m + rampes d'éclairage
+    const roof = (z) => [[-4.4, 3.1, z], [0, 4.9, z], [4.4, 3.1, z]];
+    const p0 = Math.ceil((cz + 1.3 - 2.2) / 3) * 3 + 2.2;
+    for (let w = p0; w < cz + ZB; w += 3) {
+      const z = zw(w), sw = q(F / z * .07);
+      g += `<polyline points="${pts([[-4.4, 0, z], ...roof(z), [4.4, 0, z]])}" stroke="#fff" stroke-width="${sw}" fill="none" stroke-linejoin="round"/><polyline points="${pts([[-4.4, 3.1, z], [4.4, 3.1, z]])}" stroke="#fff" stroke-width="${q(sw * .45)}" fill="none"/>`;
+      for (let k = 0; k < 8; k++) { const x0 = -4.4 + k * 1.1; g += `<polyline points="${pts([[x0, 3.1, z], [x0 + .55, 3.45, z], [x0 + 1.1, 3.1, z]])}" stroke="#fff" stroke-width="${q(sw * .22)}" fill="none" opacity=".9"/>`; }
+      [-2, 2].forEach((x) => { const [a, b] = P(x, 2.98, z + .4); g += `<ellipse cx="${q(a)}" cy="${q(b + 2)}" rx="${q(F / z * .12)}" ry="${q(F / z * .03)}" fill="#FFF7D6" opacity=".9"/>`; });
+    }
+    [-2, 2].forEach((x) => { g += `<polyline points="${pts([[x, 3.0, 1.2], [x, 3.0, ZB]])}" stroke="#2F3A36" stroke-width="2.4" fill="none" opacity=".5"/>`; });
+    return g;
+  }
+
+  /* ---------- objets de l'allée (triés par profondeur) ---------- */
+  function table(side, z1, z2) {
+    const s = side, xa = s * 1.45, xb = s * 3.6, Y = TABLE_Y; let t = '';
+    t += `<polygon points="${pts([[xa, 0, z1], [xb, 0, z1], [xb, 0, z2], [xa, 0, z2]])}" fill="#000" opacity=".1"/>`;
+    [[xa + s * .08, z1 + .1], [xb - s * .08, z1 + .1], [xa + s * .08, z2 - .1], [xb - s * .08, z2 - .1]].forEach(([x, z]) => {
+      t += `<polyline points="${pts([[x, .08, z], [x, Y - .04, z]])}" stroke="#1F5A43" stroke-width="${q(F / z * .035)}" fill="none"/>`;
+      const [cx, cy] = P(x, .04, z); t += `<circle cx="${q(cx)}" cy="${q(cy)}" r="${q(F / z * .045)}" fill="#2F3532"/>`;
     });
-    const checkout = { x0: x, x1: x + 400 };
-    return { items, zones, tables, checkout, W: x + 400 };
+    t += `<polygon points="${pts([[xa, .22, z1], [xa, .26, z1], [xa, .26, z2], [xa, .22, z2]])}" fill="#2A6B52"/>`;
+    t += `<polygon points="${pts([[xa, Y, z1], [xb, Y, z1], [xb, Y, z2], [xa, Y, z2]])}" fill="url(#js-top)"/>`;
+    for (let k = 1; k < 6; k++) { const xx = xa + (xb - xa) * k / 6; t += `<polyline points="${pts([[xx, Y, z1], [xx, Y, z2]])}" stroke="#A97C45" stroke-width="${q(F / z1 * .006)}" fill="none" opacity=".6"/>`; }
+    t += `<polygon points="${pts([[xa, Y - .11, z1], [xa, Y, z1], [xa, Y, z2], [xa, Y - .11, z2]])}" fill="#0F4D36"/><polygon points="${pts([[xa, Y - .11, z1], [xa, Y - .095, z1], [xa, Y - .095, z2], [xa, Y - .11, z2]])}" fill="#2EBB99"/>`;
+    t += `<polygon points="${pts([[xa, Y - .11, z1], [xb, Y - .11, z1], [xb, Y, z1], [xa, Y, z1]])}" fill="#1C6A50"/>`;
+    return t;
+  }
+  function use(p, X, Y, Z, k = 1) {
+    const [w, h] = symSize(p), wp = F * w * k / Z, hp = F * h * k / Z, [x, y] = P(X, Y, Z);
+    return `<ellipse cx="${q(x)}" cy="${q(y)}" rx="${q(wp * .22)}" ry="${q(wp * .045)}" fill="url(#js-shad)"/><use href="#sp-${p.id}" x="${q(x - wp / 2)}" y="${q(y - hp * symFoot(p))}" width="${q(wp)}" height="${q(hp)}"/>`;
+  }
+  // nombre de pots par rangée et pas entre rangées selon la taille du dessin
+  function stock(p) {
+    if (p.img) return p.h > .7 ? [2, .7] : [3, .45];
+    return { rose: [2, .8], cyclamen: [2, .6], pansy: [2, .5], strawberry: [2, .5], lettuce: [2, .5], tomato: [2, .7], herb: [2, .55], chive: [2, .55], lavender: [2, .6] }[p.kind] || [2, .7];
+  }
+  function tag(p, side, Z, Y) {
+    const f = p.forms.plante || p.forms.bulbe, [x, y] = P(side * 1.5, Y, Z), k = F / Z / 330, w = 156 * k, h = 52 * k;
+    const name = p.name.replace(/^Rosier( grimpant)? /, 'Rosier ').replace(/ en (jardinière|mélange)$/, '').replace(/'([^']+)'.*$/, '‘$1’').slice(0, 24);
+    const fmt = f.label.split(',')[0].slice(0, 16);
+    return `<g class="tag" transform="translate(${q(x - (side < 0 ? w * .12 : w * .88))} ${q(y - h * .6)})"><rect width="${q(w)}" height="${q(h)}" rx="${q(4 * k)}" fill="#fff" stroke="#D8DCD6" stroke-width="${q(.6 * k)}"/><rect width="${q(6 * k)}" height="${q(h)}" rx="${q(2 * k)}" fill="#0F4D36"/>
+      <text x="${q(12 * k)}" y="${q(18 * k)}" font-family="DM Sans, sans-serif" font-weight="600" font-size="${q(12.5 * k)}" fill="#1D2A24">${esc(name)}</text>
+      <text x="${q(12 * k)}" y="${q(41 * k)}" font-family="DM Sans, sans-serif" font-weight="700" font-size="${q(f.price == null ? 12 * k : 19 * k)}" fill="#0F4D36">${f.price == null ? 'Voir le prix' : euro(f.price)}</text>
+      <text x="${q(w - 8 * k)}" y="${q(41 * k)}" text-anchor="end" font-family="DM Sans, sans-serif" font-size="${q(9 * k)}" fill="#7A847E">${esc(fmt)}</text></g>`;
+  }
+  function flag(side, Z, Y, [txt, col]) {
+    const [x, y] = P(side * 1.62, Y, Z), [, y2] = P(side * 1.62, Y + .55, Z), k = F / Z / 250;
+    return `<line x1="${q(x)}" y1="${q(y)}" x2="${q(x)}" y2="${q(y2)}" stroke="#5E4630" stroke-width="${q(Math.max(1, 2 * k))}"/><path d="M${q(x)} ${q(y2)}h${q(70 * k)}l${q(-10 * k)} ${q(11 * k)}l${q(10 * k)} ${q(11 * k)}h${q(-70 * k)}z" fill="${col}"/><text x="${q(x + 6 * k)}" y="${q(y2 + 15 * k)}" font-family="DM Sans, sans-serif" font-weight="700" font-size="${q(8.6 * k)}" fill="#fff">${txt}</text>`;
+  }
+  function bay(b, cz) {
+    const z1 = zOf(b.slot) - cz, z2 = z1 + 2.6, s = b.side, p = b.p;
+    let o = `<g class="bay" data-id="${p.id}" tabindex="0" role="button" aria-label="${esc(p.name)}, ${esc(euro((p.forms.plante || p.forms.bulbe).price))}. Ouvrir la fiche.">`;
+    if (b.floor) {
+      // grands sujets posés au sol, deux exemplaires
+      const pos = [[s * 2.95, z1 + 1.9], [s * 2.05, z1 + 1.1]];
+      if (z1 + .9 > 1.3) pos.forEach(([X, Z]) => { if (Z > 1.3) o += use(p, X, 0, Z); });
+      o += `<polygon class="hit" points="${pts([[s * 1.4, 0, Math.max(1.3, z1)], [s * 3.6, 0, Math.max(1.3, z1)], [s * 3.6, 2.2, Math.max(1.3, z1)], [s * 1.4, 2.2, Math.max(1.3, z1)]])}"/>`;
+      if (z1 + .8 > 1.4) o += tag(p, s, z1 + .8, .9);
+    } else {
+      o += table(s, Math.max(1.25, z1), z2);
+      const [cols, step] = stock(p), gap = cols > 1 ? (3.4 - 1.72) / (cols - 1) : 0;
+      const items = [];
+      for (let z = z2 - .3; z > z1 + .15; z -= step) for (let c = 0; c < cols; c++) { if (z < 1.35) continue; items.push([s * (1.72 + c * gap + ((z * 7.3 + c) % 1) * .06), z, .94 + ((z * 13 + c * 3) % 1) * .1]); }
+      items.sort((a, c) => c[1] - a[1]).forEach(([X, Z, k]) => { o += use(p, X, TABLE_Y, Z, k); });
+      if (p.hang) [[s * 2.3, z1 + 1.4], [s * 3.1, z1 + 1.9]].forEach(([X, Z]) => { if (Z < 1.5) return; const [a, b2] = P(X, 3.0, Z), [, b3] = P(X, 2.25, Z); o += `<line x1="${q(a)}" y1="${q(b2)}" x2="${q(a)}" y2="${q(b3)}" stroke="#5E6662" stroke-width="1"/>` + use(p, X, 1.78, Z); });
+      if (z1 + .9 > 1.4) o += tag(p, s, z1 + .9, TABLE_Y);
+    }
+    if (FLAGS[p.id] && z1 + 2 > 1.5) o += flag(s, z1 + 2, b.floor ? 0 : TABLE_Y, FLAGS[p.id]);
+    return o + '</g>';
+  }
+  function sign(Z, title, sub) {
+    const w = 2.6, [x1, y1] = P(-w / 2, 2.72, Z), [x2, y2] = P(w / 2, 2.3, Z), [ax] = P(-w / 2 + .15, 3.05, Z), [bx] = P(w / 2 - .15, 3.05, Z), [, yt] = P(0, 3.05, Z), k = F / Z / 200;
+    return `<g class="zsign"><line x1="${q(ax)}" y1="${q(yt)}" x2="${q(ax)}" y2="${q(y1)}" stroke="#4A524E" stroke-width="${q(Math.max(.6, k))}"/><line x1="${q(bx)}" y1="${q(yt)}" x2="${q(bx)}" y2="${q(y1)}" stroke="#4A524E" stroke-width="${q(Math.max(.6, k))}"/>
+      <rect x="${q(x1)}" y="${q(y1)}" width="${q(x2 - x1)}" height="${q(y2 - y1)}" rx="${q(3 * k)}" fill="url(#js-sign)"/><rect x="${q(x1)}" y="${q(y2 - 4 * k)}" width="${q(x2 - x1)}" height="${q(4 * k)}" fill="#2EBB99"/>
+      <text x="${q((x1 + x2) / 2)}" y="${q(y1 + (y2 - y1) * .52)}" text-anchor="middle" font-family="Brygada 1918, serif" font-weight="600" font-size="${q((y2 - y1) * .34)}" fill="#fff">${esc(title)}</text>
+      <text x="${q((x1 + x2) / 2)}" y="${q(y1 + (y2 - y1) * .8)}" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="500" letter-spacing="${q(k)}" font-size="${q((y2 - y1) * .15)}" fill="#BFE6D8">${esc(sub)}</text></g>`;
+  }
+  function checkout(Z) {
+    // les caisses au fond de l'allée
+    let o = `<g class="checkout" tabindex="0" role="button" aria-label="Passer en caisse : ouvrir mon panier">`;
+    o += `<polygon points="${pts([[-2.4, 0, Z], [2.4, 0, Z], [2.4, 1.0, Z], [-2.4, 1.0, Z]])}" fill="#C39558"/><polygon points="${pts([[-2.5, 1.0, Z - .2], [2.5, 1.0, Z - .2], [2.5, 1.06, Z - .2], [-2.5, 1.06, Z - .2]])}" fill="#EDE7DA"/>`;
+    for (let k = 0; k < 6; k++) { const x = -2.2 + k * .88; o += `<polyline points="${pts([[x, .1, Z - .01], [x, .9, Z - .01]])}" stroke="#A97C45" stroke-width="${q(F / Z * .01)}" fill="none"/>`; }
+    const [a, b] = P(1.2, 1.06, Z - .2), k = F / Z / 100;
+    o += `<rect x="${q(a - 14 * k)}" y="${q(b - 18 * k)}" width="${q(28 * k)}" height="${q(18 * k)}" rx="${q(2 * k)}" fill="#3C4743"/><rect x="${q(a - 11 * k)}" y="${q(b - 15 * k)}" width="${q(22 * k)}" height="${q(9 * k)}" fill="#9FD3B2"/>`;
+    o += sign(Z - .3, 'Caisses', 'CLIQUEZ POUR PAYER');
+    return o + '</g>';
   }
 
-  /* ---------- décor lointain (parallaxe) ---------- */
-  function farLayer(W) {
-    const R = rng(7); let g = '';
-    const W2 = W * 1.4;
-    g += `<path d="M0 360 ${Array.from({ length: Math.ceil(W2 / 300) + 1 }, (_, i) => `Q${i * 300 + 150} ${300 + (i % 3) * 18} ${(i + 1) * 300} ${352 + (i % 2) * 14}`).join(' ')} V${BACK} H0Z" fill="#B9CFAE"/>`;
-    for (let x = -40; x < W2; x += 70 + R() * 50) {
-      const h = 70 + R() * 70, w = 34 + R() * 26, y = 400 + R() * 20;
-      g += `<path d="${blob(x, y - h * .5, w, h * .55, 9, .18, Math.round(x))}" fill="${sh('#7FA27A', (R() - .5) * .2)}" opacity=".85"/>`;
-    }
-    for (let x = 0; x < W2; x += 120 + R() * 60) g += `<path d="${blob(x, 438, 70, 26, 9, .2, Math.round(x) + 3)}" fill="#97B78A"/>`;
-    for (let x = 300; x < W2; x += 700 + R() * 400) {
-      const y = 70 + R() * 70;
-      g += `<g opacity=".95"><path d="${blob(x, y, 70, 20, 10, .2, Math.round(x))}" fill="#FFFFFF"/><path d="${blob(x + 30, y - 12, 44, 18, 9, .2, Math.round(x) + 1)}" fill="#FFFFFF"/><path d="${blob(x + 6, y + 8, 60, 9, 9, .1, Math.round(x) + 2)}" fill="#E4EEF2"/></g>`;
-    }
-    return g;
+  /* ---------- rendu ---------- */
+  function scene(cz) {
+    const parts = [];
+    BAYS.forEach((b) => { const z = zOf(b.slot) - cz; if (z + 2.6 > 1.25 && z < 34) parts.push([z + 1.3, () => bay(b, cz)]); });
+    ZONES.forEach((zn) => { if (ZSTART[zn.id] == null) return; const z = zOf(ZSTART[zn.id]) - cz + 1.6; if (z > 2.2 && z < 34) parts.push([z + .01, () => sign(z, ...ZNAMES[zn.id])]); });
+    const zc = zOf(END) - cz + .8; if (zc > 1.5 && zc < 40) parts.push([zc, () => checkout(zc)]);
+    parts.sort((a, b) => b[0] - a[0]);
+    return shell(cz) + parts.map(([, f]) => f()).join('');
+  }
+  function draw() {
+    const g = $('#js-world', el); if (!g) return;
+    g.innerHTML = scene(camZ);
+    bindBays();
+  }
+  function frame() {
+    const s = $('.serre-svg', el); if (!s) return;
+    const box = s.getBoundingClientRect(); const ratio = box.width / Math.max(1, box.height);
+    vbW = Math.max(640, Math.min(VW, VH * ratio));
+    s.setAttribute('viewBox', `${q(VX - vbW / 2)} 0 ${q(vbW)} ${VH}`);
+  }
+  function walkTo(target) {
+    target = clamp(target, 0, Math.max(0, END - 1));
+    if (target === slot && !anim) return;
+    slot = target;
+    const from = camZ, to = slot * STEP, t0 = performance.now(), dur = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : Math.min(1400, 420 + Math.abs(to - from) * 60);
+    if (anim) cancelAnimationFrame(anim);
+    hideCard();
+    const tick = (t) => {
+      const k = dur ? Math.min(1, (t - t0) / dur) : 1, e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      camZ = from + (to - from) * e; draw();
+      if (k < 1) anim = requestAnimationFrame(tick); else { anim = null; updateHud(); }
+    };
+    anim = requestAnimationFrame(tick);
+    updateHud();
+  }
+  function zoneAt(sl) { let z = ZONES[0].id; ZONES.forEach((zn) => { if (ZSTART[zn.id] != null && sl >= ZSTART[zn.id]) z = zn.id; }); return z; }
+  function updateHud() {
+    const z = zoneAt(slot), zn = ZONES.find((x) => x.id === z);
+    $('#serre-zone', el).textContent = ZNAMES[z][0];
+    $('#serre-sub', el).textContent = `${SHOP.filter((p) => p.zone === z).length} plantes · table ${slot - ZSTART[z] + 1}`;
+    $('#serre-crumb', el).textContent = zn ? zn.name : '';
+    $$('.serre-steps i', el).forEach((i) => i.classList.toggle('on', ZSTART[i.dataset.z] <= slot));
+    $$('.serre-mini li', el).forEach((li) => li.classList.toggle('on', li.dataset.z === z));
+    $('#go-back', el).disabled = slot <= 0; $('#go-fwd', el).disabled = slot >= END - 1;
   }
 
-  /* ---------- façade d'entrée ---------- */
-  function entrance() {
-    let g = `<rect x="0" y="150" width="320" height="${BACK - 150}" fill="${grad('v', '#EEE6D3', .1, -.1)}"/>`;
-    for (let x = 8; x < 320; x += 16) g += `<path d="M${x} 176V${BACK}" stroke="#D6CBB3" stroke-width="1"/>`;
-    g += `<path d="M-10 150H330L320 176H0Z" fill="${grad('v', '#2E6B3F', .15, -.25)}"/><path d="M0 176H320" stroke="#1E4A2B" stroke-width="2"/>`;
-    g += `<rect x="30" y="192" width="270" height="64" rx="8" fill="${grad('v', '#2E6B3F', .12, -.2)}" stroke="#1E4A2B" stroke-width="1.5"/>
-      <g transform="translate(70 224)"><circle r="17" fill="#F4F1E6"/><path d="M-8 8C-10 -6 0 -12 10 -10C10 2 2 10 -8 8ZM-8 8L4 -4" fill="#4E9A4E" stroke="#2E6B3F" stroke-width="1.6" stroke-linecap="round"/></g>
-      <text x="96" y="222" class="store-sign">Le Grand Jardin</text><text x="97" y="243" class="store-sub">JARDINERIE · FLEURS · POTAGER</text>`;
-    g += `<rect x="92" y="282" width="136" height="${BACK - 282}" fill="#2D3B35"/><rect x="98" y="288" width="60" height="${BACK - 288}" fill="${grad('v', '#5E7C70', .15, -.3)}" stroke="#AEB5B0" stroke-width="2"/><rect x="162" y="288" width="60" height="${BACK - 288}" fill="${grad('v', '#5E7C70', .15, -.3)}" stroke="#AEB5B0" stroke-width="2"/>
-      <path d="M104 300L150 260M112 420L156 370M168 330L214 290" stroke="#fff" stroke-width="8" opacity=".12"/><rect x="88" y="276" width="144" height="8" fill="#AEB5B0"/>
-      <text x="160" y="310" text-anchor="middle" class="door-label">Bienvenue</text>`;
-    [44, 276].forEach((x, i) => { g += at(x, BACK + 6, `${shadow(0, 0, 30)}<path d="M-3 -40V-78" stroke="#6B5236" stroke-width="5"/>${crown(0, -100, 30, 30, { c: '#3E7D3A', n: 50, L: 11, w: .5, seed: 40 + i })}${JArt.terracotta(40, 40, '#B65A35')}`); });
-    return g;
+  /* ---------- fiche au survol et cueillette ---------- */
+  const art = (p) => (p.img ? `<img src="img/serre/${p.img}.svg" alt="">` : `<svg viewBox="-150 -345 300 350" aria-hidden="true">${DRAW[p.kind](p.color, 3, p)}</svg>`);
+  function hideCard() { const c = $('.serre-card', el); if (c) c.hidden = true; }
+  function showCard(id, g) {
+    const p = SHOP.find((x) => x.id === id), c = $('.serre-card', el), f = p.forms.plante || p.forms.bulbe, zn = ZONES.find((z) => z.id === p.zone);
+    c.innerHTML = `<div class="sc-ph">${art(p)}</div><div class="bd"><div class="rayon">${esc(zn ? zn.name : '')}</div><h3>${esc(p.name)}</h3>${p.latin ? `<i>${esc(p.latin)}</i>` : ''}
+      <div class="row"><b>${f.price == null ? 'Prix sur la fiche' : euro(f.price)}</b><small>${esc(f.label)}</small></div>
+      <div class="opts"><span class="${p.forms.plante ? '' : 'off'}">Plante en pot</span><span class="${p.forms.bulbe ? '' : 'off'}">Bulbe</span></div>
+      <button class="btn" type="button" data-pick="${p.id}">Choisir et ajouter</button></div>`;
+    const sc = $('.serre-stage', el).getBoundingClientRect(), r = g.getBoundingClientRect();
+    const right = r.left + r.width / 2 > sc.left + sc.width / 2;
+    c.style.left = right ? `${Math.max(8, r.left - sc.left - 290)}px` : `${Math.min(sc.width - 290, r.right - sc.left + 10)}px`;
+    c.style.top = `${clamp(r.top - sc.top - 40, 70, sc.height - 360)}px`;
+    c.hidden = false;
+    $('[data-pick]', c).addEventListener('click', () => chooseForm(p));
   }
-
-  /* ---------- fonds de chaque espace ---------- */
-  function hedge(x0, x1, y = 396) {
-    let g = `<path d="M${x0} ${BACK}V${y + 20}${Array.from({ length: Math.ceil((x1 - x0) / 60) }, (_, i) => `q30 ${-22 - (i % 3) * 6} 60 0`).join('')}V${BACK}Z" fill="${grad('v', '#4A7C43', .1, -.3)}"/>`;
-    for (let x = x0 + 30; x < x1 - 10; x += 110) g += crown(x, y + 26, 52, 22, { c: '#4E8446', n: 26, L: 13, w: .5, seed: Math.round(x), base: false });
-    return g;
-  }
-  function backStock(x0, x1, y, palette, seed) {
-    const R = rng(seed); let g = '';
-    for (let x = x0 + 24; x < x1 - 20; x += 40 + R() * 10) {
-      const c = palette[Math.floor(R() * palette.length)], h = 18 + R() * 12;
-      g += at(x, y, `<path d="M-11 -14H11L9 0H-9Z" fill="#33393A"/><path d="${blob(0, -14 - h * .5, 15, h * .6, 8, .2, Math.round(x))}" fill="${grad('b', '#5F8C55', .2, -.3)}"/>`
-        + (c ? Array.from({ length: 5 }, (_, i) => `<circle cx="${f(-9 + i * 4.5 + R() * 2)}" cy="${f(-14 - h * (.4 + R() * .6))}" r="${f(2.4 + R() * 1.4)}" fill="${grad('b', c, .4, -.3)}"/>`).join('') : ''));
-    }
-    return `<g opacity=".92">${g}</g>`;
-  }
-  function pergola(x0, x1) {
-    let g = '';
-    for (let x = x0 + 60; x < x1; x += 220) g += `<rect x="${x - 6}" y="250" width="12" height="${BACK - 246}" fill="${grad('c', '#9A7650', .25, -.35)}" stroke="#5E4630" stroke-width=".8"/>`;
-    g += `<rect x="${x0}" y="240" width="${x1 - x0}" height="14" fill="${grad('v', '#A98258', .2, -.3)}" stroke="#5E4630" stroke-width=".8"/>`;
-    for (let x = x0 + 20; x < x1; x += 46) g += `<rect x="${x - 4}" y="232" width="8" height="30" rx="2" fill="${grad('c', '#B48C60', .2, -.3)}" stroke="#5E4630" stroke-width=".6"/>`;
-    const R = rng(x0);
-    for (let x = x0 + 30; x < x1; x += 90) {
-      g += crown(x, 246, 50, 16, { c: '#4A8440', n: 22, L: 12, w: .5, seed: Math.round(x), base: false });
-      for (let i = 0; i < 4; i++) g += `<circle cx="${f(x - 40 + R() * 80)}" cy="${f(236 + R() * 24)}" r="${f(4 + R() * 2)}" fill="${grad('b', R() > .5 ? '#F2B6C4' : '#E7859C', .4, -.3)}"/>`;
-    }
-    for (let x = x0 + 60; x < x1; x += 220) g += crown(x, 340, 14, 80, { c: '#4A8440', n: 24, L: 11, w: .5, seed: Math.round(x) + 9, base: false });
-    return g;
-  }
-  function stoneWall(x0, x1) {
-    const R = rng(x0 + 1);
-    let g = '';
-    for (let x = x0 + 50; x < x1; x += 130 + R() * 60) g += `<path d="M${f(x)} ${BACK - 30}C${f(x - 22)} 380 ${f(x - 10)} 260 ${f(x)} ${f(200 + R() * 30)}C${f(x + 10)} 260 ${f(x + 22)} 380 ${f(x)} ${BACK - 30}Z" fill="${grad('b', '#3E6A3E', .2, -.35)}"/>`;
-    g += `<rect x="${x0}" y="420" width="${x1 - x0}" height="${BACK - 420}" fill="#CDBA94"/>`;
-    for (let row = 0; row < 3; row++) for (let x = x0 - (row % 2) * 20; x < x1; x += 34 + R() * 12) {
-      const w = 28 + R() * 12, y = 422 + row * 16;
-      g += `<rect x="${f(x)}" y="${y}" width="${f(w)}" height="14" rx="5" fill="${grad('b', sh('#DCC9A2', (R() - .5) * .16), .25, -.2)}" stroke="#A48E66" stroke-width=".6"/>`;
-    }
-    g += `<rect x="${x0}" y="414" width="${x1 - x0}" height="9" rx="3" fill="${grad('v', '#E2D2AE', .1, -.15)}" stroke="#A48E66" stroke-width=".6"/>`;
-    return g;
-  }
-  function ombriere(x0, x1) {
-    const R = rng(x0 + 5);
-    let g = `<rect x="${x0}" y="60" width="${x1 - x0}" height="${BACK - 60}" fill="${grad('v', '#5F8A64', .1, -.35)}"/>`;
-    for (let x = x0 + 20; x < x1; x += 50 + R() * 40) g += `<path d="M${f(x)} ${BACK}V120" stroke="#3E5A40" stroke-width="${f(6 + R() * 8)}" opacity=".6"/>`;
-    for (let x = x0; x < x1; x += 90) g += `<path d="${blob(x + R() * 30, 160 + R() * 60, 80, 50, 9, .2, Math.round(x))}" fill="${sh('#4D7A50', (R() - .5) * .2)}" opacity=".7"/>`;
-    for (let x = x0 + 20; x < x1; x += 70) { const y = BACK - 2; for (let i = 0; i < 7; i++) { const a = -150 + i * 20; g += JArt.leaf(x, y, 34 + R() * 10, a, '#3F7A45', .22, false); } }
-    for (let x = x0 + 10; x < x1; x += 260) g += `<rect x="${x - 4}" y="62" width="8" height="${BACK - 62}" fill="${grad('c', '#3D4B42', .3, -.3)}"/>`;
-    const net = '#24402D';
-    g += `<path d="M${x0} 50${Array.from({ length: Math.ceil((x1 - x0) / 260) }, () => 'q130 26 260 0').join('')}V80${Array.from({ length: Math.ceil((x1 - x0) / 260) }, () => 'q-130 26 -260 0').join('')}Z" fill="${net}" opacity=".88"/>`;
-    g += `<path d="M${x0} 50${Array.from({ length: Math.ceil((x1 - x0) / 260) }, () => 'q130 26 260 0').join('')}" fill="none" stroke="#14261A" stroke-width="2"/>`;
-    for (let i = 0; i < 26; i++) { const x = x0 + R() * (x1 - x0), y = 120 + R() * 320; g += `<ellipse cx="${f(x)}" cy="${f(y)}" rx="${f(10 + R() * 18)}" ry="${f(4 + R() * 6)}" fill="#F7F3D0" opacity=".14"/>`; }
-    return g;
-  }
-  function serre(x0, x1) {
-    let g = `<rect x="${x0}" y="128" width="${x1 - x0}" height="${BACK - 128}" fill="#FFFFFF" opacity=".26"/>`;
-    // panneaux vitrés, reflets et montants
-    for (let x = x0; x < x1; x += 100) {
-      g += `<path d="M${x + 14} 330L${x + 60} 150M${x + 30} 440L${x + 90} 210" stroke="#FFFFFF" stroke-width="10" opacity=".14"/>`;
-      g += `<rect x="${x - 3}" y="128" width="6" height="${BACK - 128}" fill="${grad('c', '#F2F4F1', .3, -.2)}" stroke="#AFB8B2" stroke-width=".6"/>`;
-    }
-    g += `<rect x="${x0}" y="300" width="${x1 - x0}" height="5" fill="#E9ECE8" stroke="#AFB8B2" stroke-width=".6"/>`;
-    g += `<rect x="${x0}" y="430" width="${x1 - x0}" height="${BACK - 430}" fill="${grad('v', '#CFC9BC', .1, -.12)}"/><path d="M${x0} 430H${x1}" stroke="#A9A293" stroke-width="1.5"/>`;
-    // toit en dents de scie (serre Venlo)
-    let roof = '';
-    for (let x = x0; x < x1; x += 160) roof += `<path d="M${x} 128L${x + 80} 44L${x + 160} 128Z" fill="#FFFFFF" fill-opacity=".22" stroke="#E8EBE7" stroke-width="4"/><path d="M${x + 80} 44V128M${x + 40} 86V128M${x + 120} 86V128" stroke="#E8EBE7" stroke-width="2"/>`;
-    g += roof + `<rect x="${x0}" y="124" width="${x1 - x0}" height="10" fill="${grad('v', '#F4F6F3', .2, -.2)}" stroke="#AFB8B2" stroke-width=".7"/>`;
-    // poutre treillis
-    let tr = `<path d="M${x0} 150H${x1}M${x0} 168H${x1}" stroke="#EEF1ED" stroke-width="3"/>`;
-    for (let x = x0; x < x1; x += 24) tr += `<path d="M${x} 150L${x + 12} 168L${x + 24} 150" fill="none" stroke="#EEF1ED" stroke-width="1.6"/>`;
-    g += `<g opacity=".95">${tr}</g>`;
-    // tablette du fond chargée de plantes
-    g += `<rect x="${x0}" y="452" width="${x1 - x0}" height="8" fill="${grad('v', '#9AA49C', .2, -.2)}"/>`;
-    return g;
-  }
-  function hangingBasket(x, seed, flower) {
-    const R = rng(seed);
-    let g = `<path d="M${x} 168L${x - 16} 228M${x} 168L${x + 16} 228M${x} 168V226" stroke="#6F7570" stroke-width=".9"/>`;
-    let trail = '';
-    for (let s = 0; s < 6; s++) { const sx = x - 22 + s * 9, len = 30 + R() * 50; for (let y = 236; y < 236 + len; y += 9) trail += JArt.leaf(sx + Math.sin(y * .2 + s) * 3, y, 9, s % 2 ? 60 : 120, '#4F9A4A', .6, false); if (flower) trail += `<circle cx="${f(sx)}" cy="${f(236 + len)}" r="3.2" fill="${grad('b', flower, .4, -.3)}"/>`; }
-    g += `<path d="M${x - 24} 228Q${x} 262 ${x + 24} 228Z" fill="${grad('b', '#8C6A44', .25, -.35)}" stroke="#5E4630" stroke-width=".7"/>` + crown(x, 224, 26, 10, { c: '#4F9A4A', n: 22, L: 10, w: .6, seed, base: false }) + trail;
-    return `<g class="hang" style="transform-origin:${x}px 168px">${g}</g>`;
-  }
-  function zoneSign(z) {
-    if (z.style === 'serre') return `<g transform="translate(${z.signX} 0)"><path d="M-80 168V198M80 168V198" stroke="#6F7570" stroke-width="1"/><rect x="-128" y="196" width="256" height="46" rx="6" fill="${grad('v', '#2E6B3F', .12, -.2)}" stroke="#1E4A2B" stroke-width="1.2"/><text y="226" text-anchor="middle" class="zone-sign">${esc(z.name)}</text></g>`;
-    const top = z.style === 'shade' ? 280 : 300;
-    return `<g transform="translate(${z.signX} 0)">${shadow(0, FLOOR - 2, 50)}<rect x="-5" y="${top}" width="10" height="${FLOOR - top}" fill="${grad('c', '#3D4B42', .3, -.3)}"/>
-      <rect x="-106" y="${top - 26}" width="212" height="52" rx="6" fill="${grad('v', '#2E6B3F', .12, -.2)}" stroke="#1E4A2B" stroke-width="1.2"/><text y="${top + 7}" text-anchor="middle" class="zone-sign">${esc(z.name)}</text></g>`;
-  }
-
-  /* ---------- sol ---------- */
-  function floorSeg(x0, x1, style) {
-    const base = { outdoor: '#E2D5B3', shade: '#CDBB97', serre: '#D9D4C8', entry: '#DAD3C4', checkout: '#D9D4C8' }[style];
-    const pat = style === 'outdoor' || style === 'shade'
-      ? JArt.grad('v', base, .1, -.12)
-      : JArt.grad('v', base, .1, -.1);
-    let g = `<rect x="${x0}" y="${BACK}" width="${x1 - x0}" height="${H - BACK}" fill="${pat}"/>`;
-    if (style === 'outdoor' || style === 'shade') g += `<rect x="${x0}" y="${BACK}" width="${x1 - x0}" height="${H - BACK}" fill="url(#jgravel)"/>`;
-    else for (let x = x0 + 80; x < x1; x += 160) g += `<path d="M${x} ${BACK}L${x - 40} ${H}" stroke="#BFB8A8" stroke-width="1"/>`;
-    if (style !== 'outdoor' && style !== 'shade') g += `<path d="M${x0} 560H${x1}" stroke="#BFB8A8" stroke-width="1"/>`;
-    g += `<rect x="${x0}" y="${BACK}" width="${x1 - x0}" height="16" fill="#000" opacity=".06"/>`;
-    return g;
-  }
-
-  /* ---------- mobilier ---------- */
-  function table(x0, x1) {
-    let g = shadow((x0 + x1) / 2, FLOOR, (x1 - x0) / 2 + 10, 8);
-    for (let x = x0 + 14; x <= x1 - 10; x += Math.max(60, (x1 - x0 - 28) / Math.max(1, Math.round((x1 - x0) / 220)))) g += `<rect x="${f(x - 3)}" y="${TOP + 10}" width="6" height="${FLOOR - TOP - 10}" fill="${grad('c', '#566760', .3, -.3)}"/>`;
-    g += `<rect x="${x0 - 4}" y="${TOP - 4}" width="${x1 - x0 + 8}" height="10" fill="${grad('v', '#C99D69', .25, -.1)}"/>`;
-    for (let x = x0; x < x1; x += 34) g += `<path d="M${x} ${TOP - 4}v10" stroke="#9C7448" stroke-width=".8"/>`;
-    g += `<rect x="${x0 - 6}" y="${TOP + 6}" width="${x1 - x0 + 12}" height="12" rx="2" fill="${grad('v', '#A57A4C', .15, -.3)}" stroke="#6E4E2E" stroke-width=".8"/>`;
-    g += `<rect x="${x0 + 10}" y="${FLOOR - 26}" width="${x1 - x0 - 20}" height="4" fill="#566760" opacity=".8"/>`;
-    return g;
-  }
-  function checkoutSVG(c) {
-    const x = c.x0 + 170;
-    let g = floorSeg(c.x0, c.x1, 'checkout');
-    g += `<rect x="${c.x0}" y="150" width="${c.x1 - c.x0}" height="${BACK - 150}" fill="${grad('v', '#EEE6D3', .1, -.1)}"/>`;
-    for (let xx = c.x0 + 8; xx < c.x1; xx += 16) g += `<path d="M${xx} 150V${BACK}" stroke="#D6CBB3" stroke-width="1"/>`;
-    g += `<g class="checkout" tabindex="0" role="button" aria-label="Passer en caisse : ouvrir mon panier">
-      <path d="M${x - 80} 168V196M${x + 80} 168V196" stroke="#6F7570" stroke-width="1"/><path d="M${c.x0} 168H${c.x1}" stroke="#AFB8B2" stroke-width="3"/>
-      <rect x="${x - 110}" y="194" width="220" height="50" rx="6" fill="${grad('v', '#2E6B3F', .12, -.2)}" stroke="#1E4A2B" stroke-width="1.2"/><text x="${x}" y="226" text-anchor="middle" class="zone-sign">Caisses →</text>
-      ${shadow(x, FLOOR + 2, 130, 10)}
-      <path d="M${x - 120} ${FLOOR}V420H${x + 120}V${FLOOR}Z" fill="${grad('v', '#C99D69', .15, -.25)}" stroke="#6E4E2E" stroke-width="1"/>
-      <rect x="${x - 128}" y="410" width="256" height="14" rx="3" fill="${grad('v', '#E9E4D8', .2, -.15)}" stroke="#8E877A" stroke-width=".8"/>
-      ${Array.from({ length: 7 }, (_, i) => `<path d="M${x - 110 + i * 36} 430V${FLOOR - 8}" stroke="#9C7448" stroke-width="1"/>`).join('')}
-      <rect x="${x + 40}" y="366" width="56" height="40" rx="4" fill="${grad('v', '#3C4743', .2, -.3)}"/><rect x="${x + 46}" y="372" width="44" height="22" rx="2" fill="#9FD3B2"/><text x="${x + 68}" y="388" text-anchor="middle" class="till">0,00</text>
-      <rect x="${x + 50}" y="402" width="36" height="8" fill="#3C4743"/>
-      ${at(x - 80, 410, `<path d="M-20 0H20L16 -22H-16Z" fill="${grad('c', '#C66B40', .3, -.35)}"/>${crown(0, -34, 22, 16, { c: '#4C8A3E', n: 26, L: 9, w: .5, seed: 5 })}${JArt.roseHead(-8, -38, 6, '#F3A6B8')}${JArt.roseHead(8, -34, 5.5, '#F8F3E7')}`)}
-      <g transform="translate(${x - 20} 380)"><rect x="-26" y="0" width="52" height="30" rx="3" fill="#FBF8F0" stroke="#B9B4A4"/><text y="13" text-anchor="middle" class="till-note">Clique ici</text><text y="24" text-anchor="middle" class="till-note">pour payer</text></g>
-    </g>`;
-    return g;
-  }
-
-  /* ---------- la scène complète ---------- */
-  function sceneSVG() {
-    geo = layout();
-    const { items, zones, tables, checkout, W } = geo;
-    def();
-    let back = '', floor = floorSeg(0, 330, 'entry'), stock = '', signs = '', light = '';
-    zones.forEach((z, i) => {
-      const x0 = z.x0, x1 = (zones[i + 1] ? zones[i + 1].x0 : z.x1) + 1;
-      floor += floorSeg(x0, x1, z.style);
-      if (z.style === 'outdoor') {
-        back += hedge(x0, x1) + (z.id === 'roseraie' ? pergola(x0, x1) : stoneWall(x0, x1));
-        stock += backStock(x0, x1, BACK + 8, z.id === 'roseraie' ? ['#F3A6B8', '#C8243C', '#F8F3E7', null] : ['#9C7FD6', null, '#F5CF2E', null], i + 1);
-        for (let x = x0 + 100; x < x1; x += 520) light += `<path d="M${x} 0L${x + 140} 0L${x + 340} ${BACK}L${x + 120} ${BACK}Z" fill="url(#jray)"/>`;
-      } else if (z.style === 'shade') {
-        back += ombriere(x0, x1);
-        stock += backStock(x0, x1, BACK + 8, ['#F8F3E7', null, '#E14C8B', null], i + 9);
-      } else {
-        back += serre(x0, x1);
-        stock += backStock(x0, x1, 456, z.id === 'massif' ? ['#7A5BD0', '#FFD35A', '#F28DB2', '#F2694A'] : [null, '#E2402E', null, '#F5CF2E'], i + 17);
-        for (let x = x0 + 140; x < x1 - 60; x += 300) stock += hangingBasket(x, Math.round(x), ['#E0447A', '#F28DB2', null][Math.round(x / 300) % 3]);
-        for (let x = x0 + 60; x < x1; x += 480) light += `<path d="M${x} 130L${x + 70} 130L${x + 260} ${FLOOR}L${x + 120} ${FLOOR}Z" fill="url(#jray)"/>`;
-      }
-      signs += zoneSign(z);
+  function bindBays() {
+    $$('.bay', el).forEach((g) => {
+      g.addEventListener('mouseenter', () => { if (!anim) showCard(g.dataset.id, g); });
+      g.addEventListener('focus', () => showCard(g.dataset.id, g));
+      g.addEventListener('click', () => chooseForm(SHOP.find((x) => x.id === g.dataset.id)));
+      g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); chooseForm(SHOP.find((x) => x.id === g.dataset.id)); } });
     });
-    // la serre se termine par un pignon, l'ombrière par un poteau
-    zones.forEach((z, i) => { if (z.style === 'serre' && (!zones[i - 1] || zones[i - 1].style !== 'serre')) back += `<rect x="${z.x0 - 8}" y="40" width="16" height="${BACK - 40}" fill="${grad('c', '#F2F4F1', .3, -.25)}" stroke="#AFB8B2" stroke-width=".8"/>`; });
-
-    const tablesSVG = tables.map((t) => table(t.x0, t.x1)).join('');
-    const plants = items.map(({ p, x, table: onTable, depth }, i) => {
-      const y = onTable ? TOP : FLOOR + depth * 10, sc = (SCALE[p.kind] || 1) * (onTable ? 1 : 1 - depth * .04);
-      const form = p.forms.plante ? 'plante' : 'bulbe', fm = p.forms[form];
-      const price = fm.price == null ? 'Prix sur la fiche' : euro(fm.price);
-      const tagY = onTable ? TOP + 22 : FLOOR + 18;
-      const label = `${p.name}, ${form === 'bulbe' ? 'vendu en bulbes' : 'en plante'}, ${fm.price == null ? 'prix affiché sur la fiche produit' : euro(fm.price)}. Cliquer pour cueillir.`;
-      return `<g class="shop-plant" data-id="${p.id}" data-x="${f(x)}" tabindex="0" role="button" aria-label="${esc(label)}">
-        <ellipse class="glow" cx="${f(x)}" cy="${f(y - 4)}" rx="${f(WIDTH[p.kind] * .42)}" ry="16"/>
-        <g transform="translate(${f(x)} ${f(y)}) scale(${f(sc)})"><g class="sway">${DRAW[p.kind](p.color, i + 2, p)}</g></g>
-        ${onTable ? '' : `<path d="M${f(x - 50)} ${tagY - 2}V${tagY + 2}" stroke="#7E8781" stroke-width="2"/>`}
-        <g transform="translate(${f(x)} ${tagY})">${priceTag(shortName(p.name), price, fm.price == null ? '' : shortForm(fm.label))}</g>
-      </g>`;
-    }).join('');
-    const border = (() => { let g = `<rect x="0" y="${H - 12}" width="${W}" height="12" fill="${grad('v', '#7A5A3A', .2, -.2)}"/>`; const R = rng(3); for (let x = 6; x < W; x += 26 + R() * 30) { for (let j = 0; j < 5; j++) g += `<path d="M${f(x)} ${H - 10}q${f((j - 2) * 3)} -10 ${f((j - 2) * 6 + (R() - .5) * 4)} ${f(-14 - R() * 10)}" stroke="${sh('#5E8C3E', (R() - .5) * .3)}" stroke-width="1.6" fill="none" stroke-linecap="round"/>`; } return g; })();
-
-    const svg = `<svg class="garden-svg" viewBox="0 0 ${W} ${H}" style="width:${f(W * k)}px;height:${f(H * k)}px" role="group" aria-label="Le jardin-boutique, une jardinerie à parcourir">
-      <rect width="${W}" height="${H}" fill="url(#jsky)"/>
-      <g id="far">${farLayer(W)}</g>
-      ${entrance()}${back}${floor}${stock}${checkoutSVG(checkout)}${tablesSVG}${signs}${plants}
-      <g id="walker" transform="translate(${walkerX} ${FEET}) scale(1.1)">${walkerSVG()}</g>
-      <g id="flyfx"></g>${border}
-      <g class="light" pointer-events="none">${light}</g></svg>`;
-    return { W, svg };
-  }
-  // dégradés propres à la scène
-  function def() {
-    grad('v', '#FFFFFF');
-    const host = document.querySelector('svg[aria-hidden="true"] > defs');
-    if (!host || host.querySelector('#jsky')) return;
-    host.insertAdjacentHTML('beforeend', `<linearGradient id="jsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9D3E6"/><stop offset=".6" stop-color="#DDEEF0"/><stop offset="1" stop-color="#F2F0E2"/></linearGradient>
-      <linearGradient id="jray" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF8DC" stop-opacity=".34"/><stop offset="1" stop-color="#FFF8DC" stop-opacity="0"/></linearGradient>
-      <pattern id="jgravel" width="22" height="14" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.3" fill="#A8977A" opacity=".55"/><circle cx="14" cy="9" r="1.6" fill="#FFFFFF" opacity=".45"/><circle cx="9" cy="12" r="1" fill="#8E7E62" opacity=".5"/><circle cx="19" cy="4" r="1.1" fill="#C9BA98"/></pattern>`);
-  }
-
-  /* ---------- le jardinier et son chariot ---------- */
-  function walkerSVG() {
-    return `<g class="hopper"><g class="walker-body" transform="scale(${facing} 1)">
-      <ellipse cx="40" cy="2" rx="96" ry="9" fill="url(#jshadow)"/>
-      <g class="cart">
-        <path d="M40 -40V-112" stroke="#1E4A2B" stroke-width="5" stroke-linecap="round"/><path d="M40 -40V-112" stroke="#3C8A50" stroke-width="2.6" stroke-linecap="round"/>
-        <rect x="32" y="-118" width="16" height="7" rx="3.5" fill="#2A2F2C"/>
-        <rect x="40" y="-46" width="118" height="10" rx="2" fill="${grad('v', '#C99D69', .25, -.2)}" stroke="#6E4E2E" stroke-width="1"/>
-        <path d="M40 -36H158M48 -36V-12M150 -36V-12" stroke="#1E4A2B" stroke-width="3.5"/><path d="M40 -36H158" stroke="#3C8A50" stroke-width="1.6"/>
-        <g transform="translate(52 -9)"><g class="wheel"><circle r="9" fill="#2A2F2C"/><circle r="3.4" fill="#9AA39D"/><path d="M0 -9V9M-9 0H9" stroke="#5A615C" stroke-width="1"/></g></g>
-        <g transform="translate(146 -9)"><g class="wheel"><circle r="9" fill="#2A2F2C"/><circle r="3.4" fill="#9AA39D"/><path d="M0 -9V9M-9 0H9" stroke="#5A615C" stroke-width="1"/></g></g>
-        <g id="basket-load" transform="translate(99 -46)"></g>
-      </g>
-      <rect class="leg l1" x="-12" y="-36" width="10" height="36" rx="5" fill="${grad('c', '#4F5F94', .25, -.3)}" stroke="${INK}" stroke-width="1.6"/>
-      <rect class="leg l2" x="2" y="-36" width="10" height="36" rx="5" fill="${grad('c', '#4F5F94', .25, -.3)}" stroke="${INK}" stroke-width="1.6"/>
-      <rect x="-14" y="-5" width="13" height="7" rx="3.5" fill="#5E4630" stroke="${INK}" stroke-width="1.2"/><rect x="2" y="-5" width="13" height="7" rx="3.5" fill="#5E4630" stroke="${INK}" stroke-width="1.2"/>
-      <path d="M-22 -32Q-24 -86 0 -88Q24 -86 22 -32Z" fill="${grad('c', '#3F7D46', .25, -.35)}" stroke="${INK}" stroke-width="1.8"/>
-      <path d="M-14 -32L-12 -68Q0 -72 12 -68L14 -32Z" fill="${grad('v', '#E9D3A8', .2, -.1)}" stroke="${INK}" stroke-width="1.4"/><path d="M-12 -68L-18 -84M12 -68L18 -84" stroke="${INK}" stroke-width="1.4"/>
-      <rect x="-7" y="-54" width="14" height="10" rx="2" fill="none" stroke="${INK}" stroke-width="1"/><path d="M-4 -54v-6M3 -54v-8" stroke="#7E5432" stroke-width="1.6"/>
-      <path d="M12 -76Q30 -84 38 -112" stroke="${INK}" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M12 -76Q30 -84 38 -112" stroke="#3F7D46" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="39" cy="-114" r="5" fill="#F3CDB0" stroke="${INK}" stroke-width="1.2"/>
-      <circle cx="0" cy="-106" r="22" fill="${grad('b', '#F6D2B5', .2, -.15)}" stroke="${INK}" stroke-width="1.8"/>
-      <path d="M4 -110q4 -3 8 0" stroke="${INK}" stroke-width="1.4" fill="none"/><circle cx="8" cy="-107" r="2" fill="${INK}"/><path d="M18 -106q5 3 2 7q-3 1 -4 -1" fill="#F0BFA0" stroke="${INK}" stroke-width="1.1"/>
-      <path d="M2 -98q8 4 14 -2q-2 6 -8 6q-4 0 -6 -4" fill="#7E5432" stroke="${INK}" stroke-width="1"/><path d="M6 -96q4 3 8 0" stroke="${INK}" stroke-width="1.2" fill="none"/>
-      <circle cx="14" cy="-100" r="4" fill="#F5A3BC" opacity=".6"/>
-      <ellipse cx="0" cy="-122" rx="36" ry="8" fill="${grad('v', '#F4D98A', .2, -.2)}" stroke="${INK}" stroke-width="1.8"/>
-      <path d="M-18 -124Q-16 -148 0 -148Q16 -148 18 -124Z" fill="${grad('b', '#F2D27A', .3, -.2)}" stroke="${INK}" stroke-width="1.8"/>
-      <path d="M-17 -128H17" stroke="#2E6B3F" stroke-width="5"/>${Deco.daisy(14, -129, 5, '#FFFFFF', '#F0A830', 8)}
-    </g></g>`;
-  }
-
-  /* ---------- marche ---------- */
-  function zoneAt(x) { const z = geo.zones.find((zz) => x >= zz.x0 && x < zz.x1 + 40); return z ? z.id : geo.zones[0].id; }
-  function step() {
-    const d = target - walkerX;
-    const g = $('#walker', el); if (!g) return;
-    if (Math.abs(d) < 2) { walkerX = target; g.classList.remove('walking'); raf = null; place(); return; }
-    walkerX += Math.sign(d) * Math.min(Math.abs(d), Math.max(8, Math.abs(d) * .07));
-    const fc = Math.sign(d);
-    if (fc !== facing) { facing = fc; $('.walker-body', g).setAttribute('transform', `scale(${facing} 1)`); }
-    g.classList.add('walking');
-    place();
-    raf = requestAnimationFrame(step);
-  }
-  function place() {
-    const g = $('#walker', el); if (!g) return;
-    g.setAttribute('transform', `translate(${walkerX} ${FEET}) scale(1.1)`);
-    const sc = $('.garden-scroll', el);
-    const want = walkerX * k - sc.clientWidth / 2;
-    if (Math.abs(sc.scrollLeft - want) > sc.clientWidth * 0.22) sc.scrollLeft += (want - sc.scrollLeft) * 0.12;
-    const sel = $('#zone-jump', el); const z = zoneAt(walkerX); if (sel && sel.value !== z && document.activeElement !== sel) sel.value = z;
-  }
-  function parallax() { const sc = $('.garden-scroll', el), far = $('#far', el); if (sc && far) far.setAttribute('transform', `translate(${f(sc.scrollLeft / k * .4)} 0)`); }
-  function walkTo(x, then) {
-    target = clamp(x, 80, geo.W - 120); if (!raf) raf = requestAnimationFrame(step);
-    if (then) { const t0 = Date.now(); const wait = () => { if (Math.abs(walkerX - target) < 3 || Date.now() - t0 > 6000) then(); else setTimeout(wait, 60); }; wait(); }
-  }
-
-  /* ---------- cueillette ---------- */
-  function pick(id) {
-    const item = SHOP.find((p) => p.id === id);
-    const x = +$(`.shop-plant[data-id="${id}"]`, el).dataset.x;
-    walkTo(walkerX < x ? x - 150 : x + 150, () => chooseForm(item));
+    const co = $('.checkout', el);
+    if (co) { co.addEventListener('click', openBasket); co.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openBasket(); } }); }
   }
   function chooseForm(item) {
-    const opt = (key, title, emoji) => {
-      const fm = item.forms[key];
-      return fm ? `<div class="form-opt"><span class="fo-em" aria-hidden="true">${emoji}</span><div><b>${title}</b><span>${esc(fm.label)}</span><span class="fo-price">${euro(fm.price)}</span></div>
-          <button class="btn small" data-form="${key}" type="button">Mettre dans le chariot</button></div>`
-        : `<div class="form-opt off"><span class="fo-em" aria-hidden="true">${emoji}</span><div><b>${title}</b><span>Pas vendu sous cette forme en ligne</span></div></div>`;
+    const opt = (key, title) => {
+      const f = item.forms[key];
+      return f ? `<div class="form-opt"><div><b>${title}</b><span>${esc(f.label)}</span><span class="fo-price">${euro(f.price)}</span></div>
+          <button class="btn small" data-form="${key}" type="button">Ajouter au panier</button></div>`
+        : `<div class="form-opt off"><div><b>${title}</b><span>Pas vendu sous cette forme en ligne</span></div></div>`;
     };
-    const art = `<svg class="pick-art" viewBox="-130 -330 260 350" aria-hidden="true">${DRAW[item.kind](item.color, 3, item)}</svg>`;
-    const box = modal(`<div class="pick-head">${art}<div><h2>${esc(item.name)}</h2>
-      <p class="hand" style="font-size:19px;margin:0 0 4px">Tu la veux en plante ou en bulbe ?</p></div></div>
-      ${opt('plante', 'Plante en pot', '🪴')}${opt('bulbe', 'Bulbe à planter', '🧅')}
+    const box = modal(`<div class="pick-head"><div class="pick-art">${art(item)}</div><div><h2>${esc(item.name)}</h2>${item.latin ? `<p class="pick-latin">${esc(item.latin)}</p>` : ''}</div></div>
+      ${opt('plante', 'Plante en pot')}${opt('bulbe', 'Bulbe à planter')}
       <p class="small"><a href="${(item.forms.plante || item.forms.bulbe).url}" target="_blank" rel="noopener">Voir la fiche produit sur truffaut.com</a></p>`);
     $$('[data-form]', box).forEach((b) => b.addEventListener('click', () => { add(item, b.dataset.form); closeModal(); }));
   }
   function add(item, form) {
-    const b = basket();
-    const ex = b.find((x) => x.id === item.id && x.form === form);
+    const b = basket(); const ex = b.find((x) => x.id === item.id && x.form === form);
     if (ex) ex.qty++; else b.push({ id: item.id, form, qty: 1 });
     setBasket(b);
-    const g = $(`.shop-plant[data-id="${item.id}"]`, el);
-    const fx = $('#flyfx', el);
-    const x0 = +g.dataset.x, y0 = FLOOR - 140;
-    const x1 = walkerX + 110 * facing, y1 = FEET - 60;
-    fx.innerHTML = `<g class="fly" style="--dx:${x1 - x0}px;--dy:${y1 - y0}px"><g transform="translate(${x0} ${y0})">${miniPot(item.color, 1.6)}</g></g>`;
-    setTimeout(() => { fx.innerHTML = ''; fillBasket(); }, 900);
     const btn = $('#basket-btn'); btn.classList.remove('jiggle'); void btn.offsetWidth; btn.classList.add('jiggle');
-    toast('🛒', `${item.name} dans ton chariot`, form === 'bulbe' ? 'En bulbes, à planter.' : 'En plante, prête à planter.', 2600);
-  }
-  const miniPot = (c, s = 1) => `<g transform="scale(${s})"><path d="M-7 -12H7L5.5 0H-5.5Z" fill="${grad('c', '#C66B40', .3, -.35)}" stroke="#6E3618" stroke-width=".5"/><circle cx="-3" cy="-17" r="6" fill="${grad('b', '#4C8A3E', .3, -.3)}"/><circle cx="4" cy="-18" r="5.5" fill="${grad('b', '#5A9A48', .3, -.3)}"/><circle cx="1" cy="-21" r="4" fill="${grad('b', tint(c), .4, -.3)}" stroke="${sh(tint(c), -.4)}" stroke-width=".4"/></g>`;
-  function fillBasket() {
-    const load = $('#basket-load', el); if (!load) return;
-    const items = basket().flatMap((x) => Array(Math.min(x.qty, 3)).fill(x)).slice(-8);
-    load.innerHTML = items.map((x, i) => { const p = SHOP.find((s) => s.id === x.id); return at(-46 + (i % 6) * 18 + (i >= 6 ? 9 : 0), i >= 6 ? -12 : 0, miniPot(p ? p.color : '#5DB565', 1.3)); }).join('');
+    toast('🛒', `${item.name} dans ton panier`, form === 'bulbe' ? 'En bulbes, à planter.' : 'En plante, prête à planter.', 2600);
   }
 
   function openBasket() {
     const b = basket();
-    const rows = b.map((x, i) => { const p = SHOP.find((s) => s.id === x.id); const fm = p.forms[x.form];
-      return `<li><div><b>${esc(p.name)}</b><span>${x.form === 'bulbe' ? 'Bulbe' : 'Plante'} · ${esc(fm.label)} · ${euro(fm.price)}</span></div>
+    const rows = b.map((x, i) => { const p = SHOP.find((s) => s.id === x.id); if (!p) return ''; const f = p.forms[x.form];
+      return `<li><div><b>${esc(p.name)}</b><span>${x.form === 'bulbe' ? 'Bulbe' : 'Plante'} · ${esc(f.label)} · ${euro(f.price)}</span></div>
         <div class="qty"><button type="button" data-i="${i}" data-d="-1" aria-label="Retirer un">−</button><b>${x.qty}</b><button type="button" data-i="${i}" data-d="1" aria-label="Ajouter un">+</button></div></li>`; }).join('');
-    const total = b.reduce((s, x) => { const fm = SHOP.find((p) => p.id === x.id).forms[x.form]; return s + (fm.price || 0) * x.qty; }, 0);
-    const unknown = b.some((x) => SHOP.find((p) => p.id === x.id).forms[x.form].price == null);
+    const known = b.filter((x) => SHOP.find((p) => p.id === x.id));
+    const total = known.reduce((s, x) => { const f = SHOP.find((p) => p.id === x.id).forms[x.form]; return s + (f.price || 0) * x.qty; }, 0);
+    const unknown = known.some((x) => SHOP.find((p) => p.id === x.id).forms[x.form].price == null);
     const box = modal(`<h2>Mon panier</h2>
-      ${b.length ? `<ul class="basket-list">${rows}</ul>
+      ${known.length ? `<ul class="basket-list">${rows}</ul>
         <p class="basket-total">Total : <b>${euro(total)}</b>${unknown ? '<br><span class="small">+ articles dont le prix s’affiche sur la fiche produit</span>' : ''}</p>
         <div class="actions"><button class="btn sun" id="order" type="button">Commander</button><button class="btn white" id="empty" type="button">Vider le panier</button></div>`
-      : `<p class="hand" style="font-size:20px">Ton chariot est vide. Va te balader dans le jardin-boutique et clique sur les plantes pour les cueillir.</p>
-         <div class="actions"><a class="btn" href="#jardin" id="to-garden">Aller au jardin</a></div>`}`);
+      : `<p>Ton panier est vide. Promène-toi dans la grande serre et clique sur les plantes pour les ajouter.</p>
+         <div class="actions"><a class="btn" href="#jardin" id="to-garden">Aller dans la serre</a></div>`}`);
     $$('.qty button', box).forEach((btn) => btn.addEventListener('click', () => {
-      const bb = basket(); const it = bb[+btn.dataset.i]; it.qty += +btn.dataset.d; if (it.qty <= 0) bb.splice(+btn.dataset.i, 1); setBasket(bb); fillBasket(); openBasket();
+      const bb = basket(); const it = bb[+btn.dataset.i]; it.qty += +btn.dataset.d; if (it.qty <= 0) bb.splice(+btn.dataset.i, 1); setBasket(bb); openBasket();
     }));
     const tg = $('#to-garden', box); if (tg) tg.addEventListener('click', closeModal);
-    const em = $('#empty', box); if (em) em.addEventListener('click', () => { setBasket([]); fillBasket(); openBasket(); });
+    const em = $('#empty', box); if (em) em.addEventListener('click', () => { setBasket([]); openBasket(); });
     const or = $('#order', box); if (or) or.addEventListener('click', () => {
       modal(`<h2>Finaliser sur truffaut.com</h2>
         <p>Dans la version en ligne, ton panier serait transmis directement au panier Truffaut. Dans cette maquette, ouvre chaque fiche pour commander :</p>
-        <ul class="link-list">${basket().map((x) => { const p = SHOP.find((s) => s.id === x.id); const fm = p.forms[x.form]; return `<li><a href="${fm.url}" target="_blank" rel="noopener">${esc(p.name)} (${x.qty})</a></li>`; }).join('')}</ul>`);
+        <ul class="link-list">${basket().map((x) => { const p = SHOP.find((s) => s.id === x.id); if (!p) return ''; const f = p.forms[x.form]; return `<li><a href="${f.url}" target="_blank" rel="noopener">${esc(p.name)} (${x.qty})</a></li>`; }).join('')}</ul>`);
     });
   }
 
+  /* ---------- montage ---------- */
   function mount(view) {
-    el = view;
-    k = window.innerWidth < 700 ? 0.6 : window.innerHeight < 800 ? 0.78 : 0.9;
-    const { svg } = sceneSVG();
-    el.innerHTML = `<div class="page jardin">
-      ${Deco.head('Le jardin-boutique', 'Pousse la porte et promène-toi dans les allées : la pépinière, l’ombrière, puis la grande serre. Clique sur une plante pour la mettre dans ton chariot, en pot ou en bulbe, et passe en caisse au bout de l’allée.',
-        ['Je te suis, mais à mon rythme.', 'Le rosier ‘Edith Piaf’ ? Je ne regrette rien.', 'Les bulbes, c’est comme moi : ça prend son temps, mais ça finit par sortir.', 'Dans la serre, il fait bon. J’y passerais l’hiver.'], 1)}
-      <div class="walk-bar"><div class="walk-ctrl"><button class="btn white" id="go-l" type="button" aria-label="Marcher vers la gauche">◀</button>
-        <select id="zone-jump" aria-label="Aller directement à">${ZONES.map((z) => `<option value="${z.id}">${z.name}</option>`).join('')}</select>
-        <button class="btn white" id="go-r" type="button" aria-label="Marcher vers la droite">▶</button></div></div>
-      <div class="garden-scroll panel" tabindex="0" aria-label="Le jardin. Flèches gauche et droite pour marcher.">${svg}</div>
-      <p class="hand hint">Astuce : flèches du clavier pour te promener, ou clique sur l’allée pour y aller.</p>
+    el = view; layout();
+    camZ = slot * STEP;
+    const zl = ZONES.filter((z) => ZSTART[z.id] != null);
+    el.innerHTML = `<div class="serre">
+      <div class="serre-stage">
+        <svg class="serre-svg" viewBox="0 0 ${VW} ${VH}" preserveAspectRatio="xMidYMid slice" role="group" aria-label="L’allée de la grande serre. Flèches gauche et droite pour avancer ou reculer.">
+          <defs>
+            <linearGradient id="js-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8EC3E6"/><stop offset=".45" stop-color="#CFE6F2"/><stop offset="1" stop-color="#F6F4EC"/></linearGradient>
+            <linearGradient id="js-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EFE7D6"/><stop offset=".5" stop-color="#E4D9C3"/><stop offset="1" stop-color="#D6C8AE"/></linearGradient>
+            <linearGradient id="js-wall" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#DCEAEE"/><stop offset="1" stop-color="#EEF4F2"/></linearGradient>
+            <linearGradient id="js-top" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D8B27A"/><stop offset="1" stop-color="#C39558"/></linearGradient>
+            <linearGradient id="js-ray" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF4CF" stop-opacity=".55"/><stop offset="1" stop-color="#FFF4CF" stop-opacity="0"/></linearGradient>
+            <radialGradient id="js-sun"><stop offset="0" stop-color="#FFF6D6" stop-opacity=".75"/><stop offset="1" stop-color="#FFF6D6" stop-opacity="0"/></radialGradient>
+            <radialGradient id="js-glow" cx=".5" cy=".42" r=".5"><stop offset="0" stop-color="#FFF6D6"/><stop offset="1" stop-color="#FFF6D6" stop-opacity="0"/></radialGradient>
+            <linearGradient id="js-sign" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16614A"/><stop offset="1" stop-color="#0E4A36"/></linearGradient>
+            <radialGradient id="js-shad"><stop offset="0" stop-color="#000" stop-opacity=".28"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+            ${symbols()}
+          </defs>
+          <g id="js-world"></g>
+        </svg>
+        <div class="serre-crumb">La grande serre <span>›</span> <b id="serre-crumb"></b></div>
+        <div class="serre-mini"><h4>Plan de la serre <span>Vous êtes ici</span></h4><ol>${zl.map((z) => `<li data-z="${z.id}"><button type="button" data-z="${z.id}">${esc(ZNAMES[z.id][0])}<small>${SHOP.filter((p) => p.zone === z.id).length}</small></button></li>`).join('')}<li data-z="caisse"><button type="button" data-z="caisse">Caisses</button></li></ol></div>
+        <div class="serre-card" hidden></div>
+        <div class="serre-walk">
+          <button class="b" id="go-back" type="button">← Reculer</button>
+          <div class="serre-steps">${zl.map((z) => `<i data-z="${z.id}" title="${esc(ZNAMES[z.id][0])}"></i>`).join('')}</div>
+          <div class="lbl"><b id="serre-zone"></b><span id="serre-sub"></span></div>
+          <button class="b go" id="go-fwd" type="button">Avancer →</button>
+        </div>
+      </div>
+      <p class="serre-hint">Astuce : flèches ← → pour vous déplacer, survolez une table pour voir la fiche, cliquez pour ajouter au panier. Les caisses sont au bout de l’allée.</p>
     </div>`;
-    fillBasket();
-    const sc = $('.garden-scroll', el);
-    sc.scrollLeft = walkerX * k - sc.clientWidth / 2;
-    sc.addEventListener('scroll', parallax, { passive: true }); parallax();
-    $$('.shop-plant', el).forEach((g) => {
-      g.addEventListener('click', (e) => { e.stopPropagation(); pick(g.dataset.id); });
-      g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(g.dataset.id); } });
-    });
-    const co = $('.checkout', el);
-    const goPay = (e) => { e.stopPropagation(); walkTo(geo.checkout.x0 + 30, openBasket); };
-    co.addEventListener('click', goPay); co.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goPay(e); } });
-    $('.garden-svg', el).addEventListener('click', (e) => { const r = e.currentTarget.getBoundingClientRect(); walkTo((e.clientX - r.left) / k); });
-    const move = (dir) => walkTo(target + dir * 280);
-    $('#go-l', el).addEventListener('click', () => move(-1));
-    $('#go-r', el).addEventListener('click', () => move(1));
-    $('#zone-jump', el).addEventListener('change', (e) => { const z = geo.zones.find((zz) => zz.id === e.target.value); walkTo(z.signX + 80); });
-    keyHandler = (e) => { if (document.querySelector('#modal-back')) return; if (e.target.closest && e.target.closest('select')) return; if (e.key === 'ArrowRight') { e.preventDefault(); move(1); } if (e.key === 'ArrowLeft') { e.preventDefault(); move(-1); } };
+    frame(); draw(); updateHud();
+    $('#go-back', el).addEventListener('click', () => walkTo(slot - 1));
+    $('#go-fwd', el).addEventListener('click', () => walkTo(slot + 1));
+    $$('.serre-mini button', el).forEach((b) => b.addEventListener('click', () => walkTo(b.dataset.z === 'caisse' ? END - 1 : ZSTART[b.dataset.z])));
+    $('.serre-stage', el).addEventListener('mouseleave', hideCard);
+    keyHandler = (e) => { if (document.querySelector('#modal-back')) return; if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { e.preventDefault(); walkTo(slot + 1); } if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { e.preventDefault(); walkTo(slot - 1); } };
     window.addEventListener('keydown', keyHandler);
+    resizeHandler = () => { frame(); };
+    window.addEventListener('resize', resizeHandler);
   }
 
   return {
-    title: 'Le jardin-boutique', mount,
-    unmount() { if (raf) cancelAnimationFrame(raf); raf = null; window.removeEventListener('keydown', keyHandler); },
+    title: 'La grande serre', mount,
+    unmount() { if (anim) cancelAnimationFrame(anim); anim = null; window.removeEventListener('keydown', keyHandler); window.removeEventListener('resize', resizeHandler); },
     openBasket, updateCount, DRAW,
   };
 })();

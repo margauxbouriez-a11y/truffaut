@@ -84,7 +84,7 @@ function render() {
   view.className = 'view view-' + (path || 'hub');
   current = mod;
   document.title = (mod.title ? mod.title + ' — ' : '') + 'Le Grand Jardin';
-  $('#home-btn').hidden = !path;
+  $$('.mainnav a').forEach((a) => { const on = a.dataset.r === (ROUTES[path] ? path : ''); a.classList.toggle('on', on); if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   mod.mount(view);
   window.scrollTo(0, 0);
   const h = view.querySelector('h1');

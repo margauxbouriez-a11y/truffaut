@@ -1,70 +1,85 @@
-/* ---------- Jardin-boutique ---------- */
-.walk-ctrl { display: flex; gap: 8px; align-items: center; }
-.walk-ctrl .btn { padding: 8px 16px; }
-.walk-ctrl select { padding: 9px 12px; border: 2px solid var(--line); border-radius: 999px; background: #fff; font-weight: 700; }
-.garden-scroll { overflow-x: auto; overflow-y: hidden; border-radius: 30px; padding: 0; scrollbar-color: var(--leaf) transparent; }
-.garden-svg { display: block; }
-.garden-scroll { background: #DDEEF0; box-shadow: inset 0 0 0 1px rgba(31,58,46,.08); cursor: pointer; }
-.garden-svg text { pointer-events: none; }
-.zone-sign { font-family: var(--display); font-size: 21px; font-weight: 600; fill: #F7F3E6; letter-spacing: .01em; }
-.store-sign { font-family: var(--display); font-size: 23px; font-weight: 600; fill: #F7F3E6; }
-.store-sub { font-family: var(--ui); font-size: 9px; font-weight: 700; letter-spacing: .06em; fill: #CFE3C9; }
-.door-label { font-family: var(--hand); font-size: 20px; fill: #F7F3E6; opacity: .9; }
-.rack-head { font-family: var(--ui); font-size: 10px; font-weight: 800; letter-spacing: .22em; fill: #F7F3E6; }
-.till { font-family: var(--ui); font-size: 11px; font-weight: 700; fill: #1F3A2E; }
-.till-note { font-family: var(--hand); font-size: 11px; fill: #1F3A2E; }
-.ptag-name { font-family: var(--ui); font-size: 12px; font-weight: 700; fill: #1F3A2E; }
-.ptag-price { font-family: var(--ui); font-size: 15px; font-weight: 800; fill: #2E6B3F; }
-.ptag-note { font-family: var(--ui); font-size: 10.5px; fill: #6B776F; }
-.shop-plant { cursor: pointer; }
-.shop-plant:focus { outline: none; }
-.shop-plant .glow { fill: #FFF6C8; opacity: 0; transition: opacity .25s; }
-.shop-plant:hover .glow, .shop-plant:focus-visible .glow { opacity: .75; }
-.shop-plant .ptag { transition: transform .2s; }
-.shop-plant:hover .ptag, .shop-plant:focus-visible .ptag { transform: translateY(-4px); }
-.shop-plant:hover .ptag rect:first-child, .shop-plant:focus-visible .ptag rect:first-child { stroke: #2E6B3F; stroke-width: 2.5; }
-.shop-plant:hover .sway, .shop-plant:focus-visible .sway { animation: shake .6s ease-in-out; }
-.sway { transform-box: fill-box; transform-origin: 50% 100%; }
-@keyframes shake { 25% { transform: rotate(-2.5deg); } 75% { transform: rotate(2.5deg); } }
-.hang { animation: hang 5s ease-in-out infinite alternate; }
-@keyframes hang { from { transform: rotate(-1.6deg); } to { transform: rotate(1.6deg); } }
-.checkout { cursor: pointer; }
-.checkout:focus { outline: none; }
-.checkout:hover rect:first-of-type, .checkout:focus-visible rect:first-of-type { stroke: #F0A830; stroke-width: 3; }
-.walking .hopper { animation: hop .36s ease-in-out infinite; }
-.walking .l1 { animation: legA .36s ease-in-out infinite; }
-.walking .l2 { animation: legA .36s ease-in-out infinite reverse; }
-.walking .wheel { animation: roll .5s linear infinite; }
-.wheel { transform-box: fill-box; transform-origin: center; }
-@keyframes roll { to { transform: rotate(360deg); } }
-@keyframes hop { 50% { transform: translateY(-3px); } }
-@keyframes legA { 50% { transform: translateY(-4px); } }
-.fly { animation: flyleaf .9s cubic-bezier(.4, -0.3, .6, 1) forwards; }
-@keyframes flyleaf { to { transform: translate(var(--dx), var(--dy)) scale(.6); opacity: .7; } }
-.pick-head { display: flex; gap: 14px; align-items: center; margin-bottom: 8px; }
-.pick-head h2 { margin: 0 0 4px; }
-.pick-art { width: 110px; height: 148px; flex: 0 0 auto; background: radial-gradient(circle at 50% 60%, #F1F5EA, #fff 70%); border-radius: 16px; }
-@media (prefers-reduced-motion: reduce) { .hang, .walking .hopper, .walking .wheel, .walking .l1, .walking .l2 { animation: none; } }
-.hint { color: var(--ink-soft); font-size: 18px; margin: 10px 4px 0; }
-.form-opt { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 12px; margin: 8px 0; border: 2px solid var(--line); border-radius: 18px; background: #fff; }
-.form-opt.off { opacity: .55; border-style: dashed; grid-template-columns: auto 1fr; }
-.fo-em { font-size: 32px; }
-.form-opt b { display: block; font-size: 18px; }
-.form-opt span { display: block; font-size: 14px; color: var(--ink-soft); line-height: 1.3; }
-.form-opt .fo-price { color: var(--ink); font-weight: 700; font-size: 16px; }
+/* ---------- La grande serre : allée en perspective ---------- */
+.view-jardin { background: #fff; }
+.serre-stage { position: relative; height: min(calc(100vh - 92px), 860px); min-height: 520px; overflow: hidden; background: #E9EEF0; user-select: none; }
+.serre-svg { display: block; width: 100%; height: 100%; }
+.serre-svg text { pointer-events: none; }
+.bay { cursor: pointer; outline: none; }
+.bay .hit { fill: transparent; }
+.bay:hover use, .bay:focus-visible use { filter: brightness(1.08) saturate(1.1); }
+.bay:hover .tag rect:first-child, .bay:focus-visible .tag rect:first-child { stroke: #2EBB99; stroke-width: 2.5; }
+.checkout { cursor: pointer; outline: none; }
+.checkout:hover .zsign rect:first-of-type { filter: brightness(1.2); }
+
+.serre-crumb { position: absolute; left: 24px; top: 18px; display: flex; gap: 8px; align-items: center; background: rgba(255, 255, 255, .92); padding: 8px 14px; border-radius: 20px; font-size: 13px; color: var(--gris); box-shadow: 0 2px 10px rgba(0, 0, 0, .08); }
+.serre-crumb b { color: var(--sapin); }
+.serre-mini { position: absolute; right: 22px; top: 18px; width: 228px; background: rgba(255, 255, 255, .95); border-radius: 14px; padding: 12px 12px 10px; box-shadow: 0 6px 24px rgba(0, 0, 0, .12); }
+.serre-mini h4 { margin: 0 0 6px; font: 600 13px var(--ui); color: var(--sapin); display: flex; justify-content: space-between; }
+.serre-mini h4 span { color: var(--gris); font-weight: 500; }
+.serre-mini ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; }
+.serre-mini button { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 10px; border: 0; border-radius: 8px; background: #F1F4F0; font: 500 12.5px var(--ui); color: #3B4842; cursor: pointer; text-align: left; }
+.serre-mini button small { font-size: 11px; color: var(--gris); }
+.serre-mini button:hover { background: var(--menthe-l); }
+.serre-mini li.on button { background: var(--menthe); color: #fff; font-weight: 600; }
+.serre-mini li.on small { color: #E4FFF6; }
+
+.serre-walk { position: absolute; left: 50%; transform: translateX(-50%); bottom: 20px; display: flex; align-items: center; gap: 6px; background: rgba(255, 255, 255, .96); border-radius: 40px; padding: 6px; box-shadow: 0 8px 30px rgba(0, 0, 0, .18); max-width: calc(100% - 24px); }
+.serre-walk .b { height: 44px; padding: 0 20px; border-radius: 22px; border: 0; background: transparent; font: 600 14px var(--ui); color: var(--sapin); cursor: pointer; white-space: nowrap; }
+.serre-walk .b.go { background: var(--sapin); color: #fff; }
+.serre-walk .b:disabled { opacity: .35; cursor: default; }
+.serre-steps { display: flex; gap: 5px; padding: 0 10px; }
+.serre-steps i { width: 22px; height: 5px; border-radius: 3px; background: #D5DBD7; }
+.serre-steps i.on { background: var(--menthe); }
+.serre-walk .lbl { font-size: 12.5px; color: var(--gris); padding: 0 8px; min-width: 160px; text-align: center; }
+.serre-walk .lbl b { display: block; color: #1D2A24; font-size: 14px; }
+
+.serre-card { position: absolute; z-index: 4; width: 280px; background: #fff; border-radius: 16px; box-shadow: 0 18px 50px rgba(15, 40, 30, .28); overflow: hidden; }
+.serre-card .sc-ph { height: 140px; background: radial-gradient(circle at 50% 60%, #F1F5EE, #E4ECE5); display: grid; place-items: center; }
+.serre-card .sc-ph img, .serre-card .sc-ph svg { height: 128px; width: auto; }
+.serre-card .bd { padding: 12px 16px 16px; }
+.serre-card .rayon { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--sapin-2); font-weight: 600; }
+.serre-card h3 { margin: 3px 0 0; font: 600 19px var(--display); }
+.serre-card i { color: var(--gris); font-size: 13px; }
+.serre-card .row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: 10px; }
+.serre-card .row b { font: 700 21px var(--ui); color: var(--sapin); white-space: nowrap; }
+.serre-card .row small { font-size: 12px; color: var(--gris); text-align: right; }
+.serre-card .opts { display: flex; gap: 6px; margin-top: 10px; }
+.serre-card .opts span { font-size: 12px; padding: 5px 10px; border-radius: 14px; background: var(--menthe-l); color: var(--sapin); font-weight: 600; }
+.serre-card .opts span.off { background: #F0F0EC; color: #9AA09C; text-decoration: line-through; }
+.serre-card .btn { width: 100%; justify-content: center; margin-top: 12px; }
+.serre-hint { margin: 10px 24px 24px; font-size: 13px; color: var(--gris); }
+
+/* fenêtre « choisir la forme » et panier */
+.pick-head { display: flex; gap: 14px; align-items: center; margin-bottom: 10px; }
+.pick-head h2 { margin: 0; }
+.pick-latin { margin: 2px 0 0; font-style: italic; color: var(--gris); }
+.pick-art { width: 104px; height: 120px; flex: 0 0 auto; border-radius: 14px; background: radial-gradient(circle at 50% 60%, #F1F5EE, #E4ECE5); display: grid; place-items: center; overflow: hidden; }
+.pick-art img, .pick-art svg { height: 112px; width: auto; }
+.form-opt { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; margin: 8px 0; border: 1px solid var(--ligne); border-radius: 14px; background: #fff; }
+.form-opt.off { opacity: .55; border-style: dashed; grid-template-columns: 1fr; }
+.form-opt b { display: block; font-size: 16px; }
+.form-opt span { display: block; font-size: 13.5px; color: var(--gris); line-height: 1.3; }
+.form-opt .fo-price { color: var(--sapin); font-weight: 700; font-size: 16px; }
 .basket-list { list-style: none; padding: 0; margin: 12px 0; display: grid; gap: 8px; }
-.basket-list li { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 10px 12px; border: 2px solid var(--line); border-radius: 14px; background: #fff; }
-.basket-list li span { display: block; font-size: 13px; color: var(--ink-soft); }
+.basket-list li { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 10px 12px; border: 1px solid var(--ligne); border-radius: 14px; background: #fff; }
+.basket-list li span { display: block; font-size: 13px; color: var(--gris); }
 .qty { display: flex; align-items: center; gap: 8px; }
-.qty button { width: 30px; height: 30px; border: 2px solid var(--line); border-radius: 50%; background: var(--sun); font-weight: 700; cursor: pointer; }
+.qty button { width: 30px; height: 30px; border: 1px solid #D3D6CF; border-radius: 50%; background: var(--menthe-l); color: var(--sapin); font-weight: 700; cursor: pointer; }
 .basket-total { font-size: 20px; text-align: right; margin: 6px 0 0; }
 .link-list { padding-left: 20px; }
 .link-list li { margin: 6px 0; }
 .jiggle { animation: jig .5s; }
-@keyframes jig { 25% { transform: rotate(-10deg) scale(1.1); } 75% { transform: rotate(8deg) scale(1.1); } }
-@media (max-width: 640px) {
-  .walk-ctrl { width: 100%; }
-  .walk-ctrl select { flex: 1; min-width: 0; }
-  .form-opt { grid-template-columns: auto 1fr; }
-  .form-opt .btn { grid-column: 1 / -1; }
+@keyframes jig { 25% { transform: rotate(-6deg) scale(1.08); } 75% { transform: rotate(5deg) scale(1.08); } }
+
+@media (max-width: 760px) {
+  .serre-stage { height: calc(100vh - 150px); min-height: 480px; }
+  .serre-mini { display: none; }
+  .serre-crumb { left: 12px; top: 12px; font-size: 12px; }
+  .serre-steps { display: none; }
+  .serre-walk { bottom: 12px; }
+  .serre-walk .b { padding: 0 14px; }
+  .serre-walk .lbl { min-width: 0; }
+  .serre-walk .lbl span { display: none; }
+  .serre-walk .lbl b { white-space: nowrap; font-size: 13px; }
+  .serre-card { display: none; }
+  .form-opt { grid-template-columns: 1fr; }
 }
