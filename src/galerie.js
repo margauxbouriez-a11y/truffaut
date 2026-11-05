@@ -17,11 +17,11 @@ const Galerie = (() => {
     const D = Jardin.DRAW;
     const g = {
       veg: [0, 1, 2].map((i) => `<rect x="${20 + i * 92}" y="140" width="80" height="60" rx="8" fill="#7A4E2D" stroke="${INK}" stroke-width="3"/><g transform="translate(${60 + i * 92} 182) scale(.75)">${Potager.vegSVG(['courgette', 'salade', 'tomate'][i], 5)}</g>`).join(''),
-      hydra: `<g transform="translate(90 190) scale(1.1)">${D.hydrangea('#9BB6F0', 3)}</g><g transform="translate(220 195)">${D.hydrangea('#F4A6C8', 5)}</g>`,
-      balcon: `<rect x="0" y="160" width="300" height="60" fill="#E9D2A8"/><path d="M0 160 H300 M20 160 V220 M60 160 V220 M100 160 V220 M140 160 V220 M180 160 V220 M220 160 V220 M260 160 V220" stroke="${INK}" stroke-width="3"/><g transform="translate(90 160) scale(.8)">${D.tomato()}</g><g transform="translate(200 160) scale(.9)">${D.herb('#3FA05A')}</g>`,
-      roses: `<g transform="translate(80 195)">${D.rose('#C8243C', 2)}</g><g transform="translate(200 195) scale(.9)">${D.climber('#F8D2D8')}</g>`,
-      shade: `<rect width="300" height="220" fill="#B9DDC0"/><rect y="150" width="300" height="70" fill="#6FB35A"/><g transform="translate(80 200)">${D.camellia('#FFFFFF', 4)}</g><g transform="translate(210 200)">${D.cyclamen('#E14C8B')}</g>`,
-      fraise: `<g transform="translate(150 190) scale(1.3)">${D.strawberry()}</g><rect x="60" y="190" width="180" height="24" rx="6" fill="#D9774B" stroke="${INK}" stroke-width="3"/>`,
+      hydra: `<g transform="translate(95 200) scale(.62)">${D.hydrangea('#DCE6FA', 3)}</g><g transform="translate(215 205) scale(.58)">${D.hydrangea('#F8DDE6', 5)}</g>`,
+      balcon: `<rect x="0" y="160" width="300" height="60" fill="#E9D2A8"/><path d="M0 160 H300 M20 160 V220 M60 160 V220 M100 160 V220 M140 160 V220 M180 160 V220 M220 160 V220 M260 160 V220" stroke="${INK}" stroke-width="3"/><g transform="translate(90 162) scale(.62)">${D.tomato()}</g><g transform="translate(215 162) scale(.75)">${D.herb('#3FA05A', 3, { id: 'menthe' })}</g>`,
+      roses: `<g transform="translate(90 200) scale(.78)">${D.rose('#C8243C', 2)}</g><g transform="translate(215 205) scale(.6)">${D.climber('#F8D2D8')}</g>`,
+      shade: `<rect width="300" height="220" fill="#B9DDC0"/><rect y="150" width="300" height="70" fill="#6FB35A"/><g transform="translate(85 205) scale(.72)">${D.camellia('#FFFFFF', 4)}</g><g transform="translate(210 200)">${D.cyclamen('#E14C8B')}</g>`,
+      fraise: `<g transform="translate(150 196) scale(1.4)">${D.strawberry()}</g><rect x="40" y="192" width="220" height="26" rx="6" fill="#D9774B" stroke="${INK}" stroke-width="3"/>`,
     }[k];
     return `<svg viewBox="0 0 300 220" aria-hidden="true">${sky}${g}</svg>`;
   };

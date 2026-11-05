@@ -1,12 +1,19 @@
 /* ---------- Mon bouquet ---------- */
 .bq-stats { display: flex; gap: 8px; }
 .bq-stats .tag { font-size: 16px; padding: 4px 14px; }
-.shelf { display: flex; gap: 10px; overflow-x: auto; padding: 14px 14px 10px; border-radius: 26px 26px 10px 10px; background: #E9D2A8; }
+/* étal du fleuriste : lambris clair, tablette en bois sous les seaux */
+.shelf { display: flex; gap: 10px; overflow-x: auto; padding: 18px 14px 12px; border-radius: 26px 26px 10px 10px;
+  background:
+    linear-gradient(180deg, transparent 0 calc(100% - 76px), #9C7448 calc(100% - 76px) calc(100% - 72px), #D9B88A calc(100% - 72px) calc(100% - 62px), #C49A66 calc(100% - 62px)),
+    repeating-linear-gradient(90deg, rgba(120, 100, 70, .14) 0 1px, transparent 1px 34px),
+    linear-gradient(180deg, #F3ECDC, #E6DBC2);
+  box-shadow: inset 0 -2px 0 #8A6236; }
+.b-price { font-family: var(--ui); font-size: 6.6px; font-weight: 800; fill: #3B2A16; }
 .bucket { flex: 0 0 auto; position: relative; display: grid; justify-items: center; width: 118px; padding: 0 0 4px; border: 3px solid transparent; border-radius: 18px; background: transparent; cursor: pointer; }
 .bucket:hover { background: rgba(255,255,255,.4); }
 .bucket.on { border-color: var(--line); background: var(--sun); }
 .b-scene { width: 108px; height: 157px; display: block; overflow: visible; }
-.b-name { font-family: var(--hand); font-size: 15px; line-height: 1.05; text-align: center; margin-top: 2px; }
+.b-name { font-family: var(--hand); font-size: 15px; line-height: 1.05; text-align: center; margin-top: 4px; color: #2A1E10; }
 .workbench { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 18px; margin-top: 14px; }
 .table {
   position: relative; overflow: hidden; height: min(62vh, 560px); min-height: 420px;
